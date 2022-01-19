@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/health_data">
+
+    <fragment
+        android:id="@+id/health_data"
+        android:name="com.jinke.driverhealth.fragments.DataFragment"
+        android:label="健康数据"
+        tools:layout="@layout/data_fragment" />
+    <fragment
+        android:id="@+id/mine_center"
+        android:name="com.jinke.driverhealth.fragments.MineFragment"
+        android:label="个人中心"
+        tools:layout="@layout/mine_fragment" />
+    <fragment
+        android:id="@+id/home_page"
+        android:name="com.jinke.driverhealth.fragments.HomePageFragment"
+        android:label="首页"
+        tools:layout="@layout/home_page_fragment" />
+</navigation>

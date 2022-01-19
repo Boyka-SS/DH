@@ -1,0 +1,30 @@
+package com.jinke.driverhealth.fragments;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.jinke.driverhealth.R;
+
+public class DataFragment extends Fragment {
+
+
+
+    public static DataFragment newInstance() {
+        return new DataFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.data_fragment, container, false);
+    }
+
+
+
+}
