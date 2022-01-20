@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/data_time"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2022-01-20" />
+
+        <TextView
+            android:id="@+id/item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:23:28"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/health_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="2"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="体温：36.9 ℃"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/item_heart_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="心率：108 次/分"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/item_hypertension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高血压：102 mmHg"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/item_hypotension"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="低血压：76mmHg"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/item_alcohol_concentration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="酒精：0 g/L"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/item_health_assessment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/app_icon180" />
+    </LinearLayout>
+</LinearLayout>

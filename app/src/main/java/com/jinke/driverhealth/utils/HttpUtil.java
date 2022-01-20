@@ -1,5 +1,6 @@
 package com.jinke.driverhealth.utils;
 
+import com.jinke.driverhealth.services.publicparams.TransIdParams;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 
@@ -15,7 +16,7 @@ public class HttpUtil {
 
 
     private static final String TAG = "HttpUtil";
-    private static final String BASE_URL = "https://openapi.xu5g.com/tsp/auth/token";
+
 
     /**
      * 异步GET请求，仅执行网络请求，对于请求结果的操作的callback里面
@@ -25,7 +26,10 @@ public class HttpUtil {
      * @param callback
      */
     public static void getByOkGo(String address, StringCallback callback) {
-        OkGo.<String>get(BASE_URL + address).execute(callback);
+        String transIdParams = new TransIdParams().getTransIdParams();
+        OkGo.<String>get(address)
+                .headers("transid", transIdParams)
+                .execute(callback);
     }
 
     /**
@@ -34,7 +38,7 @@ public class HttpUtil {
      * @param address
      */
     public static String getByOkGoSync(String address) throws IOException {
-        Response response = OkGo.<String>get(BASE_URL + address).execute();
+        Response response = OkGo.<String>get(address).execute();
         if (response.isSuccessful()) {
             return response.body().string();
         }
