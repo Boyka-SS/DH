@@ -25,8 +25,8 @@ public class HttpUtil {
      * @param address
      * @param callback
      */
-    public static void getByOkGo(String address, StringCallback callback) {
-        String transIdParams = new TransIdParams().getTransIdParams();
+    public static void getByOkGo(String address, String transIdParams , StringCallback callback) {
+
         OkGo.<String>get(address)
                 .headers("transid", transIdParams)
                 .execute(callback);

@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.jinke.driverhealth.entity.HeartRateEntity;
+import com.jinke.driverhealth.beans.HeartRate;
 
 import java.util.List;
 
@@ -21,17 +21,17 @@ import java.util.List;
 @Dao
 public interface HeartRateDao {
     @Insert
-    void insertHeartRate(HeartRateEntity... heartRate);
+    void insertHeartRate(HeartRate... heartRate);
 
     @Update
-    void updateHeartRate(HeartRateEntity... heartRate);
+    void updateHeartRate(HeartRate... heartRate);
 
     @Delete
-    void deleteHeartRate(HeartRateEntity... heartRate);
+    void deleteHeartRate(HeartRate... heartRate);
 
     @Query("DELETE FROM HEART_RATE")
     void deleteAllHeartRate();
 
-    @Query("SELECT * FROM HEART_RATE ORDER BY ID DESC")
-    List<HeartRateEntity> getAllHeartRate();
+    @Query("SELECT * FROM HEART_RATE ORDER BY heart_rate_id DESC")
+    List<HeartRate> getAllHeartRate();
 }

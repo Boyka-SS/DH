@@ -1,92 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
     android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/data_time"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/item_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2022-01-20" />
-
-        <TextView
-            android:id="@+id/item_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="09:23:28"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/health_data"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_weight="2"
+        android:layout_margin="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
 
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/item_temperature"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="体温：36.9 ℃"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/item_heart_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="心率：108 次/分"
-            android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/data_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/item_hypertension"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="高血压：102 mmHg"
-            android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/item_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2022-01-20"
+                    android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/item_hypotension"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="低血压：76mmHg"
-            android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/item_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09:23:28"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/item_alcohol_concentration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="酒精：0 g/L"
-            android:textSize="16sp" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/health_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1.5"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/item_temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="体温：36.9 ℃"
+                    android:textSize="12sp" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:gravity="center">
+                <TextView
+                    android:id="@+id/item_heart_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="心率：108 次/分"
+                    android:textSize="12sp" />
 
-        <ImageView
-            android:id="@+id/item_health_assessment"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/app_icon180" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/item_hypertension"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高血压：102 mmHg"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/item_hypotension"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="低血压：76mmHg"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/item_alcohol_concentration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="酒精：0 g/L"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <com.jinke.driverhealth.views.ZQImageViewRoundOval
+                    android:id="@+id/item_health_assessment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/yiban1" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </LinearLayout>
+

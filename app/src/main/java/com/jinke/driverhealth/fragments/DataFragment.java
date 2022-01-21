@@ -20,15 +20,18 @@ import com.jinke.driverhealth.interfaces.OkGoCallback;
 import com.jinke.driverhealth.services.BloodPressureService;
 import com.jinke.driverhealth.services.HeartService;
 import com.jinke.driverhealth.services.TemperatureSevice;
+import com.jinke.driverhealth.utils.CalendarFormatUtil;
 import com.jinke.driverhealth.utils.JsonUtil;
+import com.jinke.driverhealth.utils.WrapContentLinearLayoutManager;
 
 import java.io.IOException;
 import java.util.List;
 
 public class DataFragment extends Fragment {
+
     private static final String TAG = "DataFragment";
     private RecyclerView mRecyclerView;
-    private DataAdapter mHeartRateDataAdapter;
+    private DataAdapter mDataAdapter;
 
 
     public static DataFragment newInstance() {
@@ -45,11 +48,14 @@ public class DataFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_data_view);
         //2、设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        //解决 RecyclerView 存在的 数组越界 BUG
+        //参考链接：1、https://www.jianshu.com/p/a15764f6d673
+        //2、https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
+        mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         //3、设置适配器
-        mHeartRateDataAdapter = new DataAdapter();
-        mRecyclerView.setAdapter(mHeartRateDataAdapter);
+        mDataAdapter = new DataAdapter();
+        mRecyclerView.setAdapter(mDataAdapter);
 
         //获取 心率 体温 血压 数据
         try {
@@ -62,8 +68,11 @@ public class DataFragment extends Fragment {
     }
 
     private void initData() throws IOException {
+
+        String currentFormatTime = CalendarFormatUtil.getCurrentFormatTime();
+
         //心率
-        HeartService.requestHeartRateDataFromTuDY(new OkGoCallback() {
+        HeartService.requestHeartRateDataFromTuDY(currentFormatTime,new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {
@@ -76,7 +85,7 @@ public class DataFragment extends Fragment {
         });
 
         //体温
-        TemperatureSevice.requestTemperatureDataFromTuDY(new OkGoCallback() {
+        TemperatureSevice.requestTemperatureDataFromTuDY(currentFormatTime,new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {
@@ -89,7 +98,7 @@ public class DataFragment extends Fragment {
         });
 
         //血压
-        BloodPressureService.requestBloodPressureDataFromTuDY(new OkGoCallback() {
+        BloodPressureService.requestBloodPressureDataFromTuDY(currentFormatTime,new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {
@@ -103,28 +112,16 @@ public class DataFragment extends Fragment {
     }
 
     private void upHeartRateData(List<HeartRate.DataDTO.ResultDTO> result) {
+        mDataAdapter.setHeartRateResult(result);
 
     }
 
     private void upTemperatureData(List<Temperature.DataDTO.ResultDTO> result) {
+        mDataAdapter.setTemperatureResult(result);
     }
 
     private void upBloodPressureData(List<BloodPressure.DataDTO.ResultDTO> result) {
-
+        mDataAdapter.setBloodPressureResult(result);
     }
-
-
-
-    /*private void upDataUI(Object obj) {
-
-        if (obj instanceof HeartRate) {
-            mHeartRateDataAdapter.setHeartRate((HeartRate) obj);
-        } else if (obj instanceof Temperature) {
-            mHeartRateDataAdapter.setTemperature((Temperature) obj);
-        } else if (obj instanceof BloodPressure) {
-            mHeartRateDataAdapter.setBloodPressure((BloodPressure) obj);
-        }
-
-    }*/
 
 }

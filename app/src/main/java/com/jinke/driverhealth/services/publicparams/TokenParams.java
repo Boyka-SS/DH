@@ -24,13 +24,15 @@ public class TokenParams {
 
     public static void requestToken(final OkGoCallback okGoCallback) throws IOException {
         //事务序号
-        String transId = new TransIdParams().getTransIdParams();
+
+        String transId = new TransIdParams().getTransIdParams("88Cf2uyhdpH3");
         //签名算法
         String sign = EncryptUtil.sha1("" + Constant.SECRET + "" + Constant.APPKEY + "" + transId + "" + Constant.SECRET);
         String queryParams = "?appkey=10014&transid=" + transId + "&sign=" + sign;
-        String url = "https://openapi.xu5g.com/tsp/auth/token"+queryParams;
+        String url = "https://openapi.xu5g.com/tsp/auth/token" + queryParams;
 
-        HttpUtil.getByOkGo(url, new StringCallback() {
+
+        HttpUtil.getByOkGo(url, transId, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (response.isSuccessful()) {

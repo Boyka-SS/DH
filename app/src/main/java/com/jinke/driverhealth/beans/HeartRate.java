@@ -1,16 +1,46 @@
 package com.jinke.driverhealth.beans;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 
 /**
  * @author: fanlihao
  * @date: 2022/1/20
  */
+@Entity(tableName = "heart_rate")
 public class HeartRate {
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "heart_rate_id")
+    private int id;
+    @Embedded
     private DataDTO data;
+    @Ignore
     private String message;
+
+
+
+    @Ignore
     private int status;
 
+
+    public HeartRate() {
+    }
 
     public DataDTO getData() {
         return data;
@@ -37,9 +67,9 @@ public class HeartRate {
     }
 
     public static class DataDTO {
-
+        @Ignore
         private List<ResultDTO> result;
-
+        @Ignore
         private int total;
 
         public List<ResultDTO> getResult() {
@@ -59,13 +89,13 @@ public class HeartRate {
         }
 
         public static class ResultDTO {
-
+            @ColumnInfo(name = "生成时间")
             private String created;
-
+            @ColumnInfo(name = "心率")
             private int heart_rate;
-
+            @ColumnInfo(name = "设备号")
             private String imei_sn;
-
+            @ColumnInfo(name = "UUID")
             private String uuid;
 
             public String getCreated() {
