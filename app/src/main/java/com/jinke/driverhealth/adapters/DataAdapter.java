@@ -170,8 +170,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             time.setText(strings[1]);
             temperature.setText("体温：" + temperatureResultDto.getTemperature() + " ℃");
             heartRate.setText("心率：" + heartRateResultDto.getHeart_rate() + " 次/分");
-            hypertension.setText("高血压：" + bloodPressureResultDto.getMax_rate() + " mmHg");
-            hypotension.setText("低血压：" + bloodPressureResultDto.getMin_rate() + " mmHg");
+            hypertension.setText("收缩压：" + bloodPressureResultDto.getMax_rate() + " mmHg");
+            hypotension.setText("舒张压：" + bloodPressureResultDto.getMin_rate() + " mmHg");
             alcohol.setText("酒精：" + alcoholMock + " g/L");
 
             healthState = isHealth(temperatureResultDto.getTemperature(), heartRateResultDto.getHeart_rate(), bloodPressureResultDto.getMax_rate(), bloodPressureResultDto.getMin_rate(), alcoholMock);

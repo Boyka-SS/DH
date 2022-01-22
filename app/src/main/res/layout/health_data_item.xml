@@ -72,14 +72,14 @@
                     android:id="@+id/item_hypertension"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="高血压：102 mmHg"
+                    android:text="收缩压：102 mmHg"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/item_hypotension"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="低血压：76mmHg"
+                    android:text="舒张压：76mmHg"
                     android:textSize="12sp" />
 
                 <TextView
