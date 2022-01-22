@@ -18,7 +18,7 @@ public class Constant {
 
 
     //请求数量
-    public static int limit = 10;
+    public static int limit = 20;
 
     //健康状况
     public final int GOOD = 1;//健康

@@ -1,9 +1,12 @@
 package com.jinke.driverhealth.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.HealthDetailActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.beans.BloodPressure;
 import com.jinke.driverhealth.beans.HeartRate;
 import com.jinke.driverhealth.beans.Temperature;
 import com.jinke.driverhealth.interfaces.OkGoCallback;
+import com.jinke.driverhealth.interfaces.OnItemClickListener;
 import com.jinke.driverhealth.services.BloodPressureService;
 import com.jinke.driverhealth.services.HeartService;
 import com.jinke.driverhealth.services.TemperatureSevice;
@@ -55,9 +60,41 @@ public class DataFragment extends Fragment {
         mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         //3、设置适配器
         mDataAdapter = new DataAdapter();
+        //添加点击事件
+        mDataAdapter.setOnItemClickListener(new OnItemClickListener() {
+
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //TODO:监听长按事件
+                Toast.makeText(getActivity(), "long click " + position + " item", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onLongClick  --> item" + position);
+            }
+
+            @Override
+            public void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData) {
+
+                Log.d(TAG, "onClick -->  item" + pos);
+                Intent intent = new Intent(getActivity(), HealthDetailActivity.class);
+
+                //用Bundle携带数据
+                Bundle bundle = new Bundle();
+
+                bundle.putString("heart_rate", "" + hrResDTO.getHeart_rate());
+                bundle.putString("temperature", "" + tempResDTO.getTemperature());
+                bundle.putString("blood_max_pressure", "" + bpResDTO.getMax_rate());
+                bundle.putString("blood_min_pressure", "" + bpResDTO.getMin_rate());
+                bundle.putString("alcohol", mockAlcoholData);
+
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
+
         mRecyclerView.setAdapter(mDataAdapter);
 
-        //获取 心率 体温 血压 数据
+        //4、获取 心率 体温 血压 数据
         try {
             initData();
         } catch (IOException e) {
@@ -72,7 +109,7 @@ public class DataFragment extends Fragment {
         String currentFormatTime = CalendarFormatUtil.getCurrentFormatTime();
 
         //心率
-        HeartService.requestHeartRateDataFromTuDY(currentFormatTime,new OkGoCallback() {
+        HeartService.requestHeartRateDataFromTuDY(currentFormatTime, new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {
@@ -85,7 +122,7 @@ public class DataFragment extends Fragment {
         });
 
         //体温
-        TemperatureSevice.requestTemperatureDataFromTuDY(currentFormatTime,new OkGoCallback() {
+        TemperatureSevice.requestTemperatureDataFromTuDY(currentFormatTime, new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {
@@ -98,7 +135,7 @@ public class DataFragment extends Fragment {
         });
 
         //血压
-        BloodPressureService.requestBloodPressureDataFromTuDY(currentFormatTime,new OkGoCallback() {
+        BloodPressureService.requestBloodPressureDataFromTuDY(currentFormatTime, new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {

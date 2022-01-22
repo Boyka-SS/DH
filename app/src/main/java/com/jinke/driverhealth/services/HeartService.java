@@ -8,6 +8,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author: fanlihao
@@ -31,7 +32,13 @@ public class HeartService {
             @Override
             public void onSuccess(Response<String> response) {
                 if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
+                    try {
+                        callback.onSuccess(response.body());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

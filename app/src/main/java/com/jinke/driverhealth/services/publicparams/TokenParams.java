@@ -10,6 +10,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author: fanlihao
@@ -36,7 +37,14 @@ public class TokenParams {
             @Override
             public void onSuccess(Response<String> response) {
                 if (response.isSuccessful()) {
-                    okGoCallback.onSuccess(response.body());
+                    try {
+                        okGoCallback.onSuccess(response.body());
+                    } catch (IOException e) {
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

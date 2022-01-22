@@ -15,6 +15,7 @@ import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.beans.BloodPressure;
 import com.jinke.driverhealth.beans.HeartRate;
 import com.jinke.driverhealth.beans.Temperature;
+import com.jinke.driverhealth.interfaces.OnItemClickListener;
 import com.jinke.driverhealth.views.ZQImageViewRoundOval;
 
 import java.util.ArrayList;
@@ -36,6 +37,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private int healthState = 0;//健康状况
 
+    //事件回调监听
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,10 +58,43 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        //模拟酒精浓度数据
+        String[] alcoholArr = new String[]{"1.0", "0.1", "0.0", "1.3", "0.3"};
+        //mock 酒精浓度
+        String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
         //这里设置数据
         holder.itemView.setTag(position);
         Log.d(TAG, position + "");
-        holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position));
+        holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position), mockAlcoholData);
+        //对RecyclerView的每一个itemView设置点击事件
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    mOnItemClickListener.onItemClick(
+                                    holder.itemView,
+                                    pos,
+                                    mBloodPressureResult.get(position),
+                                    mTemperatureResult.get(position),
+                                    mHeartRateResult.get(position),
+                                    mockAlcoholData);
+                }
+            }
+        });
+        //长按监听
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mOnItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    mOnItemClickListener.onItemLongClick(holder.itemView, pos);
+                }
+                //表示此事件已经消费，不会触发单击事件
+                return true;
+            }
+        });
     }
 
     @Override
@@ -102,16 +144,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
         ZQImageViewRoundOval healthAssessment;
 
-        //模拟酒精浓度数据
-        String[] alcoholArr = new String[]{"1.0", "0.1", "0.0", "1.3", "0.3"};
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public void setData(BloodPressure.DataDTO.ResultDTO bloodPressureResultDto, Temperature.DataDTO.ResultDTO temperatureResultDto, HeartRate.DataDTO.ResultDTO heartRateResultDto) {
+        public void setData(BloodPressure.DataDTO.ResultDTO bloodPressureResultDto, Temperature.DataDTO.ResultDTO temperatureResultDto, HeartRate.DataDTO.ResultDTO heartRateResultDto, String alcoholMock) {
 
             initBindView();
 
@@ -120,6 +159,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
             int i = 0;
             String[] strings = new String[2];
+
             while (st.hasMoreElements()) {
                 strings[i] = (String) st.nextElement();
                 i++;
@@ -132,12 +172,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             heartRate.setText("心率：" + heartRateResultDto.getHeart_rate() + " 次/分");
             hypertension.setText("高血压：" + bloodPressureResultDto.getMax_rate() + " mmHg");
             hypotension.setText("低血压：" + bloodPressureResultDto.getMin_rate() + " mmHg");
+            alcohol.setText("酒精：" + alcoholMock + " g/L");
 
-            //mock 酒精浓度
-            String s1 = alcoholArr[new Random().nextInt(5)];
-            alcohol.setText("酒精：" + s1 + " g/L");
-
-            healthState = isHealth(temperatureResultDto.getTemperature(), heartRateResultDto.getHeart_rate(), bloodPressureResultDto.getMax_rate(), bloodPressureResultDto.getMin_rate(), s1);
+            healthState = isHealth(temperatureResultDto.getTemperature(), heartRateResultDto.getHeart_rate(), bloodPressureResultDto.getMax_rate(), bloodPressureResultDto.getMin_rate(), alcoholMock);
 
             switch (healthState) {
                 case 1:
@@ -210,3 +247,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         }
     }
 }
+
+/**
+ * item添加监听事件 ：可以通过在绑定ViewHolder的时候设置监听，然后通过Apater回调出去
+ * recyclerView使用：https://www.jianshu.com/p/4f9591291365
+ */

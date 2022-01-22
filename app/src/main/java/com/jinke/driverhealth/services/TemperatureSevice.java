@@ -8,6 +8,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author: fanlihao
@@ -32,7 +33,14 @@ public class TemperatureSevice {
             @Override
             public void onSuccess(Response<String> response) {
                 if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
+                    try {
+                        callback.onSuccess(response.body());
+                    } catch (IOException e) {
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

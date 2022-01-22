@@ -2,7 +2,6 @@ package com.jinke.driverhealth;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.jinke.driverhealth.beans.Token;
 import com.jinke.driverhealth.interfaces.OkGoCallback;
@@ -29,45 +28,52 @@ public class DHapplication extends Application {
     private static final String TAG = "DHapplication";
 
     private String mToken = "";
+    private String mExpire = "";
+
+    private StorageCallback mStorageCallback;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+
         try {
             initPublicParams();
-            initOkGo();
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 
     /**
-     * 公共参数 token + transID（每次请求都要更新，不添加成全局参数）
+     * 公共参数 token
      */
     private void initPublicParams() throws IOException {
-        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        if (sharedPreferences.getString("token", "") == "") {
-            //准备token，不过期即可
-            storageOrUpgradeToken();
-            mToken = sharedPreferences.getString("token", "");
-        }
+        //获取token存入本地
+        storageOrUpgradeToken(new StorageCallback() {
+            @Override
+            public void onStorageSuccess(String token, String expire) throws IOException, ParseException {
+                initOkGo(token, expire);
+            }
+        });
     }
+
+    ;
 
     /**
      * 初始化OkGo
      */
-    private void initOkGo() throws ParseException, IOException {
+    private void initOkGo(String token, String expire) throws ParseException, IOException {
+
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
 
-        String expire = sharedPreferences.getString("expire", "");
-        mToken = getEffectiveToken(expire, sharedPreferences);
+//        String effectiveToken = getEffectiveToken(expire, sharedPreferences);
 
         //公共头
         HttpHeaders headers = new HttpHeaders();
-        Log.d(TAG, "" + mToken);
-        headers.put("token", "" + mToken);
+
+        headers.put("token", "" + token);
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -85,25 +91,30 @@ public class DHapplication extends Application {
     }
 
     /**
-     * 检测 token  是否过期
-     * 不过期 用本地 否则 重新发送请求
-     * ps:java 比较日期大小： www.cnblogs.com/MrYangSX/p/11684482.html
+     * @param expireTime
+     * @param sharedPreferences
+     * @return
+     * @throws ParseException
+     * @throws IOException    java 比较日期大小： www.cnblogs.com/MrYangSX/p/11684482.html
      */
     private String getEffectiveToken(String expireTime, SharedPreferences sharedPreferences) throws ParseException, IOException {
-        String token = sharedPreferences.getString("token", "");
+
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         Date currentTime = new Date();
+
         Date endTime = format.parse(expireTime);
+
         //有效
         if (currentTime.before(endTime)) {
-            return token;
+            return sharedPreferences.getString("token","");
         } else {
             //无效，更新本地token+expire
-            storageOrUpgradeToken();
-            token = sharedPreferences.getString("token", "");
-            return token;
+           // storageOrUpgradeToken();
+//            token = sharedPreferences.getString("token", "");
         }
+        return mToken;
     }
 
 
@@ -114,20 +125,29 @@ public class DHapplication extends Application {
      *
      * @throws IOException
      */
-    private void storageOrUpgradeToken() throws IOException {
+    private void storageOrUpgradeToken(StorageCallback callback) throws IOException {
 
         TokenParams.requestToken(new OkGoCallback() {
             @Override
-            public void onSuccess(String reponseData) {
+            public void onSuccess(String reponseData) throws IOException, ParseException {
                 if (reponseData != "") {
                     Token token = JsonUtil.parseJson(reponseData, Token.class);
+
                     SharedPreferences.Editor edit = getSharedPreferences("data", MODE_PRIVATE).edit();
+                    //存放token
                     edit.putString("token", token.getData().getToken());
                     edit.putString("expire", token.getData().getExpired());
+
                     edit.apply();
+
+                    callback.onStorageSuccess(token.getData().getToken(), token.getData().getExpired());
                 }
             }
         });
 
+    }
+
+    public interface StorageCallback {
+        void onStorageSuccess(String token, String expire) throws IOException, ParseException;
     }
 }

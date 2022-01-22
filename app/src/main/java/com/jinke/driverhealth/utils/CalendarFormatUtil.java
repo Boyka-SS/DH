@@ -2,6 +2,7 @@ package com.jinke.driverhealth.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author: fanlihao
@@ -16,6 +17,7 @@ public class CalendarFormatUtil {
     public static String getCurrentFormatTime() {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         String dateNowStr = sdf.format(d);
         return dateNowStr;
     }
