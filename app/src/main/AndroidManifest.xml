@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth">
-        <activity android:name=".activity.ContacterActivity"></activity>
+        <activity android:name=".activity.ContacterActivity">
+
+        </activity>
         <activity android:name=".activity.AlcoholActivity" />
         <activity android:name=".activity.BloodPressureActivity" />
         <activity android:name=".activity.TempActivity" />
