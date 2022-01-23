@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="shallowSeaOfGreen">#20B2AA</color>
+    <color name="black_semi_transparent">#F5F5F5</color>
+
+    <!--悬浮按钮-->
+    <color name="text">#FF0000</color>
+    <color name="colorAccent">#D2691E</color>
 </resources>

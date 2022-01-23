@@ -1,7 +1,6 @@
 package com.jinke.driverhealth.adapters;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +64,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
         //这里设置数据
         holder.itemView.setTag(position);
-        Log.d(TAG, position + "");
         holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position), mockAlcoholData);
-        //对RecyclerView的每一个itemView设置点击事件
+        //对RecyclerView的每一个itemView设置点击事件,并传递数据过去
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +77,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                                     mBloodPressureResult.get(position),
                                     mTemperatureResult.get(position),
                                     mHeartRateResult.get(position),
-                                    mockAlcoholData);
+                                    mockAlcoholData,
+                                    mHeartRateResult.get(position).getCreated());
                 }
             }
         });
@@ -235,9 +234,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             temperature = itemView.findViewById(R.id.item_temperature);
             //心率
             heartRate = itemView.findViewById(R.id.item_heart_rate);
-            //高血压
+            //收缩压
             hypertension = itemView.findViewById(R.id.item_hypertension);
-            //低血压
+            //舒张压
             hypotension = itemView.findViewById(R.id.item_hypotension);
             alcohol = itemView.findViewById(R.id.item_alcohol_concentration);//mock 数据
             healthAssessment = itemView.findViewById(R.id.item_health_assessment);//健康状况

@@ -34,5 +34,5 @@ public interface OnItemClickListener {
      * @param hrResDTO
      * @param mockAlcoholData
      */
-    void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData);
+    void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData,String createDate);
 }

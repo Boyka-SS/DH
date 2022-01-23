@@ -60,7 +60,7 @@ public class DataFragment extends Fragment {
         mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         //3、设置适配器
         mDataAdapter = new DataAdapter();
-        //添加点击事件
+        //添加点击事件，通过接口回调的方式将recyclerView item中对应的数据 拿到，传给  detai页面
         mDataAdapter.setOnItemClickListener(new OnItemClickListener() {
 
 
@@ -72,7 +72,7 @@ public class DataFragment extends Fragment {
             }
 
             @Override
-            public void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData) {
+            public void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData, String createDate) {
 
                 Log.d(TAG, "onClick -->  item" + pos);
                 Intent intent = new Intent(getActivity(), HealthDetailActivity.class);
@@ -85,6 +85,7 @@ public class DataFragment extends Fragment {
                 bundle.putString("blood_max_pressure", "" + bpResDTO.getMax_rate());
                 bundle.putString("blood_min_pressure", "" + bpResDTO.getMin_rate());
                 bundle.putString("alcohol", mockAlcoholData);
+                bundle.putString("create_date", createDate);
 
                 intent.putExtras(bundle);
 

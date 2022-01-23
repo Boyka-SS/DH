@@ -1,10 +1,14 @@
 package com.jinke.driverhealth.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.jinke.driverhealth.R;
 
@@ -12,15 +16,21 @@ public class HealthDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "HealthDetailActivity";
 
+    //相关数据
     private String mHeartRate;
     private String mTemperature;
     private String mBloodMaxPressure;
     private String mBloodMinPressure;
     private String mAlcohol;
+    private String mCreateDate;
 
 
-    private TextView temperature, heartRate, maxRate, minRate, alcohol;
-    private ImageView tempImage, hrImg, bpImg, alcoImg;
+    private TextView temperature, heartRate, maxRate, minRate, alcohol, tip;
+    private ImageView tempImage;
+    private ImageView hrImg;
+    private ImageView bpImg;
+    private ImageView aldoImg;
+    private CardView tempCard, hrCard, bpCard, aldoCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,26 +38,70 @@ public class HealthDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_health_detail);
         initView();
         initData();
+        setOnCardClickEvent();
     }
 
+    private void setOnCardClickEvent() {
+
+
+        tempCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HealthDetailActivity.this, TempActivity.class);
+                Toast.makeText(getApplicationContext(), "tempCard", Toast.LENGTH_LONG).show();
+            }
+        });
+        hrCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HealthDetailActivity.this, HeartActivity.class);
+                Toast.makeText(getApplicationContext(), "hrCard", Toast.LENGTH_LONG).show();
+            }
+        });
+        bpCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HealthDetailActivity.this, BloodPressureActivity.class);
+                Toast.makeText(getApplicationContext(), "bpCard", Toast.LENGTH_LONG).show();
+            }
+        });
+        aldoCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HealthDetailActivity.this, AlcoholActivity.class);
+                Toast.makeText(getApplicationContext(), "aldoCard", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
     private void initView() {
+        tempCard = this.findViewById(R.id.item_temperature);
         temperature = this.findViewById(R.id.item_temperature_value);
         tempImage = this.findViewById(R.id.item_temperature_image);
 
         heartRate = this.findViewById(R.id.item_heart_rate_value);
         hrImg = this.findViewById(R.id.item_heart_rate_image);
+        hrCard = this.findViewById(R.id.item_heart_rate);
 
         maxRate = this.findViewById(R.id.item_blood_pressure_maxvalue);
         minRate = this.findViewById(R.id.item_blood_pressure_minvalue);
         bpImg = this.findViewById(R.id.item_blood_pressure_image);
+        bpCard = this.findViewById(R.id.item_blood_pressure);
 
         alcohol = this.findViewById(R.id.item_alcohol_value);
-        alcoImg = this.findViewById(R.id.item_alcohol_image);
+        aldoImg = this.findViewById(R.id.item_alcohol_image);
+        aldoCard = this.findViewById(R.id.item_alcohol);
+
+
+        tip = this.findViewById(R.id.textView);
 
     }
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
+        //心率
         mHeartRate = bundle.getString("heart_rate");
         if (Integer.parseInt(mHeartRate) >= 60 && Integer.parseInt(mHeartRate) <= 100) {
             hrImg.setImageResource(R.mipmap.good1);
@@ -55,31 +109,42 @@ public class HealthDetailActivity extends AppCompatActivity {
             hrImg.setImageResource(R.mipmap.bad1);
         }
         heartRate.setText(mHeartRate + " 次/分");
-
+        //体温
         mTemperature = bundle.getString("temperature");
-        if (Double.parseDouble(mTemperature) >= 36.0 && Double.parseDouble(mTemperature) <= 37.0) {
-            hrImg.setImageResource(R.mipmap.good1);
+        if (
+                Double.parseDouble(mTemperature) >= 36.0 &&
+                        Double.parseDouble(mTemperature) <= 37.0) {
+            tempImage.setImageResource(R.mipmap.good1);
         } else {
-            hrImg.setImageResource(R.mipmap.bad1);
+            tempImage.setImageResource(R.mipmap.bad1);
         }
         temperature.setText(mTemperature + " ℃");
-
+        //血压
         mBloodMaxPressure = bundle.getString("blood_max_pressure");
         maxRate.setText(mBloodMaxPressure + " mmHg");
         mBloodMinPressure = bundle.getString("blood_min_pressure");
         minRate.setText(mBloodMinPressure + " mmHg");
-        if (Integer.parseInt(mBloodMaxPressure) >= 90 && Integer.parseInt(mBloodMaxPressure) <= 120 && Integer.parseInt(mBloodMinPressure) >= 60 && Integer.parseInt(mBloodMinPressure) <= 80) {
+
+        if (
+                Integer.parseInt(mBloodMaxPressure) >= 90 &&
+                        Integer.parseInt(mBloodMaxPressure) <= 120 &&
+                        Integer.parseInt(mBloodMinPressure) >= 60 &&
+                        Integer.parseInt(mBloodMinPressure) <= 80) {
             bpImg.setImageResource(R.mipmap.good1);
         } else {
             bpImg.setImageResource(R.mipmap.bad1);
         }
-
+        //酒精
         mAlcohol = bundle.getString("alcohol");
         if (Double.parseDouble(mAlcohol) <= 0.2) {
-            hrImg.setImageResource(R.mipmap.good1);
+            aldoImg.setImageResource(R.mipmap.good1);
         } else {
-            hrImg.setImageResource(R.mipmap.bad1);
+            aldoImg.setImageResource(R.mipmap.bad1);
         }
         alcohol.setText(mAlcohol + " g/L");
+
+        //心率生成日期
+        mCreateDate = bundle.getString("create_date");
+        tip.setText(mCreateDate);
     }
 }

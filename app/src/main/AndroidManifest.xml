@@ -3,6 +3,9 @@
     package="com.jinke.driverhealth">
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--通讯录-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:name=".DHapplication"
@@ -12,7 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth">
-        <activity android:name=".activity.HealthDetailActivity"></activity>
+        <activity android:name=".activity.ContacterActivity"></activity>
+        <activity android:name=".activity.AlcoholActivity" />
+        <activity android:name=".activity.BloodPressureActivity" />
+        <activity android:name=".activity.TempActivity" />
+        <activity android:name=".activity.HeartActivity" />
+        <activity android:name=".activity.HealthDetailActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
