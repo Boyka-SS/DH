@@ -1,8 +1,11 @@
 package com.jinke.driverhealth.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +15,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.jinke.driverhealth.AppDatabase;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.ContacterActivity;
+import com.jinke.driverhealth.beans.Contactor;
+import com.jinke.driverhealth.dao.ContactorDao;
+import com.jinke.driverhealth.repository.ContactorRepository;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import butterknife.Unbinder;
 
 public class HomePageFragment extends Fragment {
@@ -25,8 +33,11 @@ public class HomePageFragment extends Fragment {
     private static final String TAG = "HomePageFragment";
     private Unbinder unbinder;
 
-    @BindView(R.id.add_contacter)
-    FloatingActionButton mAddContacter;
+
+    private FloatingActionButton mAddContacter;
+    private FloatingActionButton mMakePhone;
+
+    private ContactorDao mContactorDao;
 
     public static HomePageFragment newInstance() {
         return new HomePageFragment();
@@ -38,27 +49,65 @@ public class HomePageFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.home_page_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        initViewEvent(view);
         return view;
     }
 
+    private void initViewEvent(View view) {
+        mAddContacter = view.findViewById(R.id.add_contacter);
+        mAddContacter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getActivity(), ContacterActivity.class);
+                startActivity(intent1);
+            }
+        });
+        mMakePhone = view.findViewById(R.id.make_phone);
+        mMakePhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-    @OnClick({R.id.add_contacter,})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.add_contacter:
-                Intent intent = new Intent(getActivity(), ContacterActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+                Intent intent2 = new Intent(Intent.ACTION_DIAL);
+                try {
+                    intent2.setData(Uri.parse("tel:" + getFirstContactorPhone(getContext())));
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent2);
+            }
+        });
+    }
+
+
+    /**
+     * 拨打第一联系人，如果没有就打120
+     *
+     * @return
+     */
+    private String getFirstContactorPhone(Context context) throws ExecutionException, InterruptedException {
+        mContactorDao = AppDatabase.getInstance(context).getContactorDao();
+
+        List<Contactor> contactors = new ContactorRepository(mContactorDao).getAllContactorData();
+        Log.d(TAG, "contactors.size :" + contactors.size());
+
+        if (contactors.size() != 0) {
+            Iterator<Contactor> iterator = contactors.iterator();
+            while (iterator.hasNext()) {
+                Contactor next = iterator.next();
+                if (next.isFirstContactor() == 1) {
+                    Log.d(TAG, "name :" + next.getName());
+                    return next.getPhone();
+                }
+            }
         }
 
+
+        return "120";
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();//视图销毁时必须解绑,否则会造成内存泄漏.
+//        unbinder.unbind();//视图销毁时必须解绑,否则会造成内存泄漏.
     }
 }

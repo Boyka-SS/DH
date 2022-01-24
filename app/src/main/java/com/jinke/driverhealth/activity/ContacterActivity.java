@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -12,10 +13,25 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jinke.driverhealth.AppDatabase;
+import com.jinke.driverhealth.DHapplication;
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.beans.Contactor;
+import com.jinke.driverhealth.dao.ContactorDao;
+import com.jinke.driverhealth.repository.ContactorRepository;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * 添加联系人界面
+ */
 public class ContacterActivity extends AppCompatActivity {
 
     private static final String TAG = "ContacterActivity";
@@ -25,7 +41,10 @@ public class ContacterActivity extends AppCompatActivity {
     private EditText contacterPhone;
     private EditText contacterMail;
     private CheckBox mCheckBox;
-    private Button mResetButton;
+    private Button mResetButton, mSave;
+
+    protected AppDatabase mAppDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +56,13 @@ public class ContacterActivity extends AppCompatActivity {
             supportActionBar.hide();
         }
 
+        //获取database实例
+        mAppDatabase = ((DHapplication) getApplication()).getAppDatabase();
         initView();
 
-        mResetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetContactorInfo();
-            }
-        });
     }
 
     private void initView() {
-        mResetButton = this.findViewById(R.id.reset);
         contacterSurName = this.findViewById(R.id.contacter_surname);
         contacterName = this.findViewById(R.id.contacter_name);
         //电话 和 邮箱 id exchange
@@ -56,9 +70,35 @@ public class ContacterActivity extends AppCompatActivity {
         contacterMail = this.findViewById(R.id.contacter_phone);
         mCheckBox = this.findViewById(R.id.checkBox);
 
+        mSave = this.findViewById(R.id.finish);
+        mSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    saveContactorInfo();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mResetButton = this.findViewById(R.id.reset);
+        mResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "reset");
+                resetContactorInfo();
+            }
+        });
+
     }
 
 
+    /**
+     * 重置用户联系人信息
+     */
     private void resetContactorInfo() {
         Log.d(TAG, "reset ");
         contacterName.setText("");
@@ -68,8 +108,88 @@ public class ContacterActivity extends AppCompatActivity {
         mCheckBox.setChecked(false);
     }
 
-    private void storageContactorInfo() {
+    /**
+     * room 保存 联系人 信息
+     */
+    private void saveContactorInfo() throws ExecutionException, InterruptedException {
 
+        String name = contacterSurName.getText().toString() + contacterName.getText().toString();
+//        String phone = isTelPhoneNumber(contacterPhone.getText().toString())? contacterPhone.getText().toString() : "手机号格式不正确";
+        String phone = contacterPhone.getText().toString();
+//        String mail = isMail(contacterMail.getText().toString()) ? contacterMail.getText().toString() : "邮箱格式不正确";
+        String mail = contacterMail.getText().toString();
+
+        Contactor contactor = new Contactor(name,
+                phone,
+                mail,
+                mCheckBox.isChecked() ? 1 : 0,
+                "");
+
+        ContactorDao contactorDao = mAppDatabase.getContactorDao();
+
+        List<Contactor> allContactorData = new ContactorRepository(contactorDao).getAllContactorData();
+
+        Iterator<Contactor> iterator = allContactorData.iterator();
+
+        //保证第一联系人唯一,如果新增联系人被设为第一联系人，则其他联系人要设为false,并且更新 DB
+        if (mCheckBox.isChecked()) {
+            while (iterator.hasNext()) {
+                iterator.next().setFirstContactor(0);
+            }
+            contactorDao.updateContactors(allContactorData);
+        }
+
+        new AlertDialog.Builder(ContacterActivity.this)
+                .setMessage("是否保存")
+                .setPositiveButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "cancel");
+                    }
+                })
+                .setNegativeButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        contactorDao.insertContactor(contactor);
+                        resetContactorInfo();
+                    }
+                })
+                .show();
+
+    }
+
+
+    /**
+     * 手机号号段校验，
+     * 第1位：1；
+     * 第2位：{3、4、5、6、7、8、9}任意数字；
+     * 第3—11位：0—9任意数字
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isTelPhoneNumber(String value) {
+        if (value != null && value.length() == 11) {
+            Pattern pattern = Pattern.compile("^1[3|4|5|6|7|8|9][0-9]\\d{8}$");
+            Matcher matcher = pattern.matcher(value);
+            return matcher.matches();
+        }
+        return false;
+    }
+
+    /**
+     * 邮箱有效性验证
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isMail(String value) {
+        if (value != "") {
+            Pattern pattern = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+            Matcher matcher = pattern.matcher(value);
+            return matcher.matches();
+        }
+        return false;
     }
 
     /**

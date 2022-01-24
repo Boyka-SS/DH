@@ -1,6 +1,9 @@
 package com.jinke.driverhealth;
 
 import android.app.Application;
+import android.content.Context;
+
+import androidx.room.Room;
 
 import com.jinke.driverhealth.beans.Token;
 import com.jinke.driverhealth.interfaces.OkGoCallback;
@@ -23,12 +26,15 @@ import okhttp3.OkHttpClient;
 public class DHapplication extends Application {
 
     private static final String TAG = "DHapplication";
-
-
+    private AppDatabase mAppDatabase;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mAppDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "android_room_dev.db")
+                .allowMainThreadQueries()
+                .build();
         try {
             initPublicParams();
         } catch (IOException e) {
@@ -36,6 +42,14 @@ public class DHapplication extends Application {
         }
 
 
+    }
+
+    /**
+     * 获取 room database
+     * @return
+     */
+    public AppDatabase getAppDatabase() {
+        return mAppDatabase;
     }
 
     /**
@@ -77,7 +91,6 @@ public class DHapplication extends Application {
 
 
     /**
-     *
      * @param callback
      * @throws IOException
      */

@@ -151,7 +151,6 @@ public class DataFragment extends Fragment {
 
     private void upHeartRateData(List<HeartRate.DataDTO.ResultDTO> result) {
         mDataAdapter.setHeartRateResult(result);
-
     }
 
     private void upTemperatureData(List<Temperature.DataDTO.ResultDTO> result) {
