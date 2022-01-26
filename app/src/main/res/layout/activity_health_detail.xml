@@ -9,7 +9,7 @@
     tools:context=".activity.HealthDetailActivity">
 
     <!--temperature-->
-
+    <include layout="@layout/title_bar" />
     <androidx.cardview.widget.CardView
         android:id="@+id/item_temperature"
         android:layout_width="match_parent"

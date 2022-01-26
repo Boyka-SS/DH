@@ -22,6 +22,7 @@ import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.beans.Contactor;
 import com.jinke.driverhealth.dao.ContactorDao;
 import com.jinke.driverhealth.repository.ContactorRepository;
+import com.jinke.driverhealth.views.TitleLayout;
 
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +56,13 @@ public class ContacterActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             supportActionBar.hide();
         }
+
+        new TitleLayout(this).setTitleText("添加联系人").setLeftIcoListening(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //获取database实例
         mAppDatabase = ((DHapplication) getApplication()).getAppDatabase();
@@ -92,6 +100,7 @@ public class ContacterActivity extends AppCompatActivity {
                 resetContactorInfo();
             }
         });
+
 
     }
 

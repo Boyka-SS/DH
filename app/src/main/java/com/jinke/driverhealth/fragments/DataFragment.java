@@ -123,7 +123,7 @@ public class DataFragment extends Fragment {
         });
 
         //体温
-        TemperatureSevice.requestTemperatureDataFromTuDY(currentFormatTime, new OkGoCallback() {
+        TemperatureSevice.requestTemperatureDataFromTuDY("", currentFormatTime, new OkGoCallback() {
             @Override
             public void onSuccess(String reponseData) {
                 if (reponseData != "") {

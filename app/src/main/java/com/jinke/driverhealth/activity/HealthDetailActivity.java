@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.views.TitleLayout;
 
 public class HealthDetailActivity extends AppCompatActivity {
 
@@ -31,11 +32,26 @@ public class HealthDetailActivity extends AppCompatActivity {
     private ImageView bpImg;
     private ImageView aldoImg;
     private CardView tempCard, hrCard, bpCard, aldoCard;
+    private Bundle mBundle; //用Bundle携带数据 在页面之间传递数据
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health_detail);
+
+        //隐藏系统自带 头部导航栏
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.hide();
+        }
+        new TitleLayout(this).setTitleText("健康数据详情").setLeftIcoListening(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         initView();
         initData();
         setOnCardClickEvent();
@@ -48,28 +64,36 @@ public class HealthDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HealthDetailActivity.this, TempActivity.class);
-                Toast.makeText(getApplicationContext(), "tempCard", Toast.LENGTH_LONG).show();
+                mBundle = new Bundle();
+                mBundle.putString("create_time", mCreateDate);
+                startActivity(intent);
             }
         });
         hrCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HealthDetailActivity.this, HeartActivity.class);
-                Toast.makeText(getApplicationContext(), "hrCard", Toast.LENGTH_LONG).show();
+                mBundle = new Bundle();
+                mBundle.putString("create_time", mCreateDate);
+                startActivity(intent);
             }
         });
         bpCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HealthDetailActivity.this, BloodPressureActivity.class);
-                Toast.makeText(getApplicationContext(), "bpCard", Toast.LENGTH_LONG).show();
+                mBundle = new Bundle();
+                mBundle.putString("create_time", mCreateDate);
+                startActivity(intent);
             }
         });
         aldoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HealthDetailActivity.this, AlcoholActivity.class);
-                Toast.makeText(getApplicationContext(), "aldoCard", Toast.LENGTH_LONG).show();
+                mBundle = new Bundle();
+                mBundle.putString("create_time", mCreateDate);
+                startActivity(intent);
             }
         });
 

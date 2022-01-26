@@ -18,11 +18,14 @@ public class TemperatureSevice {
     private static final String TAG = "TemperatureSevice";
 
 
-    public static void requestTemperatureDataFromTuDY(String endTime,final OkGoCallback callback) throws IOException {
+    public static void requestTemperatureDataFromTuDY(String startTime, String endTime, final OkGoCallback callback) throws IOException {
 
+        if (startTime == "") {
+            startTime = "2021-10-01 00:00:00";
+        }
 
         String url = "https://openapi.xu5g.com/tsp/temperatures/get" +
-                "?start_time=2021-10-01 00:00:00" +
+                "?start_time=" + startTime +
                 "&end_time=" + endTime +
                 "&page=1" +
                 "&limit=" + Constant.limit;
@@ -36,7 +39,6 @@ public class TemperatureSevice {
                     try {
                         callback.onSuccess(response.body());
                     } catch (IOException e) {
-
 
                     } catch (ParseException e) {
                         e.printStackTrace();

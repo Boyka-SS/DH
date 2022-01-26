@@ -1,7 +1,6 @@
 package com.jinke.driverhealth;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.room.Room;
 
@@ -27,7 +26,7 @@ public class DHapplication extends Application {
 
     private static final String TAG = "DHapplication";
     private AppDatabase mAppDatabase;
-    private static Context context;
+
 
     @Override
     public void onCreate() {
@@ -35,6 +34,7 @@ public class DHapplication extends Application {
         mAppDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "android_room_dev.db")
                 .allowMainThreadQueries()
                 .build();
+
         try {
             initPublicParams();
         } catch (IOException e) {
