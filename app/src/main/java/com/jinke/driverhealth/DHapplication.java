@@ -46,6 +46,7 @@ public class DHapplication extends Application {
 
     /**
      * 获取 room database
+     *
      * @return
      */
     public AppDatabase getAppDatabase() {
@@ -56,13 +57,14 @@ public class DHapplication extends Application {
      * 公共参数 token
      */
     private void initPublicParams() throws IOException {
-        //获取token,存入本地,初始化 OKGO
+//        获取token,存入本地,初始化 OKGO
         storageOrUpgradeToken(new FetchTokenCallback() {
             @Override
             public void onFetchTokenSuccess(String token, String expire) throws IOException, ParseException {
                 initOkGo(token);
             }
         });
+
     }
 
     ;

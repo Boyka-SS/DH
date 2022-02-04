@@ -44,13 +44,15 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    //okgo
+    //gson
     implementation 'com.google.code.gson:gson:2.8.5'
+    //okgo
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okio:okio:1.14.0'
     implementation 'com.lzy.net:okgo:3.0.4'
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //cardview
     implementation 'androidx.cardview:cardview:1.0.0'
     //floatbutton
@@ -62,10 +64,11 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     //butterknife
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
-    //热门强大的图片加载器
+    //图片加载器
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //noinspection GradleCompatible

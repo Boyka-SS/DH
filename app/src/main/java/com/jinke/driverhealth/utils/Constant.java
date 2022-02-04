@@ -9,7 +9,13 @@ public class Constant {
 
 
     /**
+     * 兔盯云平台
+     */
+    public static final String BASE_URL = "https://openapi.xu5g.com/";
+
+    /**
      * APPKEY+SECRET：兔盯云手表秘钥
+     *
      * IMEI：设备号
      */
     public static final String APPKEY = "10014";

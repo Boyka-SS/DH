@@ -316,8 +316,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="八百年前，明帝之子张若尘被他的未婚妻池瑶公主杀死，一代天骄，就此陨落。八百年后，
-               张若尘重新活了过来，却发现曾经杀死他的未婚妻，" />
+            android:text="点击查看历史数据" />
     </LinearLayout>
 
 </LinearLayout>

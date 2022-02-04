@@ -32,6 +32,7 @@ public class HealthDetailActivity extends AppCompatActivity {
     private ImageView bpImg;
     private ImageView aldoImg;
     private CardView tempCard, hrCard, bpCard, aldoCard;
+
     private Bundle mBundle; //用Bundle携带数据 在页面之间传递数据
 
 
@@ -66,6 +67,7 @@ public class HealthDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(HealthDetailActivity.this, TempActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -75,6 +77,7 @@ public class HealthDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(HealthDetailActivity.this, HeartActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -84,6 +87,7 @@ public class HealthDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(HealthDetailActivity.this, BloodPressureActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
@@ -93,6 +97,7 @@ public class HealthDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(HealthDetailActivity.this, AlcoholActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });
