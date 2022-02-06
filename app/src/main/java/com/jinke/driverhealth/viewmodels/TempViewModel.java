@@ -1,7 +1,6 @@
 package com.jinke.driverhealth.viewmodels;
 
 import android.net.ParseException;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,6 +21,7 @@ import java.util.List;
  */
 
 public class TempViewModel extends ViewModel {
+
     private static final String TAG = "TempViewModel";
     private MutableLiveData<List<Temperature.DataDTO.ResultDTO>> tempResult = new MutableLiveData<>();
     private String endTime;
@@ -32,17 +32,10 @@ public class TempViewModel extends ViewModel {
 
 
     public MutableLiveData<List<Temperature.DataDTO.ResultDTO>> getTempResult() throws IOException {
-        if (tempResult == null) {
-            tempResult = new MutableLiveData<List<Temperature.DataDTO.ResultDTO>>();
-            loadTempData(endTime);
-            Log.d(TAG,"abc"+tempResult.getValue().toString());
-        }
+        loadTempData(endTime);
         return tempResult;
     }
 
-    public String getEndTime() {
-        return endTime;
-    }
 
     private void loadTempData(String endTime) throws IOException {
         TemperatureSevice.requestTemperatureDataFromTuDY("", endTime, new OkGoCallback() {
@@ -57,7 +50,6 @@ public class TempViewModel extends ViewModel {
                 }
             }
         });
-
     }
 
     @Override

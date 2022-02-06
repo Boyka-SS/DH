@@ -2,11 +2,11 @@ package com.jinke.driverhealth.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
@@ -43,12 +43,45 @@ public class TempActivity extends AppCompatActivity {
 
     private TempViewModel mTempActModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp);
+        hideActionBar();
 
-        //隐藏系统自带 头部导航栏
+        mTempActModel = new ViewModelProvider(this).get(TempViewModel.class);
+
+        String endTime = (String) getIntent().getExtras().get("create_time");
+        mTempActModel.setEndTime(endTime);
+
+        try {
+            mTempActModel.getTempResult().observe(this, new Observer<List<Temperature.DataDTO.ResultDTO>>() {
+                @Override
+                public void onChanged(List<Temperature.DataDTO.ResultDTO> resultDTOS) {
+                    lineChart = findViewById(R.id.line_chart_temp);
+
+                    List<String> date = new ArrayList<>();
+                    List<String> tempData = new ArrayList<>();
+                    for (Temperature.DataDTO.ResultDTO resultDTO : resultDTOS) {
+                        date.add(resultDTO.getCreated().substring(5, 10));
+                        tempData.add(resultDTO.getTemperature());
+                    }
+                    getAxisXLables(date);//获取x轴的标注
+                    getAxisPoints(tempData);//获取坐标点
+                    initLineChart();//初始化
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 隐藏系统自带 头部导航栏
+     */
+    private void hideActionBar() {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.hide();
@@ -59,22 +92,6 @@ public class TempActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mTempActModel = new ViewModelProvider(this).get(TempViewModel.class);
-        String endTime = (String) getIntent().getExtras().get("create_time");
-        mTempActModel.setEndTime(endTime);
-
-        try {
-            List<Temperature.DataDTO.ResultDTO> tempData = mTempActModel.getTempResult().getValue();
-            Log.d(TAG, tempData.toString() + "abcd");
-            getAxisXLables(tempData);//获取x轴的标注
-            getAxisPoints(tempData);//获取坐标点
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        lineChart = findViewById(R.id.line_chart_temp);
-
-
-        initLineChart();//初始化
     }
 
     private void initLineChart() {
@@ -94,7 +111,7 @@ public class TempActivity extends AppCompatActivity {
         //坐标轴
         Axis axisX = new Axis(); //X轴
         axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
-        axisX.setTextColor(Color.GRAY);  //设置字体颜色
+        axisX.setTextColor(Color.RED);  //设置字体颜色
         axisX.setName("date");  //表格名称
         axisX.setTextSize(10);//设置字体大小
         axisX.setMaxLabelChars(8); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
@@ -106,13 +123,13 @@ public class TempActivity extends AppCompatActivity {
         // Y轴是根据数据的大小自动设置Y轴上限(在下面我会给出固定Y轴数据个数的解决方案)
         Axis axisY = new Axis();  //Y轴
         axisY.setName("");//y轴标注
-        axisY.setTextSize(10);//设置字体大小
+        axisY.setTextSize(5);//设置字体大小
         data.setAxisYLeft(axisY);  //Y轴设置在左边
         //data.setAxisYRight(axisY);  //y轴设置在右边
 
 
         //设置行为属性，支持缩放、滑动以及平移
-        lineChart.setInteractive(true);
+        lineChart.setInteractive(false);
         lineChart.setZoomType(ZoomType.HORIZONTAL);
         lineChart.setMaxZoom((float) 2);//最大放大比例
         lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
@@ -130,9 +147,9 @@ public class TempActivity extends AppCompatActivity {
     /**
      * 图表的每个点的表示
      */
-    private void getAxisPoints(List<Temperature.DataDTO.ResultDTO> result) {
+    private void getAxisPoints(List<String> result) {
         for (int i = 0; i < result.size(); i++) {
-            mPointValues.add(new PointValue(i, Float.parseFloat(result.get(i).getTemperature())));
+            mPointValues.add(new PointValue(i, Float.parseFloat(result.get(i))));
         }
     }
 
@@ -141,11 +158,9 @@ public class TempActivity extends AppCompatActivity {
      *
      * @param result
      */
-    private void getAxisXLables(List<Temperature.DataDTO.ResultDTO> result) {
-
+    private void getAxisXLables(List<String> result) {
         for (int i = 0; i < result.size(); i++) {
-
-            mAxisXValues.add(new AxisValue(i).setLabel(result.get(i).getCreated()));
+            mAxisXValues.add(new AxisValue(i).setLabel(result.get(i)));
         }
     }
 
