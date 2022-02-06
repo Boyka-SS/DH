@@ -8,6 +8,7 @@ package com.jinke.driverhealth.utils;
 public class Constant {
 
 
+
     /**
      * 兔盯云平台
      */
@@ -21,7 +22,6 @@ public class Constant {
     public static final String APPKEY = "10014";
     public static final String SECRET = "2c5058d97630269bf0867035764f81db";
     public static final String IMEI = "689466010023530";
-
 
     //请求数量
     public static int limit = 20;

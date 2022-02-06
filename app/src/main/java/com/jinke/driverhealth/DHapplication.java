@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.jinke.driverhealth.beans.Token;
+import com.jinke.driverhealth.data.network.TokenNetwork;
+import com.jinke.driverhealth.data.repository.TokenRepository;
 import com.jinke.driverhealth.interfaces.OkGoCallback;
 import com.jinke.driverhealth.services.publicparams.TokenParams;
 import com.jinke.driverhealth.utils.JsonUtil;
@@ -35,13 +37,12 @@ public class DHapplication extends Application {
                 .allowMainThreadQueries()
                 .build();
 
-        try {
-            initPublicParams();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+//        try {
+//            initPublicParams();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        new TokenRepository(mAppDatabase.getTokenDao(),new TokenNetwork()).fetchToken();
     }
 
     /**
