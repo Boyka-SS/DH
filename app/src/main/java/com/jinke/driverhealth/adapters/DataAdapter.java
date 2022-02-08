@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private static final String TAG = "DataAdapter";
+
     private List<BloodPressure.DataDTO.ResultDTO> mBloodPressureResult = new ArrayList<>();
     private List<HeartRate.DataDTO.ResultDTO> mHeartRateResult = new ArrayList<>();
     private List<Temperature.DataDTO.ResultDTO> mTemperatureResult = new ArrayList<>();
@@ -59,7 +60,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         //模拟酒精浓度数据
-        String[] alcoholArr = new String[]{"1.0", "0.1", "0.0", "1.3", "0.3"};
+        String[] alcoholArr = new String[]{"56.0", "43.0", "12.0", "5.0", "93.4"};
         //mock 酒精浓度
         String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
         //这里设置数据
@@ -72,13 +73,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                 if (mOnItemClickListener != null) {
                     int pos = holder.getLayoutPosition();
                     mOnItemClickListener.onItemClick(
-                                    holder.itemView,
-                                    pos,
-                                    mBloodPressureResult.get(position),
-                                    mTemperatureResult.get(position),
-                                    mHeartRateResult.get(position),
-                                    mockAlcoholData,
-                                    mHeartRateResult.get(position).getCreated());
+                            holder.itemView,
+                            pos,
+                            mBloodPressureResult.get(position),
+                            mTemperatureResult.get(position),
+                            mHeartRateResult.get(position),
+                            mockAlcoholData,
+                            mHeartRateResult.get(position).getCreated());
                 }
             }
         });
@@ -171,7 +172,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             heartRate.setText("心率：" + heartRateResultDto.getHeart_rate() + " 次/分");
             hypertension.setText("收缩压：" + bloodPressureResultDto.getMax_rate() + " mmHg");
             hypotension.setText("舒张压：" + bloodPressureResultDto.getMin_rate() + " mmHg");
-            alcohol.setText("酒精：" + alcoholMock + " g/L");
+            alcohol.setText("酒精：" + alcoholMock + " mg/100ml");
 
             healthState = isHealth(temperatureResultDto.getTemperature(), heartRateResultDto.getHeart_rate(), bloodPressureResultDto.getMax_rate(), bloodPressureResultDto.getMin_rate(), alcoholMock);
 
@@ -180,9 +181,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     healthAssessment.setImageResource(R.mipmap.good1);
                     break;
                 case 2:
-                    healthAssessment.setImageResource(R.mipmap.yiban1);
-                    break;
-                case 3:
                     healthAssessment.setImageResource(R.mipmap.bad1);
                     break;
                 default:
@@ -193,32 +191,32 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         /**
          * 返回 健康 状况
          *
-         * @param temperature 体温 36~37
+         * @param temperature 体温 35.5~37.5
          * @param heartRate   心率 60~100 次/分
-         * @param maxRate     收缩压
-         * @param minRate     舒张压
-         * @param s1          酒精浓度  >= 0.8 g/L（醉酒驾驶）
-         * @return 2 一般
+         * @param maxRate     收缩压 90-139 mmHg
+         * @param minRate     舒张压 60-89 mmHg
+         * @param alcohol     酒精浓度  正常 20mg/100ml 饮酒 80mg/100ml 醉酒
+         *                    <p>
+         *                    只有满足无效条件均在正常范围内即可健康，否则全是虚弱.以上范围来源自网络
+         *
          */
-        private int isHealth(String temperature, int heartRate, int maxRate, int minRate, String s1) {
+        private int isHealth(String temperature, int heartRate, int maxRate, int minRate, String alcohol) {
 
-            if ((0.0 == Double.parseDouble(s1)) &&
-                    (maxRate <= 120) &&
-                    (minRate >= 80) &&
-                    (heartRate < 100) &&
-                    (heartRate > 60) &&
-                    (Double.parseDouble(temperature) < 37.0) &&
-                    (Double.parseDouble(temperature) > 36.0)) {
-                return 1;
+            double alcoholD = Double.parseDouble(alcohol);
+            double temperatureD = Double.parseDouble(temperature);
+
+            if (heartRate >= 60 && heartRate <= 100) {
+                if (temperatureD >= 35.5 && temperatureD <= 37.5) {
+                    if (maxRate >= 90 && maxRate <= 139) {
+                        if (minRate >= 60 && minRate <= 89) {
+                            if (alcoholD < 20.0) {
+                                return 1;
+                            }
+                        }
+                    }
+                }
             }
-            if ((0.8 <= Double.parseDouble(s1)) ||
-                    ((maxRate >= 120) && (minRate >= 80)) ||
-                    (heartRate > 100) ||
-                    (heartRate < 60) ||
-                    (Double.parseDouble(temperature) >= 37.0) ||
-                    (Double.parseDouble(temperature) <= 36.0)) {//如果 酒精浓度超标 直接 不健康
-                return 3;
-            }
+
             return 2;
         }
 

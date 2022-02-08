@@ -11,8 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.detail.AlcoholDeatilActivity;
+import com.jinke.driverhealth.activity.detail.BPDetailActivity;
+import com.jinke.driverhealth.activity.detail.HRDetailActivity;
+import com.jinke.driverhealth.activity.detail.TempDetailActivity;
 import com.jinke.driverhealth.views.TitleLayout;
 
+/**
+ * 健康数据详情页面
+ */
 public class HealthDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "HealthDetailActivity";
@@ -41,7 +48,17 @@ public class HealthDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health_detail);
 
-        //隐藏系统自带 头部导航栏
+        hideActionBar();
+
+        initView();
+        initData();
+        setOnCardClickEvent();
+    }
+
+    /**
+     * 隐藏系统自带 头部导航栏
+     */
+    private void hideActionBar() {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.hide();
@@ -52,10 +69,6 @@ public class HealthDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        initView();
-        initData();
-        setOnCardClickEvent();
     }
 
     private void setOnCardClickEvent() {
@@ -64,7 +77,7 @@ public class HealthDetailActivity extends AppCompatActivity {
         tempCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HealthDetailActivity.this, TempActivity.class);
+                Intent intent = new Intent(HealthDetailActivity.this, TempDetailActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
                 intent.putExtras(mBundle);
@@ -74,7 +87,7 @@ public class HealthDetailActivity extends AppCompatActivity {
         hrCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HealthDetailActivity.this, HeartActivity.class);
+                Intent intent = new Intent(HealthDetailActivity.this, HRDetailActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
                 intent.putExtras(mBundle);
@@ -84,7 +97,7 @@ public class HealthDetailActivity extends AppCompatActivity {
         bpCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HealthDetailActivity.this, BloodPressureActivity.class);
+                Intent intent = new Intent(HealthDetailActivity.this, BPDetailActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
                 intent.putExtras(mBundle);
@@ -94,7 +107,7 @@ public class HealthDetailActivity extends AppCompatActivity {
         aldoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HealthDetailActivity.this, AlcoholActivity.class);
+                Intent intent = new Intent(HealthDetailActivity.this, AlcoholDeatilActivity.class);
                 mBundle = new Bundle();
                 mBundle.putString("create_time", mCreateDate);
                 intent.putExtras(mBundle);
@@ -141,8 +154,8 @@ public class HealthDetailActivity extends AppCompatActivity {
         //体温
         mTemperature = bundle.getString("temperature");
         if (
-                Double.parseDouble(mTemperature) >= 36.0 &&
-                        Double.parseDouble(mTemperature) <= 37.0) {
+                Double.parseDouble(mTemperature) >= 35.5 &&
+                        Double.parseDouble(mTemperature) <= 37.5) {
             tempImage.setImageResource(R.mipmap.good1);
         } else {
             tempImage.setImageResource(R.mipmap.bad1);
@@ -165,7 +178,7 @@ public class HealthDetailActivity extends AppCompatActivity {
         }
         //酒精
         mAlcohol = bundle.getString("alcohol");
-        if (Double.parseDouble(mAlcohol) <= 0.2) {
+        if (Double.parseDouble(mAlcohol) <= 20) {
             aldoImg.setImageResource(R.mipmap.good1);
         } else {
             aldoImg.setImageResource(R.mipmap.bad1);

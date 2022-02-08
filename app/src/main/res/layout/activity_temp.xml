@@ -11,11 +11,8 @@
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/line_chart_temp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="300dp"
+        android:layout_margin="10dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="体温详情页面"/>
 
 </LinearLayout>

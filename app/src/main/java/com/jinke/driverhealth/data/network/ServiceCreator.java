@@ -2,6 +2,7 @@ package com.jinke.driverhealth.data.network;
 
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
+import com.jinke.driverhealth.data.network.interceptor.HeaderInterceptor;
 import com.jinke.driverhealth.utils.Config;
 
 import okhttp3.OkHttpClient;
@@ -20,8 +21,11 @@ public class ServiceCreator {
     public <T> T create(Class<T> serviceClass) {
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
-        //添加拦截器
-        okHttpClient.addInterceptor(new LoggingInterceptor.Builder()
+        //添加打印拦截器
+
+        okHttpClient
+                .addInterceptor(new HeaderInterceptor(Config.TOKEN))
+                .addInterceptor(new LoggingInterceptor.Builder()
                 .setLevel(Level.BASIC)
                 .log(VERBOSE)
                 .request("Request")
@@ -42,4 +46,6 @@ public class ServiceCreator {
 /**
  * Retrofit2 打印网络请求日志参考链接:
  * https://blog.csdn.net/baiyicanggou_wujie/article/details/80365836
+ * Retrofit2 添加公共参数:
+ * https://www.codeleading.com/article/86562498785/
  */

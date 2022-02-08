@@ -8,6 +8,10 @@ import java.util.Date;
  * @date: 2022/2/6
  */
 public class Config {
+
+    public static volatile String TOKEN = "";
+
+
     /**
      * 兔盯云平台
      */
@@ -15,7 +19,7 @@ public class Config {
 
     /**
      * APPKEY+SECRET：兔盯云手表秘钥
-     *
+     * <p>
      * IMEI：设备号
      */
     public static final String APPKEY = "10014";
@@ -36,8 +40,10 @@ public class Config {
     public static String getTransId(String suffix) {
         return APPKEY + "" + getNowFormatCalendar() + "" + suffix;
     }
+
     /**
      * 获取当前符合格式化的 年月日时分秒
+     *
      * @return
      */
     private static String getNowFormatCalendar() {

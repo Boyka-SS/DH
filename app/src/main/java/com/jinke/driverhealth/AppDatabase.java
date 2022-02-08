@@ -11,7 +11,6 @@ import com.jinke.driverhealth.beans.HeartRate;
 import com.jinke.driverhealth.beans.Token;
 import com.jinke.driverhealth.dao.ContactorDao;
 import com.jinke.driverhealth.dao.HeartRateDao;
-import com.jinke.driverhealth.data.db.dao.TokenDao;
 
 /**
  * @author: fanlihao
@@ -19,11 +18,9 @@ import com.jinke.driverhealth.data.db.dao.TokenDao;
  */
 @Database(
         entities = {HeartRate.class, Contactor.class, Token.class},
-        version = 1
-//        exportSchema = true,
-//        autoMigrations = {
-//                @AutoMigration(from = 2, to = 3)
-//        }
+        version = 1,
+        exportSchema = true
+
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -48,5 +45,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ContactorDao getContactorDao();
 
-    public abstract TokenDao getTokenDao();
+
 }

@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,24 +22,19 @@ import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.beans.BloodPressure;
 import com.jinke.driverhealth.beans.HeartRate;
 import com.jinke.driverhealth.beans.Temperature;
-import com.jinke.driverhealth.interfaces.OkGoCallback;
 import com.jinke.driverhealth.interfaces.OnItemClickListener;
-import com.jinke.driverhealth.services.BloodPressureService;
-import com.jinke.driverhealth.services.HeartService;
-import com.jinke.driverhealth.services.TemperatureSevice;
-import com.jinke.driverhealth.utils.CalendarFormatUtil;
-import com.jinke.driverhealth.utils.JsonUtil;
 import com.jinke.driverhealth.utils.WrapContentLinearLayoutManager;
+import com.jinke.driverhealth.viewmodels.DataViewModel;
 
-import java.io.IOException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DataFragment extends Fragment {
 
     private static final String TAG = "DataFragment";
     private RecyclerView mRecyclerView;
     private DataAdapter mDataAdapter;
-
+    private DataViewModel mDataViewModel;
 
     public static DataFragment newInstance() {
         return new DataFragment();
@@ -54,13 +51,10 @@ public class DataFragment extends Fragment {
         //2、设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-        //解决 RecyclerView 存在的 数组越界 BUG
-        //参考链接：1、https://www.jianshu.com/p/a15764f6d673
-        //2、https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in
         mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         //3、设置适配器
         mDataAdapter = new DataAdapter();
-        //添加点击事件，通过接口回调的方式将recyclerView item中对应的数据 拿到，传给  detai页面
+        //添加点击事件，通过接口回调的方式将recyclerView item中对应的数据 拿到，传给  detail页面
         mDataAdapter.setOnItemClickListener(new OnItemClickListener() {
 
 
@@ -71,6 +65,7 @@ public class DataFragment extends Fragment {
                 Log.d(TAG, "onLongClick  --> item" + position);
             }
 
+            //点击跳转对应健康数据详情页面
             @Override
             public void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData, String createDate) {
 
@@ -94,71 +89,58 @@ public class DataFragment extends Fragment {
         });
 
         mRecyclerView.setAdapter(mDataAdapter);
+        String endTime = getCurrentTime();
+        //fetch data
+        getData("", endTime, "1", "20");
 
-        //4、获取 心率 体温 血压 数据
-        try {
-            initData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         return view;
     }
 
-    private void initData() throws IOException {
+    private String getCurrentTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = format.format(new Date());
+        return currentTime;
+    }
 
-        String currentFormatTime = CalendarFormatUtil.getCurrentFormatTime();
+    /**
+     * @param startTime 开始时间 2021-10-01 00:00:00
+     * @param endTime   结束时间 2021-10-01 00:00:00
+     * @param page      页码
+     * @param limit     每页条数
+     */
+    private void getData(String startTime, String endTime, String page, String limit) {
+        if (startTime == "") {
+            startTime = "2021-10-01 00:00:00";
+        }
 
-        //心率
-        HeartService.requestHeartRateDataFromTuDY(currentFormatTime, new OkGoCallback() {
+        mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+
+        //hr
+        mDataViewModel.loadHRData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
             @Override
-            public void onSuccess(String reponseData) {
-                if (reponseData != "") {
-                    HeartRate heartRate = JsonUtil.parseJson(reponseData, HeartRate.class);
-                    if (heartRate.getStatus() == 0) {
-                        upHeartRateData(heartRate.getData().getResult());
-                    }
-                }
+            public void onChanged(HeartRate heartRate) {
+                mDataAdapter.setHeartRateResult(heartRate.getData().getResult());
             }
         });
 
-        //体温
-        TemperatureSevice.requestTemperatureDataFromTuDY("", currentFormatTime, new OkGoCallback() {
+        //bp
+        mDataViewModel.loadBPData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
             @Override
-            public void onSuccess(String reponseData) {
-                if (reponseData != "") {
-                    Temperature temperature = JsonUtil.parseJson(reponseData, Temperature.class);
-                    if (temperature.getStatus() == 0) {
-                        upTemperatureData(temperature.getData().getResult());
-                    }
-                }
+            public void onChanged(BloodPressure bloodPressure) {
+                mDataAdapter.setBloodPressureResult(bloodPressure.getData().getResult());
             }
         });
 
-        //血压
-        BloodPressureService.requestBloodPressureDataFromTuDY(currentFormatTime, new OkGoCallback() {
+        //temp
+        mDataViewModel.loadTempData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<Temperature>() {
             @Override
-            public void onSuccess(String reponseData) {
-                if (reponseData != "") {
-                    BloodPressure bloodPressure = JsonUtil.parseJson(reponseData, BloodPressure.class);
-                    if (bloodPressure.getStatus() == 0) {
-                        upBloodPressureData(bloodPressure.getData().getResult());
-                    }
-                }
+            public void onChanged(Temperature temperature) {
+                mDataAdapter.setTemperatureResult(temperature.getData().getResult());
             }
         });
     }
-
-    private void upHeartRateData(List<HeartRate.DataDTO.ResultDTO> result) {
-        mDataAdapter.setHeartRateResult(result);
-    }
-
-    private void upTemperatureData(List<Temperature.DataDTO.ResultDTO> result) {
-        mDataAdapter.setTemperatureResult(result);
-    }
-
-    private void upBloodPressureData(List<BloodPressure.DataDTO.ResultDTO> result) {
-        mDataAdapter.setBloodPressureResult(result);
-    }
-
 }
+//解决 RecyclerView 存在的 数组越界 BUG 参考链接：
+// 1、https://www.jianshu.com/p/a15764f6d673
+//2、https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in

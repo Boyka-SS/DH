@@ -50,7 +50,7 @@
                 android:id="@+id/health_data"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
@@ -86,7 +86,7 @@
                     android:id="@+id/item_alcohol_concentration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="酒精：0 g/L"
+                    android:text="酒精：0 mg/100ml"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -94,15 +94,15 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="40dp"
                 android:layout_weight="1"
                 android:gravity="center">
 
                 <com.jinke.driverhealth.views.ZQImageViewRoundOval
                     android:id="@+id/item_health_assessment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/yiban1" />
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/good1" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

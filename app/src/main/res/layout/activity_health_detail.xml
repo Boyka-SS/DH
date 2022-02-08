@@ -281,7 +281,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="0.0 g/L"
+                        android:text="0.0 mg/100ml"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 

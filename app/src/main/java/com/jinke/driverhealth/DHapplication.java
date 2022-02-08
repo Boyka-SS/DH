@@ -1,24 +1,15 @@
 package com.jinke.driverhealth;
 
 import android.app.Application;
-
-import androidx.room.Room;
+import android.content.SharedPreferences;
 
 import com.jinke.driverhealth.beans.Token;
 import com.jinke.driverhealth.data.network.TokenNetwork;
-import com.jinke.driverhealth.data.repository.TokenRepository;
-import com.jinke.driverhealth.interfaces.OkGoCallback;
-import com.jinke.driverhealth.services.publicparams.TokenParams;
-import com.jinke.driverhealth.utils.JsonUtil;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
-import com.lzy.okgo.model.HttpHeaders;
+import com.jinke.driverhealth.utils.Config;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.logging.Level;
-
-import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @author: fanlihao
@@ -33,16 +24,9 @@ public class DHapplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mAppDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "android_room_dev.db")
-                .allowMainThreadQueries()
-                .build();
+        mAppDatabase = AppDatabase.getInstance(getApplicationContext());
 
-//        try {
-//            initPublicParams();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        new TokenRepository(mAppDatabase.getTokenDao(),new TokenNetwork()).fetchToken();
+        fetchToken();
     }
 
     /**
@@ -54,64 +38,26 @@ public class DHapplication extends Application {
         return mAppDatabase;
     }
 
-    /**
-     * 公共参数 token
-     */
-    private void initPublicParams() throws IOException {
-//        获取token,存入本地,初始化 OKGO
-        storageOrUpgradeToken(new FetchTokenCallback() {
+
+    private void fetchToken() {
+
+        new TokenNetwork().requestToken(new Callback<Token>() {
             @Override
-            public void onFetchTokenSuccess(String token, String expire) throws IOException, ParseException {
-                initOkGo(token);
-            }
-        });
-
-    }
-
-    ;
-
-    /**
-     * 初始化OkGo
-     */
-    private void initOkGo(String token) throws ParseException, IOException {
-        //公共头
-        HttpHeaders headers = new HttpHeaders();
-        headers.put("token", "" + token);
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        //log相关
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("OkGo");
-        loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);        //log打印级别，决定了log显示的详细程度
-        loggingInterceptor.setColorLevel(Level.INFO);                               //log颜色级别，决定了log在控制台显示的颜色
-        builder.addInterceptor(loggingInterceptor);
-
-        try {
-            OkGo.getInstance().init(this).addCommonHeaders(headers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * @param callback
-     * @throws IOException
-     */
-    private void storageOrUpgradeToken(FetchTokenCallback callback) throws IOException {
-
-        TokenParams.requestToken(new OkGoCallback() {
-            @Override
-            public void onSuccess(String reponseData) throws IOException, ParseException {
-                if (reponseData != "") {
-                    Token token = JsonUtil.parseJson(reponseData, Token.class);
-                    callback.onFetchTokenSuccess(token.getData().getToken(), token.getData().getExpired());
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    Token token = response.body();
+                    Config.TOKEN = token.getData().getToken();
+                    SharedPreferences.Editor data = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE).edit();
+                    data.putString("token", token.getData().getToken());
+                    data.putString("expireTime", token.getData().getExpired());
+                    data.apply();
                 }
             }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                //TODO: request token fail
+            }
         });
-
-    }
-
-    public interface FetchTokenCallback {
-        void onFetchTokenSuccess(String token, String expire) throws IOException, ParseException;
     }
 }

@@ -28,7 +28,6 @@ public class Constant {
 
     //健康状况
     public final int GOOD = 1;//健康
-    public final int COMMON = 2;//一般
-    public final int BAD = 3;//虚弱
+    public final int BAD = 2;//虚弱
 
 }
