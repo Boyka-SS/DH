@@ -70,7 +70,7 @@ public class BPDetailActivity extends AppCompatActivity {
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(7);
+        xAxis.setLabelCount(result.size());
         xAxis.setTextSize(12);
 
 
