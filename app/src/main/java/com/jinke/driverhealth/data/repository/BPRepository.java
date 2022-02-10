@@ -20,11 +20,11 @@ public class BPRepository {
 
 
 
-    public static MutableLiveData<BloodPressure> fetchBPData(String startTime, String endTime, String page, String limit) {
+    public static MutableLiveData<BloodPressure> fetchBPData(String token,String startTime, String endTime, String page, String limit) {
 
         MutableLiveData<BloodPressure> liveData = new MutableLiveData<>();
 
-        new BPNetWork().requestBPData(startTime, endTime, page, limit, new Callback<BloodPressure>() {
+        new BPNetWork().requestBPData(token,startTime, endTime, page, limit, new Callback<BloodPressure>() {
             @Override
             public void onResponse(Call<BloodPressure> call, Response<BloodPressure> response) {
                 if (response.isSuccessful()) {

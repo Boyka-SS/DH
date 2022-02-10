@@ -20,11 +20,11 @@ public class HRRepository {
     private static final String TAG = "HRRepository";
 
 
-    public static MutableLiveData<HeartRate> fetchHRData(String startTime, String endTime, String page, String limit) {
+    public static MutableLiveData<HeartRate> fetchHRData(String token,String startTime, String endTime, String page, String limit) {
 
         MutableLiveData<HeartRate> liveData = new MutableLiveData<>();
 
-        new HRNetwork().requestHRData(startTime, endTime, page, limit, new Callback<HeartRate>() {
+        new HRNetwork().requestHRData(token,startTime, endTime, page, limit, new Callback<HeartRate>() {
             @Override
             public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
                 if (response.isSuccessful()) {

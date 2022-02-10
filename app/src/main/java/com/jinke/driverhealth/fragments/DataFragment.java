@@ -29,6 +29,8 @@ import com.jinke.driverhealth.viewmodels.DataViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DataFragment extends Fragment {
 
     private static final String TAG = "DataFragment";
@@ -113,11 +115,11 @@ public class DataFragment extends Fragment {
         if (startTime == "") {
             startTime = "2021-10-01 00:00:00";
         }
-
+        String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
         //hr
-        mDataViewModel.loadHRData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
+        mDataViewModel.loadHRData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
             @Override
             public void onChanged(HeartRate heartRate) {
                 mDataAdapter.setHeartRateResult(heartRate.getData().getResult());
@@ -125,7 +127,7 @@ public class DataFragment extends Fragment {
         });
 
         //bp
-        mDataViewModel.loadBPData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
+        mDataViewModel.loadBPData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
             @Override
             public void onChanged(BloodPressure bloodPressure) {
                 mDataAdapter.setBloodPressureResult(bloodPressure.getData().getResult());
@@ -133,7 +135,7 @@ public class DataFragment extends Fragment {
         });
 
         //temp
-        mDataViewModel.loadTempData(startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<Temperature>() {
+        mDataViewModel.loadTempData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<Temperature>() {
             @Override
             public void onChanged(Temperature temperature) {
                 mDataAdapter.setTemperatureResult(temperature.getData().getResult());

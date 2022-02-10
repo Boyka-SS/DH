@@ -56,8 +56,8 @@ public class TempDetailActivity extends AppCompatActivity {
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
         String endTime = (String) getIntent().getExtras().get("create_time");
-
-        mDataViewModel.loadTempData("", endTime, "1", "7").observe(this, new Observer<Temperature>() {
+        String token = getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
+        mDataViewModel.loadTempData(token, "", endTime, "1", "7").observe(this, new Observer<Temperature>() {
             @Override
             public void onChanged(Temperature temperature) {
                 lineChart = findViewById(R.id.line_chart_temp);
@@ -68,7 +68,7 @@ public class TempDetailActivity extends AppCompatActivity {
 
                 for (Temperature.DataDTO.ResultDTO item : result) {
                     //01-20 16:13:29
-                    date.add(item.getCreated().substring(5, 16));
+                    date.add(item.getCreated().substring(5, 10));
                     tempData.add(item.getTemperature());
                 }
                 Collections.reverse(date);
@@ -118,9 +118,8 @@ public class TempDetailActivity extends AppCompatActivity {
         Axis axisX = new Axis(); //X轴
         axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
         axisX.setTextColor(R.color.design_default_color_primary_variant);  //设置字体颜色
-//        axisX.setName("日期");  //表格名称
+        axisX.setName("时间");  //表格名称
         axisX.setTextSize(8);//设置字体大小
-//        axisX.setMaxLabelChars(6);
         axisX.setMaxLabelChars(7); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
         axisX.setHasLines(true);
         axisX.setValues(mAxisXValues);  //填充X轴的坐标名称

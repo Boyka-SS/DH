@@ -16,6 +16,8 @@
     <color name="text">#FF0000</color>
     <color name="colorAccent">#D2691E</color>
 
+    <color name="color_line_chart">	#000000</color>
+
 
 
 </resources>

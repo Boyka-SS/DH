@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="match_parent"
+    android:background="#fffff0"
 
     android:orientation="vertical">
 
@@ -12,7 +13,16 @@
         android:id="@+id/line_chart_temp"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:id="@+id/tmep_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:gravity="end"
+        android:text="温度分布图"
+        android:textSize="24dp" />
 
 
 </LinearLayout>

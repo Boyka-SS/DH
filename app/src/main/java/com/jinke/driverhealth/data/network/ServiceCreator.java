@@ -2,7 +2,6 @@ package com.jinke.driverhealth.data.network;
 
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
-import com.jinke.driverhealth.data.network.interceptor.HeaderInterceptor;
 import com.jinke.driverhealth.utils.Config;
 
 import okhttp3.OkHttpClient;
@@ -24,7 +23,7 @@ public class ServiceCreator {
         //添加打印拦截器
 
         okHttpClient
-                .addInterceptor(new HeaderInterceptor(Config.TOKEN))
+
                 .addInterceptor(new LoggingInterceptor.Builder()
                 .setLevel(Level.BASIC)
                 .log(VERBOSE)

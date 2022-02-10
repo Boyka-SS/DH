@@ -55,15 +55,15 @@ public class DataViewModel extends ViewModel {
 
     //====================================================兔盯云获取数据===========================================================
 
-    public MutableLiveData<BloodPressure> loadBPData(String startTime, String endTime, String page, String limit) {
-        return BPRepository.fetchBPData(startTime, endTime, page, limit);
+    public MutableLiveData<BloodPressure> loadBPData(String token,String startTime, String endTime, String page, String limit) {
+        return BPRepository.fetchBPData(token,startTime, endTime, page, limit);
     }
 
-    public MutableLiveData<HeartRate> loadHRData(String startTime, String endTime, String page, String limit) {
-        return HRRepository.fetchHRData(startTime, endTime, page, limit);
+    public MutableLiveData<HeartRate> loadHRData(String token,String startTime, String endTime, String page, String limit) {
+        return HRRepository.fetchHRData(token,startTime, endTime, page, limit);
     }
 
-    public MutableLiveData<Temperature> loadTempData(String startTime, String endTime, String page, String limit) {
-        return TempRepository.fetchTempData(startTime, endTime, page, limit);
+    public MutableLiveData<Temperature> loadTempData(String token,String startTime, String endTime, String page, String limit) {
+        return TempRepository.fetchTempData(token,startTime, endTime, page, limit);
     }
 }

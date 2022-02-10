@@ -29,11 +29,12 @@ public class BPNetWork {
      * @param callback
      */
 
-    public void requestBPData(String startTime, String endTime, String page, String limit, Callback<BloodPressure> callback) {
+    public void requestBPData(String token,String startTime, String endTime, String page, String limit, Callback<BloodPressure> callback) {
 
         Map<String, String> header = new HashMap<>();
         String transId = Config.getTransId(Config.BP_TRANSID_SUFFIX);
         header.put("transid", transId);
+        header.put("token", token);
 
         Map<String, String> bpQueryParams = new HashMap<>();
         bpQueryParams.put("start_time", startTime);

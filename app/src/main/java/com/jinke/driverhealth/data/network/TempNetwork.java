@@ -27,9 +27,10 @@ public class TempNetwork {
      * @param limit     每页条数 整数，范围为 1-100
      * @param callback
      */
-    public void requestTempData(String startTime, String endTime, String page, String limit, Callback<Temperature> callback) {
+    public void requestTempData(String token,String startTime, String endTime, String page, String limit, Callback<Temperature> callback) {
         Map<String, String> header = new HashMap<>();
         String transId = Config.getTransId(Config.TEMP_TRANSID_SUFFIX);
+        header.put("token", token);
         header.put("transid", transId);
 
         Map<String, String> tempQueryParams = new HashMap<>();
