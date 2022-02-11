@@ -19,16 +19,15 @@ public class BPRepository {
     private static final String TAG = "BPRepository";
 
 
-
-    public static MutableLiveData<BloodPressure> fetchBPData(String token,String startTime, String endTime, String page, String limit) {
+    public static MutableLiveData<BloodPressure> fetchBPData(String token, String startTime, String endTime, String page, String limit, String sort) {
 
         MutableLiveData<BloodPressure> liveData = new MutableLiveData<>();
 
-        new BPNetWork().requestBPData(token,startTime, endTime, page, limit, new Callback<BloodPressure>() {
+        new BPNetWork().requestBPData(token, startTime, endTime, page, limit, sort, new Callback<BloodPressure>() {
             @Override
             public void onResponse(Call<BloodPressure> call, Response<BloodPressure> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG,"bp data --> "+response.body().getData().getResult().get(0).getBlood_rate());
+                    Log.d(TAG, "bp data --> " + response.body().getData().getResult().get(0).getBlood_rate());
                     liveData.postValue(response.body());
                 }
             }

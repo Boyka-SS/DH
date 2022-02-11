@@ -2,7 +2,6 @@ package com.jinke.driverhealth.activity.detail;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -21,16 +20,16 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.EntryXComparator;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.beans.BloodPressure;
+import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
+import com.jinke.driverhealth.utils.CustomXAxisRenderer;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 import com.jinke.driverhealth.views.TitleLayout;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,12 +50,22 @@ public class BPDetailActivity extends AppCompatActivity {
 
         hideActionBar();
 
-
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
-        String endTime = (String) getIntent().getExtras().get("create_time");
+        String createTime = (String) getIntent().getExtras().get("create_time");
+        //请求数据  起始日期-7 截止日期+1
+        String endTime = null, startTime = null;
+        try {
+            endTime = CalendarUtil.getFormatCalendar(createTime, 1, true);
+            startTime = CalendarUtil.getFormatCalendar(endTime, 8, false);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         String token = getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
-        mDataViewModel.loadBPData(token, Config.START_TIME, endTime, "1", "7").observe(this, new Observer<BloodPressure>() {
+        //升序数据
+        mDataViewModel.loadBPData(token, startTime, endTime, "1", "7", Config.ASC_DATA).observe(this, new Observer<BloodPressure>() {
             @Override
             public void onChanged(BloodPressure bloodPressure) {
                 mChart = findViewById(R.id.line_chart_bp);
@@ -77,21 +86,19 @@ public class BPDetailActivity extends AppCompatActivity {
         List<Entry> maxEntries = new ArrayList<>();//收缩压
         List<Entry> minEntries = new ArrayList<>();//舒张压
         List<String> date = new ArrayList<>();//舒张压
-        int i = 1, j = 1;
 
-        for (BloodPressure.DataDTO.ResultDTO resultDTO : result) {
-            maxEntries.add(new Entry(i++, new Double(resultDTO.getMax_rate()).floatValue()));
-            minEntries.add(new Entry(j++, new Double(resultDTO.getMin_rate()).floatValue()));
-            date.add(resultDTO.getCreated().substring(5, 10));
+        for (int i = 0; i < result.size(); i++) {
+            maxEntries.add(new Entry(i, new Double(result.get(i).getMax_rate()).floatValue()));
+            minEntries.add(new Entry(i, new Double(result.get(i).getMin_rate()).floatValue()));
+            date.add(result.get(i).getCreated().substring(5,16));
         }
-        Collections.reverse(maxEntries);
-        Collections.reverse(minEntries);
-        date.add("");//解决X轴不匹配问题
-        Collections.reverse(date);
 
-        Log.d(TAG, "date --> " + date);
-        Collections.sort(maxEntries, new EntryXComparator());
-        Collections.sort(minEntries, new EntryXComparator());
+        date.add("");//解决X轴不匹配问题
+//        Log.d(TAG, "date --> " + date);
+//        Log.d(TAG, "maxEntry --> " + maxEntries);
+//        Log.d(TAG, "minEntry --> " + minEntries);
+//        Collections.sort(maxEntries, new EntryXComparator());
+//        Collections.sort(minEntries, new EntryXComparator());
 
 
         //设置x轴
@@ -102,10 +109,10 @@ public class BPDetailActivity extends AppCompatActivity {
         xAxis.setGranularity(1f); //设置x轴间距
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(date.size());
-        xAxis.setLabelRotationAngle(-30); //标签倾斜
+        xAxis.setLabelRotationAngle(-10); //标签倾斜
         xAxis.setDrawGridLines(true);//是否显示X轴上的网格线
         xAxis.setTextSize(10);
-        xAxis.setAvoidFirstLastClipping(true);//是否避免图表或屏幕的边缘的第一个和最后一个轴中的标签条目被裁剪
+        xAxis.setAvoidFirstLastClipping(false);//是否避免图表或屏幕的边缘的第一个和最后一个轴中的标签条目被裁剪
         //修改X轴内容成字符日期
         xAxis.setValueFormatter(new IndexAxisValueFormatter(date));
 
@@ -162,12 +169,14 @@ public class BPDetailActivity extends AppCompatActivity {
         //设置是否可以触摸
         mChart.setTouchEnabled(true);
         mChart.setDragDecelerationFrictionCoef(0.9f);
-
+        //X 轴 换行显示
+        mChart.setXAxisRenderer(new CustomXAxisRenderer(mChart.getViewPortHandler(), mChart.getXAxis(), mChart.getTransformer(YAxis.AxisDependency.LEFT)));
+        mChart.setExtraRightOffset(30f);
 
         mChart.getDescription().setText("血压分布图");
         mChart.getDescription().setTextSize(12);//与图例字体大小一致
         // 设置LineChar间距
-        mChart.setExtraBottomOffset(12f);//设置 legend 和 X轴 之间间距
+        mChart.setExtraBottomOffset(2 * 12f);//设置 legend 和 X轴 之间间距
 
         mChart.invalidate(); // refresh
         //设置从X轴出来的动画时间

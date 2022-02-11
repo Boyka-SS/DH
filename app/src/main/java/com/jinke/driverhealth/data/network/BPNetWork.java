@@ -21,16 +21,20 @@ public class BPNetWork {
     private BPService mBPService = serviceCreator.create(BPService.class);
 
     /**
-     * 获取血压数据
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param page      页码 整数，范围为 1-5000
-     * @param limit     每页条数 整数，范围为 1-200
+     *
+     * @param token
+     * @param startTime
+     * @param endTime
+     * @param page
+     * @param limit
+     * @param sort
      * @param callback
      */
-
-    public void requestBPData(String token,String startTime, String endTime, String page, String limit, Callback<BloodPressure> callback) {
-
+    public void requestBPData(String token, String startTime, String endTime, String page, String limit, String sort, Callback<BloodPressure> callback) {
+        if (sort == "") {
+            //数据默认降序
+            sort = Config.DESC_DATA;
+        }
         Map<String, String> header = new HashMap<>();
         String transId = Config.getTransId(Config.BP_TRANSID_SUFFIX);
         header.put("transid", transId);
@@ -41,6 +45,7 @@ public class BPNetWork {
         bpQueryParams.put("end_time", endTime);
         bpQueryParams.put("page", page);
         bpQueryParams.put("limit", limit);
+        bpQueryParams.put("sort", sort);
 
         mBPService.getBPData(header, bpQueryParams).enqueue(callback);
     }

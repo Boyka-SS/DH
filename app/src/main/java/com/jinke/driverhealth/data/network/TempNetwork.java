@@ -27,7 +27,12 @@ public class TempNetwork {
      * @param limit     每页条数 整数，范围为 1-100
      * @param callback
      */
-    public void requestTempData(String token,String startTime, String endTime, String page, String limit, Callback<Temperature> callback) {
+    public void requestTempData(String token, String startTime, String endTime, String page, String limit, String sort, Callback<Temperature> callback) {
+
+        if (sort == "") {
+            //数据默认降序
+            sort = Config.DESC_DATA;
+        }
         Map<String, String> header = new HashMap<>();
         String transId = Config.getTransId(Config.TEMP_TRANSID_SUFFIX);
         header.put("token", token);
@@ -38,6 +43,8 @@ public class TempNetwork {
         tempQueryParams.put("end_time", endTime);
         tempQueryParams.put("page", page);
         tempQueryParams.put("limit", limit);
+        tempQueryParams.put("sort", sort);
+
 
         mTempService.getTempData(header, tempQueryParams).enqueue(callback);
     }

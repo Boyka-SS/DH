@@ -1,9 +1,7 @@
 package com.jinke.driverhealth.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
+ * 项目配置类
  * @author: fanlihao
  * @date: 2022/2/6
  */
@@ -11,7 +9,10 @@ public class Config {
 
 
     public static volatile String TOKEN = "";
-    public static volatile String START_TIME = "2021-10-01 00:00:00";
+    public static String START_TIME = "2021-10-01 00:00:00";
+
+    public static String ASC_DATA = "asc";//数据升序
+    public static String DESC_DATA = "desc";//数据降序
 
 
     /**
@@ -40,18 +41,8 @@ public class Config {
      * 事务序列号
      */
     public static String getTransId(String suffix) {
-        return APPKEY + "" + getNowFormatCalendar() + "" + suffix;
+        return APPKEY + "" + CalendarUtil.getNowFormatCalendar() + "" + suffix;
     }
 
-    /**
-     * 获取当前符合格式化的 年月日时分秒
-     *
-     * @return
-     */
-    private static String getNowFormatCalendar() {
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String dateNowStr = sdf.format(d);
-        return dateNowStr;
-    }
+
 }

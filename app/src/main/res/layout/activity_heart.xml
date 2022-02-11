@@ -2,25 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#fffff0"
     android:layout_height="match_parent"
+    android:background="#fffff0"
 
     android:orientation="vertical">
 
     <include layout="@layout/title_bar" />
 
-    <lecho.lib.hellocharts.view.LineChartView
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart_hr"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_margin="10dp"/>
+        android:layout_height="323dp" />
 
-    <TextView
-        android:id="@+id/hr_pic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:gravity="end"
-        android:text="心率分布图"
-        android:textSize="24dp" />
 </LinearLayout>

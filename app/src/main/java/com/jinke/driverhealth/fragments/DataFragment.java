@@ -120,7 +120,7 @@ public class DataFragment extends Fragment {
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
         //hr
-        mDataViewModel.loadHRData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
+        mDataViewModel.loadHRData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
             @Override
             public void onChanged(HeartRate heartRate) {
                 mDataAdapter.setHeartRateResult(heartRate.getData().getResult());
@@ -128,7 +128,7 @@ public class DataFragment extends Fragment {
         });
 
         //bp
-        mDataViewModel.loadBPData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
+        mDataViewModel.loadBPData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
             @Override
             public void onChanged(BloodPressure bloodPressure) {
                 mDataAdapter.setBloodPressureResult(bloodPressure.getData().getResult());
@@ -136,7 +136,7 @@ public class DataFragment extends Fragment {
         });
 
         //temp
-        mDataViewModel.loadTempData(token, startTime, endTime, page, limit).observe(getViewLifecycleOwner(), new Observer<Temperature>() {
+        mDataViewModel.loadTempData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<Temperature>() {
             @Override
             public void onChanged(Temperature temperature) {
                 mDataAdapter.setTemperatureResult(temperature.getData().getResult());

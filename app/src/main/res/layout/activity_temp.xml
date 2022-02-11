@@ -9,20 +9,12 @@
 
     <include layout="@layout/title_bar" />
 
-    <lecho.lib.hellocharts.view.LineChartView
+
+
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart_temp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="10dp" />
-
-    <TextView
-        android:id="@+id/tmep_pic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:gravity="end"
-        android:text="温度分布图"
-        android:textSize="24dp" />
+        android:layout_height="323dp" />
 
 
 </LinearLayout>

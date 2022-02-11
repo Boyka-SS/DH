@@ -19,15 +19,21 @@ public class HRNetwork {
     private HRService mHRService = serviceCreator.create(HRService.class);
 
     /**
-     * 获取心率数据
      *
-     * @param startTime 开始时间 字符串，格式为 2006-01-01 00:00:00
-     * @param endTime   结束时间 字符串，格式为 2006-01-01 00:00:00
-     * @param page      页码 整数，范围为 1-5000
-     * @param limit     每页条数 整数，范围为 1-200
-     * @param callback
+     * @param token 公共参数
+     * @param startTime 起始时间
+     * @param endTime   结束时间
+     * @param page  页数
+     * @param limit 每页条数
+     * @param sort 数据排序方式
+     * @param callback 请求数据的回调
+     * @return
      */
-    public void requestHRData(String token, String startTime, String endTime, String page, String limit, Callback<HeartRate> callback) {
+    public void requestHRData(String token, String startTime, String endTime, String page, String limit, String sort, Callback<HeartRate> callback) {
+        if (sort == "") {
+            //数据默认降序
+            sort = Config.DESC_DATA;
+        }
         Map<String, String> header = new HashMap<>();
         String transId = Config.getTransId(Config.HR_TRANSID_SUFFIX);
         header.put("transid", transId);
@@ -38,6 +44,7 @@ public class HRNetwork {
         hrQueryParams.put("end_time", endTime);
         hrQueryParams.put("page", page);
         hrQueryParams.put("limit", limit);
+        hrQueryParams.put("sort", sort);
 
         mHRService.getHRData(header, hrQueryParams).enqueue(callback);
     }

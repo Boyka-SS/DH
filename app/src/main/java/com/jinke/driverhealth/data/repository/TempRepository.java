@@ -19,11 +19,11 @@ public class TempRepository {
     private static final String TAG = "TempRepository";
 
 
-    public static MutableLiveData<Temperature> fetchTempData(String token,String startTime, String endTime, String page, String limit) {
+    public static MutableLiveData<Temperature> fetchTempData(String token,String startTime, String endTime, String page, String limit,String sort) {
 
         MutableLiveData<Temperature> liveData = new MutableLiveData<>();
 
-        new TempNetwork().requestTempData(token,startTime, endTime, page, limit, new Callback<Temperature>() {
+        new TempNetwork().requestTempData(token,startTime, endTime, page, limit,sort, new Callback<Temperature>() {
             @Override
             public void onResponse(Call<Temperature> call, Response<Temperature> response) {
                 if (response.isSuccessful()) {

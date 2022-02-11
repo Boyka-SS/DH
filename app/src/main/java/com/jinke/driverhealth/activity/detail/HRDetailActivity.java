@@ -2,32 +2,36 @@ package com.jinke.driverhealth.activity.detail;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.beans.HeartRate;
+import com.jinke.driverhealth.utils.CalendarUtil;
+import com.jinke.driverhealth.utils.Config;
+import com.jinke.driverhealth.utils.CustomXAxisRenderer;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 import com.jinke.driverhealth.views.TitleLayout;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import lecho.lib.hellocharts.gesture.ContainerScrollType;
-import lecho.lib.hellocharts.gesture.ZoomType;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.ValueShape;
-import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * 心率详情页面
@@ -35,15 +39,8 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class HRDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "HRDetailActivity";
-
-    //心率折线图
-
-    private LineChartView lineChart;
-    private List<PointValue> mPointValues = new ArrayList<PointValue>();
-    private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
-
+    private LineChart mChart;
     private DataViewModel mDataViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,32 +51,165 @@ public class HRDetailActivity extends AppCompatActivity {
 
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
-        String endTime = (String) getIntent().getExtras().get("create_time");
+        String createTime = (String) getIntent().getExtras().get("create_time");
+        //请求数据 截止日期 天数+1
+
+        String endTime = null, startTime = null;
+        try {
+            endTime = CalendarUtil.getFormatCalendar(createTime, 1, true);
+            startTime = CalendarUtil.getFormatCalendar(endTime, 8, false);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         String token = getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
-        mDataViewModel.loadHRData(token, "", endTime, "1", "7").observe(this, new Observer<HeartRate>() {
+
+        //升序数据
+        mDataViewModel.loadHRData(token, startTime, endTime, "1", "7", Config.ASC_DATA).observe(this, new Observer<HeartRate>() {
             @Override
             public void onChanged(HeartRate heartRate) {
-
-                lineChart = findViewById(R.id.line_chart_hr);
+                mChart = findViewById(R.id.line_chart_hr);
                 List<HeartRate.DataDTO.ResultDTO> result = heartRate.getData().getResult();
+                initChart(result);
 
-                List<String> date = new ArrayList<>();
-                List<String> hrData = new ArrayList<>();
-
-                for (HeartRate.DataDTO.ResultDTO item : result) {
-                    //01-20 16:13
-                    date.add(item.getCreated().substring(5, 10));
-                    hrData.add(String.valueOf(item.getHeart_rate()));
-                }
-                //翻转数据
-                Collections.reverse(date);
-                Collections.reverse(hrData);
-
-                getAxisXLables(date);//获取x轴的标注
-                getAxisPoints(hrData);//获取坐标点
-                initLineChart();//初始化
             }
         });
+
+    }
+
+    private void initChart(List<HeartRate.DataDTO.ResultDTO> result) {
+
+        //prepare data
+        List<Entry> hrEntries = new ArrayList<>();//心率
+        List<String> date = new ArrayList<>();//日期
+
+
+        for (int i = 0; i < result.size(); i++) {
+            hrEntries.add(new Entry(i, new Double(result.get(i).getHeart_rate()).floatValue()));
+            date.add(result.get(i).getCreated().substring(5, 16));
+        }
+
+        date.add("");//解决X轴不匹配问题
+//        Collections.sort(hrEntries, new EntryXComparator());
+        Log.d(TAG, "date --> " + date);
+        Log.d(TAG, "hrEntries --> " + hrEntries);
+
+
+        //设置x轴
+        XAxis xAxis = mChart.getXAxis();
+
+        xAxis.setDrawGridLines(true);//设置X轴上每个竖线是否显示
+        xAxis.setDrawLabels(true);//设置是否绘制X轴上的对应值(标签)
+        xAxis.setGranularity(1f); //设置x轴间距
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelCount(date.size());
+        xAxis.setLabelRotationAngle(-10); //标签倾斜
+        xAxis.setDrawGridLines(true);//是否显示X轴上的网格线
+        xAxis.setTextSize(10);
+        xAxis.setAvoidFirstLastClipping(false);//是否避免图表或屏幕的边缘的第一个和最后一个轴中的标签条目被裁剪
+        //修改X轴内容成字符日期
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(date));
+
+        //设置y轴
+        YAxis yAxis = mChart.getAxisLeft();
+        yAxis.setLabelCount(7);
+        yAxis.setTextSize(12);
+        yAxis.setDrawGridLines(false); //是否显示Y轴上的网格线
+        yAxis.setAxisMaximum(120f);
+        yAxis.setAxisMinimum(50f);
+        yAxis.setDrawLabels(true);//绘制y轴标签
+
+        LineDataSet hrDataSet = new LineDataSet(hrEntries, "心率");
+        renderLine(hrDataSet, "#DC143C");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(hrDataSet);
+
+        LineData lineData = new LineData(dataSets);
+
+        if (result.isEmpty()) {
+            mChart.clear();
+        } else {
+            // set data
+            mChart.setData(lineData);
+        }
+
+
+        //设置图例
+        Legend legend = mChart.getLegend();
+        legend.setFormSize(12f);//设置当前这条线的图例的大小
+        legend.setForm(Legend.LegendForm.LINE); // 线
+        legend.setFormSize(14f); // 图形大小
+        legend.setFormLineWidth(9f);  // 图形线宽
+        legend.setXEntrySpace(13f);//设置 各个legend之间的距离
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setWordWrapEnabled(true);
+        legend.setTextSize(12);
+
+        //添加界定线
+        LimitLine maxLimit = renderLimitLine(100f, "100 次/分", "#DC143C");
+        LimitLine minLimit = renderLimitLine(60f, "60 次/分", "#0000FF");
+        yAxis.addLimitLine(maxLimit);
+        yAxis.addLimitLine(minLimit);
+
+        mChart.getAxisRight().setEnabled(false); //不绘制右侧轴线
+        mChart.setScaleYEnabled(false);
+        mChart.setScaleXEnabled(false);
+
+        //设置是否可以触摸
+        mChart.setTouchEnabled(true);
+        mChart.setDragDecelerationFrictionCoef(0.9f);
+
+        //X 轴 换行显示
+        mChart.setXAxisRenderer(new CustomXAxisRenderer(mChart.getViewPortHandler(), mChart.getXAxis(), mChart.getTransformer(YAxis.AxisDependency.LEFT)));
+        mChart.setExtraRightOffset(30f);
+
+        mChart.getDescription().setText("心率分布图");
+        mChart.getDescription().setTextSize(12);//与图例字体大小一致
+        // 设置LineChar间距
+        mChart.setExtraBottomOffset(12f);//设置 legend 和 X轴 之间间距
+        mChart.invalidate(); // refresh
+        //设置从X轴出来的动画时间
+        mChart.animateXY(1000, 1000);
+    }
+
+    /**
+     * 添加 界线
+     *
+     * @param value 界定值
+     * @param name  界定线名字
+     * @param color 界定线颜色
+     */
+    private LimitLine renderLimitLine(float value, String name, String color) {
+        LimitLine limitLine = new LimitLine(value, name);
+        limitLine.enableDashedLine(15f, 10f, 0);//设置为虚线
+        limitLine.setLineColor(Color.parseColor(color));
+        limitLine.setLineWidth(2f);
+        limitLine.setTextColor(ContextCompat.getColor(this, R.color.color_limit_line_chart));
+        limitLine.setTextSize(12f);
+        return limitLine;
+    }
+
+    /**
+     * 为chart每一条折线设置样式
+     *
+     * @param dataSet 数据
+     * @param color   折线颜色
+     */
+
+    private void renderLine(LineDataSet dataSet, String color) {
+        dataSet.setDrawCircleHole(false);
+        dataSet.setLineWidth(2f);
+//        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);//设置线数据依赖于左侧y轴
+        dataSet.setColor(Color.parseColor(color));
+        dataSet.setDrawFilled(true);//是否画数据覆盖的阴影层
+        dataSet.setDrawValues(true);//是否绘制线的数据
+        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.color_line_chart));//设置数据的文本颜色，如果不绘制线的数据 这句代码也不用设置了
+        dataSet.setValueTextSize(10f);//如果不绘制线的数据 这句代码也不用设置了
+        dataSet.setCircleRadius(4f);//设置每个折线点的大小
+        dataSet.setCircleColor(Color.parseColor(color));
 
     }
 
@@ -97,80 +227,5 @@ public class HRDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-
-    private void initLineChart() {
-        Line line = new Line(mPointValues).setColor(Color.parseColor("#FFCD41"));  //折线的颜色（橙色）
-        List<Line> lines = new ArrayList<Line>();
-        line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.DIAMOND）
-        line.setCubic(false);//曲线是否平滑，即是曲线还是折线
-        line.setFilled(true);//是否填充曲线的面积
-        line.setHasLabels(true);//曲线的数据坐标是否加上备注
-        line.setHasLabelsOnlyForSelected(false);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）,标签是否只能选中
-        line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
-        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
-//        line.setFormatter(new SimpleLineChartValueFormatter(2));//设置显示小数点
-
-        lines.add(line);
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        //坐标轴
-        Axis axisX = new Axis(); //X轴
-        axisX.setHasTiltedLabels(true);  //X坐标轴字体是斜的显示还是直的，true是斜的显示
-        axisX.setTextColor(R.color.design_default_color_primary_variant);  //设置字体颜色
-        axisX.setName("时间");  //表格名称
-        axisX.setTextSize(10);//设置字体大小
-        axisX.setMaxLabelChars(7); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
-        axisX.setHasLines(true);
-        axisX.setValues(mAxisXValues);  //填充X轴的坐标名称
-        data.setAxisXBottom(axisX); //x 轴在底部
-        //data.setAxisXTop(axisX);  //x 轴在顶部
-        axisX.setHasLines(true); //x 轴分割线
-
-        // Y轴是根据数据的大小自动设置Y轴上限(在下面我会给出固定Y轴数据个数的解决方案)
-        Axis axisY = new Axis();  //Y轴
-        axisY.setName("心率");//y轴标注
-        axisY.setTextSize(10);//设置字体大小
-        axisY.setMaxLabelChars(6);//max label length, for example 60
-        data.setAxisYLeft(axisY);  //Y轴设置在左边
-        //data.setAxisYRight(axisY);  //y轴设置在右边
-
-
-        //设置行为属性，支持缩放、滑动以及平移
-        lineChart.setInteractive(false);
-        lineChart.setZoomType(ZoomType.HORIZONTAL);
-        lineChart.setMaxZoom((float) 1);//最大放大比例
-        lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-        lineChart.setLineChartData(data);
-        lineChart.setVisibility(View.VISIBLE);
-        /**注：下面的7，10只是代表一个数字去类比而已
-         * 当时是为了解决X轴固定数据个数。见（http://forum.xda-developers.com/tools/programming/library-hellocharts-charting-library-t2904456/page2）;
-         */
-        Viewport v = new Viewport(lineChart.getMaximumViewport());
-        v.left = 0;
-        v.right = 6;
-        lineChart.setCurrentViewport(v);
-    }
-
-    /**
-     * 图表的每个点的表示
-     */
-    private void getAxisPoints(List<String> result) {
-        for (int i = 0; i < result.size(); i++) {
-            mPointValues.add(new PointValue(i, Float.parseFloat(result.get(i))));
-        }
-    }
-
-    /**
-     * 设置X轴的显示
-     *
-     * @param result
-     */
-    private void getAxisXLables(List<String> result) {
-        for (int i = 0; i < result.size(); i++) {
-            mAxisXValues.add(new AxisValue(i).setLabel(result.get(i)));
-        }
     }
 }
