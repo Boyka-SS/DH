@@ -9,7 +9,9 @@ import java.util.Date;
  */
 public class Config {
 
+
     public static volatile String TOKEN = "";
+    public static volatile String START_TIME = "2021-10-01 00:00:00";
 
 
     /**

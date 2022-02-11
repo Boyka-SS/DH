@@ -23,6 +23,7 @@ import com.jinke.driverhealth.beans.BloodPressure;
 import com.jinke.driverhealth.beans.HeartRate;
 import com.jinke.driverhealth.beans.Temperature;
 import com.jinke.driverhealth.interfaces.OnItemClickListener;
+import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.WrapContentLinearLayoutManager;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 
@@ -113,7 +114,7 @@ public class DataFragment extends Fragment {
      */
     private void getData(String startTime, String endTime, String page, String limit) {
         if (startTime == "") {
-            startTime = "2021-10-01 00:00:00";
+            startTime = Config.START_TIME;
         }
         String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);

@@ -17,6 +17,7 @@
     <color name="colorAccent">#D2691E</color>
 
     <color name="color_line_chart">	#000000</color>
+    <color name="color_limit_line_chart">#A9A9A9</color>
 
 
 
