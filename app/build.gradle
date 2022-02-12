@@ -58,13 +58,14 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
-    //okgo+okhttp+log
+    //okhttp+log
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation('com.github.ihsanbal:LoggingInterceptor:3.1.0') {
         exclude group: 'org.json', module: 'json'
     }
     implementation 'com.squareup.okio:okio:1.14.0'
-
+    //magic-indicator
+    implementation 'com.github.hackware1993:MagicIndicator:1.7.0' // for androidx
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -80,7 +81,6 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room_version"
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     //butterknife
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'

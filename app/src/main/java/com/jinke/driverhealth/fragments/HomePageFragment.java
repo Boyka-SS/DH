@@ -26,12 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import butterknife.Unbinder;
-
 public class HomePageFragment extends Fragment {
-
     private static final String TAG = "HomePageFragment";
-    private Unbinder unbinder;
+
 
 
     private FloatingActionButton mAddContacter;
@@ -52,6 +49,8 @@ public class HomePageFragment extends Fragment {
         initViewEvent(view);
         return view;
     }
+
+
 
     private void initViewEvent(View view) {
         mAddContacter = view.findViewById(R.id.add_contacter);
