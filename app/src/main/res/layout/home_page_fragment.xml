@@ -43,15 +43,16 @@
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <Button
-        android:id="@+id/item_alcohol"
-        android:layout_width="match_parent"
+        android:id="@+id/alcohol_data_get"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="获取酒精浓度"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.337"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.422"
+        tools:ignore="MissingConstraints"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
