@@ -20,5 +20,7 @@
     <color name="color_limit_line_chart">#A9A9A9</color>
 
 
+    <!--底部导航栏和viewpager2之间的分割线-->
+    <color name="viewpager2_divider_bottom_navigation_bar">#C0C0C0</color>
 
 </resources>

@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -36,6 +38,8 @@ public class HomePageFragment extends Fragment {
     private FloatingActionButton mMakePhone;
 
     private ContactorDao mContactorDao;
+    private CardView mCardView;
+    private TextView mAlcoholTextView;
     //点击跳转 获取酒精浓度页面
     private Button mBtn;
 
@@ -62,6 +66,7 @@ public class HomePageFragment extends Fragment {
     }
 
 
+
     private void initViewEvent(View view) {
         mAddContacter = view.findViewById(R.id.add_contacter);
         mAddContacter.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +90,7 @@ public class HomePageFragment extends Fragment {
                 startActivity(intent2);
             }
         });
+
     }
 
 
@@ -119,4 +125,6 @@ public class HomePageFragment extends Fragment {
         super.onDestroyView();
 //        unbinder.unbind();//视图销毁时必须解绑,否则会造成内存泄漏.
     }
+
+
 }
