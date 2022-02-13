@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,9 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -38,13 +41,31 @@ public class HomePageFragment extends Fragment {
     private FloatingActionButton mMakePhone;
 
     private ContactorDao mContactorDao;
-    private CardView mCardView;
-    private TextView mAlcoholTextView;
-    //点击跳转 获取酒精浓度页面
-    private Button mBtn;
+
+
+    private CardView tempCard, hrCard, bpCard, alcoholCard;
+    private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
+
 
     public static HomePageFragment newInstance() {
         return new HomePageFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mIntentActivityResultLauncher = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent intent = result.getData();
+                            //TODO Handle the Intent
+                            Log.d(TAG, "get alcohol data back" );
+                        }
+                    }
+                });
     }
 
     @Override
@@ -53,20 +74,68 @@ public class HomePageFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.home_page_fragment, container, false);
-        mBtn = view.findViewById(R.id.alcohol_data_get);
-        mBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AlcoholActivity.class);
-                startActivity(intent);
-            }
-        });
+        initView(view);
+        setOnCardClickEvent();
         initViewEvent(view);
         return view;
     }
 
 
+    private void initView(View view) {
+        alcoholCard = view.findViewById(R.id.alcohol_data_get);
+        hrCard = view.findViewById(R.id.hr_data_get);
+        tempCard = view.findViewById(R.id.temp_data_get);
+        bpCard = view.findViewById(R.id.bp_data_get);
+        mAddContacter = view.findViewById(R.id.add_contacter);
+        mMakePhone = view.findViewById(R.id.make_phone);
+    }
 
+    /**
+     * 卡片点击事件
+     */
+    private void setOnCardClickEvent() {
+        alcoholCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAlcoholData();
+                //startActivity(new Intent(getActivity(), AlcoholActivity.class));
+            }
+        });
+        hrCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "--> hr");
+            }
+        });
+        tempCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "--> temp");
+            }
+        });
+
+        bpCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "--> bp");
+            }
+        });
+
+
+    }
+
+    /**
+     * 跳转到 获取酒精浓度页面
+     */
+    private void getAlcoholData() {
+        Log.d(TAG, "--> alcohol");
+        mIntentActivityResultLauncher.launch(new Intent(getActivity(), AlcoholActivity.class));
+    }
+
+
+    /**
+     * 悬浮按钮 点击事件
+     */
     private void initViewEvent(View view) {
         mAddContacter = view.findViewById(R.id.add_contacter);
         mAddContacter.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +159,7 @@ public class HomePageFragment extends Fragment {
                 startActivity(intent2);
             }
         });
-
     }
-
 
     /**
      * 拨打第一联系人，如果没有就打120

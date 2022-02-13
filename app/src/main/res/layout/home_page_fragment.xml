@@ -1,65 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
+    android:background="@color/page_background_color"
+    android:orientation="vertical"
     tools:context=".fragments.HomePageFragment">
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fab_menu"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        fab:fab_addButtonColorNormal="@color/colorAccent"
-        fab:fab_icon="@drawable/ic_add_black_24dp"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="left"
-        tools:ignore="MissingConstraints">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_contacter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorAccent"
-            fab:fab_icon="@drawable/ic_baseline_contact_phone_24"
-            fab:fab_size="mini"
-            fab:fab_title="添加联系人" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/make_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorAccent"
-            fab:fab_icon="@drawable/ic_baseline_phone_in_talk_24"
-            fab:fab_size="mini"
-            fab:fab_title="拨打电话" />
-
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-    <Button
+    <androidx.cardview.widget.CardView
         android:id="@+id/alcohol_data_get"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:background="@drawable/btn_selector"
-        android:drawableLeft="@mipmap/outline_local_bar_black_36"
-        android:text="无测量"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.422"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginTop="36dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/alcohol_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/alcohol" />
+
+            <TextView
+                android:id="@+id/alcohol_concentration_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:text="酒精浓度"
+                android:textColor="@color/default_text_color"
+                android:textSize="24sp"
+                tools:ignore="InvalidId" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/hr_data_get"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/hr_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/hr" />
+
+            <TextView
+                android:id="@+id/hr_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:text="心率"
+                android:textColor="@color/default_text_color"
+                android:textSize="24sp"
+                tools:ignore="InvalidId" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/temp_data_get"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/temp_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/temp" />
+
+            <TextView
+                android:id="@+id/temp_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:text="温度"
+                android:textColor="@color/default_text_color"
+                android:textSize="24sp"
+                tools:ignore="InvalidId" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bp_data_get"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/bp_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/bp" />
+
+            <TextView
+                android:id="@+id/bp_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:text="血压"
+                android:textColor="@color/default_text_color"
+                android:textSize="24sp"
+                tools:ignore="InvalidId" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|end">
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fab_menu"
+            android:layout_width="138dp"
+            android:layout_height="193dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_icon="@drawable/ic_add_black_24dp"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_labelsPosition="left"
+            tools:ignore="MissingConstraints">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_contacter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_icon="@mipmap/add_contactor"
+                fab:fab_size="mini"
+                fab:fab_title="添加联系人" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/make_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_icon="@mipmap/make_phone"
+                fab:fab_size="mini"
+                fab:fab_title="拨打电话" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

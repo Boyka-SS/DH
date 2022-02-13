@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.jinke.driverhealth.adapters.MyAdapt;
+import com.jinke.driverhealth.adapters.MyFragmentAdapter;
 import com.jinke.driverhealth.fragments.DataFragment;
 import com.jinke.driverhealth.fragments.HomePageFragment;
 import com.jinke.driverhealth.fragments.MineFragment;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         list.add(new DataFragment());
         list.add(new MineFragment());
 
-        MyAdapt myFragmentAdapter = new MyAdapt(getSupportFragmentManager(), getLifecycle(), list);
+        MyFragmentAdapter myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), getLifecycle(), list);
         viewPager.setAdapter(myFragmentAdapter);
 
 //        ViewPager2提供的滑动监听

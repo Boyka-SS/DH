@@ -27,9 +27,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth">
-        <activity android:name=".activity.alcohol.DeviceListActivity"></activity>
+        <activity android:name=".activity.alcohol.DeviceListActivity" />
         <activity android:name=".activity.alcohol.AlcoholActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activity.DemoActivity" />
         <activity android:name=".activity.ContacterActivity" />
@@ -39,11 +43,7 @@
         <activity android:name=".activity.detail.HRDetailActivity" />
         <activity android:name=".activity.HealthDetailActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

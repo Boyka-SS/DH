@@ -13,10 +13,10 @@ import java.util.List;
  * @author: fanlihao
  * @date: 2022/2/13
  */
-public class MyAdapt  extends FragmentStateAdapter {
+public class MyFragmentAdapter  extends FragmentStateAdapter {
    private List<Fragment> list = new ArrayList<>();
 
-    public MyAdapt(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle , List<Fragment> list) {
+    public MyFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle , List<Fragment> list) {
         super(fragmentManager, lifecycle);
         this.list = list;
     }

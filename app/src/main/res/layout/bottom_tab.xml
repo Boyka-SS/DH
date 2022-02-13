@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="首页"
+            android:text="@string/fragment_app"
             android:textColor="@drawable/text_selector"
             android:textSize="13sp" />
     </LinearLayout>
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="健康数据"
+            android:text="@string/fragment_health_data"
             android:textColor="@drawable/text_selector"
             android:textSize="13sp" />
     </LinearLayout>
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="个人中心"
+            android:text="@string/fragment_me"
             android:textColor="@drawable/text_selector"
             android:textSize="13sp" />
     </LinearLayout>

@@ -73,7 +73,6 @@ public class HealthDetailActivity extends AppCompatActivity {
 
     private void setOnCardClickEvent() {
 
-
         tempCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
