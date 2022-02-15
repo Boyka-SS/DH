@@ -25,8 +25,12 @@ public class CalendarUtil {
         return dateNowStr;
     }
 
-
-
+    public static String getNowFormatCalendar(String pattern) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String dateNowStr = sdf.format(d);
+        return dateNowStr;
+    }
 
 
     /**

@@ -7,12 +7,14 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +23,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
+import com.jinke.driverhealth.utils.ShowDialog;
 import com.jinke.driverhealth.views.TitleLayout;
 
 import java.io.IOException;
@@ -32,17 +36,16 @@ import java.util.UUID;
 public class AlcoholActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "AlcoholActivity";
-    //宏定义查询设备句柄
-    private final static int REQUEST_CONNECT_DEVICE = 1;
 
 
     private InputStream mInputStream;    //输入流，用来接收蓝牙数据
     private BluetoothDevice mRemoteBTDevice = null;     //蓝牙设备
     private BluetoothSocket _socket = null;      //蓝牙通信socket
-    boolean _discoveryFinished = false;
 
+    private int threshold = 20, flag = 0;
     private Button connectBTDevice, thresholdValueAdd, thresholdValueSub;
-    private TextView mTextView;
+    private TextView mTextView, mToday, mThreshold;
+    private ImageView mWarnImg;
 
     boolean bRun = true;
     boolean bThread = false;
@@ -70,9 +73,20 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
 
         private void refreshView(byte[] buffer) {
             h = (buffer[0]);
-            //TODO add alcohol data
+            if (h >= threshold) {
+
+                //检测数据超过阈值，颜色变红，并且提示是否需要拨打电话
+                mTextView.setTextColor(Color.parseColor("#DD6B55"));
+                if (flag == 0) {
+                    ShowDialog.showWarnDialog(AlcoholActivity.this, "是否拨打紧急电话");
+                }
+                mWarnImg.setVisibility(View.VISIBLE);
+                flag++;
+            } else {
+                mTextView.setTextColor(Color.parseColor("#FFFFFFFF"));
+                mWarnImg.setVisibility(View.INVISIBLE);
+            }
             mTextView.setText(h + " %");
-            Log.d("", "--> " + h);
         }
     };
 
@@ -85,6 +99,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         hideActionBar("检测今日酒精浓度");
         initView();
         initBT();
+
     }
 
 
@@ -113,11 +128,22 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     private void initView() {
         connectBTDevice = findViewById(R.id.connect_bt);
         connectBTDevice.setOnClickListener(this);
+
         mTextView = findViewById(R.id.alcohol_concentration_txt);
+
+        mToday = findViewById(R.id.alcohol_concentration_today);
+        mToday.setText("今日日期：" + CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm"));
+
+        mThreshold = findViewById(R.id.alcohol_concentration_threshold);
+        mThreshold.setText("阈值：" + threshold + " %");
+
         thresholdValueAdd = findViewById(R.id.add_threshold);
         thresholdValueAdd.setOnClickListener(this);
+
         thresholdValueSub = findViewById(R.id.sub_threshold);
         thresholdValueSub.setOnClickListener(this);
+
+        mWarnImg = findViewById(R.id.alcohol_concentration_warn);
     }
 
 
@@ -157,7 +183,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     /**
      * 阈值+
      */
+
     private void addThreshold() {
+        mThreshold.setText("阈值：" + ++threshold + " %");
         String str = "a";
         byte[] fasong1 = str.getBytes();
         if (_socket != null) {
@@ -167,7 +195,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
             } catch (IOException e) {
             }
         } else {
-            Toast.makeText(this,"未连接蓝牙设备",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "未连接蓝牙设备", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,6 +203,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
      * 阈值-
      */
     private void subThreshold() {
+        mThreshold.setText("阈值：" + --threshold + " %");
         String str = "b";
         byte[] fasong1 = str.getBytes();
         if (_socket != null) {
@@ -184,7 +213,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
             } catch (IOException e) {
             }
         } else {
-            Toast.makeText(this,"未连接蓝牙设备",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "未连接蓝牙设备", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -203,6 +232,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         // 用服务号得到socket
         try {
             _socket = mRemoteBTDevice.createRfcommSocketToServiceRecord(UUID.fromString(Config.DEVICE_UUID));
+            if (_socket == null) {
+                Log.e(TAG, "connect BL device fail");
+            }
         } catch (IOException e) {
             Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
         }
@@ -253,7 +285,6 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                     /*在采集单个数据的时候把while(true给去掉)*/
-
                     /*读入数据*/
                     mInputStream.read(buffer);
 
@@ -276,6 +307,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        threshold = 20;
         /* 关闭连接socket */
         if (_socket != null) {
             try {
@@ -296,32 +328,14 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
  * 3、搜索设备：
  * ①特定设备（只扫描含有特定 UUID Service 的蓝牙设备）
  * ②全部设备
+ * /
  * <p>
+ * /**
  * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
  * <p>
  * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
  * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
  * <p>
- * 需要注册一个蓝牙搜索结果的广播接收器，
- * 在接收器中解析蓝牙设备信息，
- * 再把新设备添加到蓝牙设备列表。
- * <p>
- * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
- * <p>
- * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
- * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
- * <p>
- * 需要注册一个蓝牙搜索结果的广播接收器，
- * 在接收器中解析蓝牙设备信息，
- * 再把新设备添加到蓝牙设备列表。
- */
-
-/**
- * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
- *
- * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
- * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
- *
  * 需要注册一个蓝牙搜索结果的广播接收器，
  * 在接收器中解析蓝牙设备信息，
  * 再把新设备添加到蓝牙设备列表。
