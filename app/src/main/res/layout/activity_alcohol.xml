@@ -10,29 +10,47 @@
     <include layout="@layout/title_bar" />
 
     <LinearLayout
-        android:background="#FFB6C1"
-        android:layout_width="match_parent"
-        android:layout_height="400dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="01010101" />
-    </LinearLayout>
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:layout_margin="10dp"
-        android:layout_marginTop="20dp"
-        android:gravity="start">
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/arc_progress"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@drawable/round_corner"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/alcohol_concentration_lable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/arc_bottom_text"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+            <TextView
+                android:id="@+id/alcohol_concentration_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0 %"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/op"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/arc_progress"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+
             android:gravity="center"
             android:orientation="vertical">
 
@@ -57,18 +75,7 @@
                 android:text="@string/get_alcohol_sub"
                 android:textAllCaps="false" />
         </LinearLayout>
+    </LinearLayout>
 
 
-        <com.github.lzyzsd.circleprogress.ArcProgress
-            android:id="@+id/arc_progress"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@drawable/round_corner"
-            custom:arc_bottom_text="@string/arc_bottom_text"
-            custom:arc_bottom_text_size="18sp"
-            custom:arc_progress="0"
-            custom:arc_suffix_text_size="20sp"
-            custom:arc_text_color="@color/white"
-            custom:arc_text_size="40sp" />
-    </RelativeLayout>
 </LinearLayout>

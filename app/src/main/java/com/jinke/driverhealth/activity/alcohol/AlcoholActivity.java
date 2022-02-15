@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.views.TitleLayout;
@@ -39,21 +37,44 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private InputStream mInputStream;    //输入流，用来接收蓝牙数据
-    private BluetoothDevice _device = null;     //蓝牙设备
+    private BluetoothDevice mRemoteBTDevice = null;     //蓝牙设备
     private BluetoothSocket _socket = null;      //蓝牙通信socket
     boolean _discoveryFinished = false;
 
     private Button connectBTDevice, thresholdValueAdd, thresholdValueSub;
-    private ArcProgress mArcProgress;
-    private TextView wendutext;
+    private TextView mTextView;
 
     boolean bRun = true;
     boolean bThread = false;
     int t, h;
     //获取本地蓝牙适配器，即蓝牙设备
-    private BluetoothAdapter _bluetooth = BluetoothAdapter.getDefaultAdapter();
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter nativeMachineBTAdapter;
+
+    /**
+     * 接收酒精浓度显示的函数
+     * 酒精浓度数据显示
+     */
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 2:
+                    byte buffer[] = (byte[]) msg.obj;
+                    /*接收到数据后显示*/
+                    refreshView(buffer);
+                    break;
+            }
+        }
+
+        private void refreshView(byte[] buffer) {
+            h = (buffer[0]);
+            //TODO add alcohol data
+            mTextView.setText(h + " %");
+            Log.d("", "--> " + h);
+        }
+    };
 
 
     @Override
@@ -62,24 +83,8 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_alcohol);   //设置画面为主画面 main.xml
         //检测酒精+隐藏系统自带标题
         hideActionBar("检测今日酒精浓度");
-
         initView();
         initBT();
-
-        /**
-         * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
-         *
-         * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
-         * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
-         *
-         * 需要注册一个蓝牙搜索结果的广播接收器，
-         * 在接收器中解析蓝牙设备信息，
-         * 再把新设备添加到蓝牙设备列表。
-         */
-        if (!nativeMachineBTAdapter.isDiscovering()) {
-            nativeMachineBTAdapter.startDiscovery();
-        }
-
     }
 
 
@@ -92,7 +97,6 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         nativeMachineBTAdapter = mBluetoothManager.getAdapter();
 //        nativeMachineBTAdapter= BluetoothAdapter.getDefaultAdapter(); //outmoded way
         if (nativeMachineBTAdapter == null) {
-            Log.d(TAG, "native machine don`t support BlueTooth");
             Toast.makeText(AlcoholActivity.this, "设备不支持蓝牙功能", Toast.LENGTH_LONG).show();
         } else if (!nativeMachineBTAdapter.isEnabled()) {//判断蓝牙是否开启
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -109,12 +113,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     private void initView() {
         connectBTDevice = findViewById(R.id.connect_bt);
         connectBTDevice.setOnClickListener(this);
-
-        mArcProgress = findViewById(R.id.arc_progress);
-
+        mTextView = findViewById(R.id.alcohol_concentration_txt);
         thresholdValueAdd = findViewById(R.id.add_threshold);
         thresholdValueAdd.setOnClickListener(this);
-
         thresholdValueSub = findViewById(R.id.sub_threshold);
         thresholdValueSub.setOnClickListener(this);
     }
@@ -159,11 +160,14 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     private void addThreshold() {
         String str = "a";
         byte[] fasong1 = str.getBytes();
-        try {
-            OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
-
-            os1.write(fasong1);
-        } catch (IOException e) {
+        if (_socket != null) {
+            try {
+                OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
+                os1.write(fasong1);
+            } catch (IOException e) {
+            }
+        } else {
+            Toast.makeText(this,"未连接蓝牙设备",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -173,19 +177,21 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     private void subThreshold() {
         String str = "b";
         byte[] fasong1 = str.getBytes();
-        try {
-            OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
-            os1.write(fasong1);
-        } catch (IOException e) {
+        if (_socket != null) {
+            try {
+                OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
+                os1.write(fasong1);
+            } catch (IOException e) {
+            }
+        } else {
+            Toast.makeText(this,"未连接蓝牙设备",Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
-     * 连接蓝牙设备
+     * 连接蓝牙设备,并开始接受数据
      */
     private void connectBtDevice() {
-
         //如果蓝牙服务不可用则提示
         if (nativeMachineBTAdapter.isEnabled() == false) {
             Toast.makeText(AlcoholActivity.this, " 打开蓝牙中...", Toast.LENGTH_LONG).show();
@@ -193,19 +199,17 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         // 得到蓝牙设备句柄
-        _device = nativeMachineBTAdapter.getRemoteDevice(Config.REMOTE_DEVICE_MAC);
-        Log.d(TAG, "remote name --> " + _device.getName());
-        Log.d(TAG, "remote address --> " + _device.getAddress());
+        mRemoteBTDevice = nativeMachineBTAdapter.getRemoteDevice(Config.REMOTE_DEVICE_MAC);
         // 用服务号得到socket
         try {
-            _socket = _device.createRfcommSocketToServiceRecord(UUID.fromString(Config.DEVICE_UUID));
+            _socket = mRemoteBTDevice.createRfcommSocketToServiceRecord(UUID.fromString(Config.DEVICE_UUID));
         } catch (IOException e) {
             Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
         }
         //连接socket
         try {
             _socket.connect();
-            Toast.makeText(this, "连接" + _device.getName() + "成功！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "连接" + mRemoteBTDevice.getName() + "成功！", Toast.LENGTH_SHORT).show();
             //	btn.setText("断开");
         } catch (IOException e) {
             try {
@@ -225,23 +229,23 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "接收数据失败！", Toast.LENGTH_SHORT).show();
             return;
         }
+
         if (bThread == false) {
             ReadThread.start();
             bThread = true;
         } else {
             bRun = true;
         }
+
     }
 
     /*接收数据线程*/
-    Thread ReadThread = new Thread() {
-
+    private Thread ReadThread = new Thread() {
         @Override
         public void run() {
-            int num = 0;
             byte[] buffer = new byte[1024];
             bRun = true;
-            /*接收线程*/
+
             while (true) {
                 try {
                     while (mInputStream.available() == 0) {
@@ -249,63 +253,22 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     }
                     /*在采集单个数据的时候把while(true给去掉)*/
-                    while (true) {
-                        /*读入数据*/
-                        num = mInputStream.read(buffer);
-                        /*通知界面*/
-                        Message message = new Message();
-                        message.what = 2;
-                        message.obj = buffer;
-                        mHandler.sendMessage(message);
 
+                    /*读入数据*/
+                    mInputStream.read(buffer);
 
-                    }
+                    /*通知界面*/
+                    Message message = new Message();
+                    message.what = 2;
+                    message.obj = buffer;
+                    mHandler.sendMessage(message);
+
                 } catch (IOException e) {
                 }
             }
         }
     };
 
-    /**
-     * 接收温湿度显示的函数
-     * <p>
-     * 温湿度数据显示
-     */
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 2:
-                    byte buffer[] = (byte[]) msg.obj;
-                    /*接收到数据后显示*/
-                    refreshView(buffer);
-                    break;
-            }
-        }
-
-        private void refreshView(byte[] buffer) {
-            h = (buffer[0]);
-            wendutext.setText(h + "%");
-        }
-    };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
-//        IntentFilter discoveryFilter = new IntentFilter();
-//        discoveryFilter.addAction(BluetoothDevice.ACTION_FOUND);
-//        //注册搜索结果的接收器
-//        registerReceiver(discoveryReceiver, discoveryFilter);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // 注销蓝牙设备搜索的广播接收器
-//        unregisterReceiver(discoveryReceiver);
-    }
 
     /**
      * 关闭程序掉用处理部分
@@ -323,23 +286,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         //	_bluetooth.disable();  //关闭蓝牙服务
     }
 
-    // 蓝牙设备的搜索结果通过广播返回
-    private BroadcastReceiver discoveryReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.d(TAG, "onReceive action = " + action);
-            // 获得已经搜索到的蓝牙设备
-            if (action.equals(BluetoothDevice.ACTION_FOUND)) { // 发现新的蓝牙设备
-                _device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) { // 搜索完毕
-                //mHandler.removeCallbacks(mRefresh); // 需要持续搜索就要注释这行
-                Log.d(TAG, "search end");
-            }
-        }
-    };
 }
 // Android App开发进阶与项目实战
+
 /**
  * 蓝牙使用步骤
  * 1、初始化蓝牙：通过BlueToothManger获取BlueToothAdapter
@@ -347,4 +296,33 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
  * 3、搜索设备：
  * ①特定设备（只扫描含有特定 UUID Service 的蓝牙设备）
  * ②全部设备
+ * <p>
+ * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
+ * <p>
+ * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
+ * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
+ * <p>
+ * 需要注册一个蓝牙搜索结果的广播接收器，
+ * 在接收器中解析蓝牙设备信息，
+ * 再把新设备添加到蓝牙设备列表。
+ * <p>
+ * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
+ * <p>
+ * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
+ * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
+ * <p>
+ * 需要注册一个蓝牙搜索结果的广播接收器，
+ * 在接收器中解析蓝牙设备信息，
+ * 再把新设备添加到蓝牙设备列表。
+ */
+
+/**
+ * 蓝牙搜索设备。搜索之前我们需要判断是否正在搜索，如果正在搜索则取消搜索后再搜索
+ *
+ * 搜索动作是个异步的过程，startDiscovery方法并不直接返回搜索发现的设备结果，
+ * 而是通过广播BluetoothDevice.ACTION_FOUND返回新发现的蓝牙设备
+ *
+ * 需要注册一个蓝牙搜索结果的广播接收器，
+ * 在接收器中解析蓝牙设备信息，
+ * 再把新设备添加到蓝牙设备列表。
  */
