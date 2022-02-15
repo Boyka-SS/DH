@@ -47,15 +47,11 @@ public class HomePageFragment extends Fragment {
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
 
 
-    public static HomePageFragment newInstance() {
-        return new HomePageFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mIntentActivityResultLauncher = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
@@ -104,12 +100,14 @@ public class HomePageFragment extends Fragment {
         hrCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 Log.d(TAG, "--> hr");
             }
         });
         tempCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 Log.d(TAG, "--> temp");
             }
         });
@@ -117,6 +115,7 @@ public class HomePageFragment extends Fragment {
         bpCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO
                 Log.d(TAG, "--> bp");
             }
         });

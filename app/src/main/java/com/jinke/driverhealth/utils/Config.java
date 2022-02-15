@@ -2,19 +2,29 @@ package com.jinke.driverhealth.utils;
 
 /**
  * 项目配置类
+ *
  * @author: fanlihao
  * @date: 2022/2/6
  */
 public class Config {
 
+    /**
+     * 兔盯云
+     */
+    //数据起始时间
+    public final static String START_TIME = "2021-10-01 00:00:00";
+    //数据升序
+    public final static String ASC_DATA = "asc";
+    //数据降序
+    public final static String DESC_DATA = "desc";
 
-    public static volatile String TOKEN = "";
-    public static String START_TIME = "2021-10-01 00:00:00";
 
-    public static String ASC_DATA = "asc";//数据升序
-    public static String DESC_DATA = "desc";//数据降序
-
-
+    //alcohol device name
+    public final static String REMOTE_DEVICE_NAME = "JDY-31-SPP";
+    // alcohol device mac
+    public final static String REMOTE_DEVICE_MAC = "50:E9:06:01:65:00";
+    //SPP服务UUID号
+    public final static String DEVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     /**
      * 兔盯云平台
      */

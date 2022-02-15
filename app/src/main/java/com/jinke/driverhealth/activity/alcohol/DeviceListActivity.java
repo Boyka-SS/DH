@@ -23,14 +23,14 @@ import com.jinke.driverhealth.R;
 
 public class DeviceListActivity extends AppCompatActivity {
 
-    // 调试用
+
     private static final String TAG = "DeviceListActivity";
     private static final boolean D = true;
 
     // 返回时数据标签
     public static String EXTRA_DEVICE_ADDRESS = "设备地址";
 
-    // 成员域
+
     private BluetoothAdapter mBtAdapter;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
     private ArrayAdapter<String> mNewDevicesArrayAdapter;

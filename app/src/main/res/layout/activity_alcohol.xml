@@ -1,68 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.alcohol.AlcoholActivity">
+    android:background="@color/page_background_color"
+    android:gravity="start"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/add_threshold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:text="阈值+"
-        app:layout_constraintEnd_toStartOf="@+id/sub_threshold"
-        app:layout_constraintHorizontal_bias="0.27"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+    <include layout="@layout/title_bar" />
 
-    <Button
-        android:id="@+id/sub_threshold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:layout_marginEnd="52dp"
-        android:text="阈值-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+    <LinearLayout
+        android:background="#FFB6C1"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
 
-    <TextView
-        android:id="@+id/alcohol_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="酒精浓度"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.213" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="01010101" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/connectToBT"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="连接蓝牙"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sub_threshold" />
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="start">
 
-    <TextView
-        android:id="@+id/alcohol_concentration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00%"
-        android:textColor="#DC143C"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/connectToBT"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alcohol_label"
-        app:layout_constraintVertical_bias="0.199" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/op"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/arc_progress"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/connect_bt"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/get_alcohol_op"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/add_threshold"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/get_alcohol_add"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/sub_threshold"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/get_alcohol_sub"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+
+        <com.github.lzyzsd.circleprogress.ArcProgress
+            android:id="@+id/arc_progress"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/round_corner"
+            custom:arc_bottom_text="@string/arc_bottom_text"
+            custom:arc_bottom_text_size="18sp"
+            custom:arc_progress="0"
+            custom:arc_suffix_text_size="20sp"
+            custom:arc_text_color="@color/white"
+            custom:arc_text_size="40sp" />
+    </RelativeLayout>
+</LinearLayout>

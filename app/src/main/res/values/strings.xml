@@ -1,6 +1,15 @@
 <resources>
+    <!--App name-->
     <string name="app_name">智小安</string>
+    <!--bottom navigation bar name-->
     <string name="fragment_me">个人中心</string>
     <string name="fragment_health_data">健康数据</string>
     <string name="fragment_app">首页</string>
+    <!--alcohol operation-->
+    <string name="get_alcohol_op">连接蓝牙</string>
+    <string name="get_alcohol_sub">阈值-</string>
+    <string name="get_alcohol_add">阈值+</string>
+    <string name="get_alcohol_end">完成</string>
+    <string name="arc_bottom_text">酒精浓度</string>
+
 </resources>

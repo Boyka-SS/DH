@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.jinke.driverhealth.beans.Token;
 import com.jinke.driverhealth.data.network.TokenNetwork;
-import com.jinke.driverhealth.utils.Config;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +24,6 @@ public class DHapplication extends Application {
     public void onCreate() {
         super.onCreate();
         mAppDatabase = AppDatabase.getInstance(getApplicationContext());
-
         fetchToken();
     }
 
@@ -38,7 +36,9 @@ public class DHapplication extends Application {
         return mAppDatabase;
     }
 
-
+    /**
+     * 获取兔盯云平台健康数据的token
+     */
     private void fetchToken() {
 
         new TokenNetwork().requestToken(new Callback<Token>() {
@@ -46,7 +46,6 @@ public class DHapplication extends Application {
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
                     Token token = response.body();
-                    Config.TOKEN = token.getData().getToken();
                     SharedPreferences.Editor data = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE).edit();
                     data.putString("token", token.getData().getToken());
                     data.putString("expireTime", token.getData().getExpired());
@@ -56,7 +55,7 @@ public class DHapplication extends Application {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                //TODO: request token fail
+                //Tip: request token fail
             }
         });
     }

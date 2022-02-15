@@ -63,7 +63,7 @@ public class DataFragment extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                //TODO:监听长按事件
+                //TODO:监听长按事件 暂时用不上
                 Toast.makeText(getActivity(), "long click " + position + " item", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onLongClick  --> item" + position);
             }
