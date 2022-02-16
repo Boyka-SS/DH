@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -37,27 +38,30 @@ public class HomePageFragment extends Fragment {
     private static final String TAG = "HomePageFragment";
 
 
-    private FloatingActionButton mAddContacter;
-    private FloatingActionButton mMakePhone;
-
     private ContactorDao mContactorDao;
 
-
+    //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
+    private TextView mAlcoholConcentration;
+    private FloatingActionButton mAddContacter, mMakePhone;
+
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
 
+    //data
+    private String mAlcohol = "待测", mAlcoholCreateTime;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //registerForActivityResult() 方法注册结果回调（在 onStart() 之前调用）
+        //获取检测到的酒精数据
         mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == 1) {
                     Intent data = result.getData();
-                    Log.d(TAG, "get alcohol data back 1--> " + data.getStringExtra("alcohol"));
-                    Log.d(TAG, "get alcohol data back 2--> " + data.getStringExtra("alcoholCreateTime"));
+                    mAlcohol = data.getStringExtra("alcohol");
+                    mAlcoholCreateTime = data.getStringExtra("alcoholCreateTime");
                 }
             }
         });
@@ -81,6 +85,7 @@ public class HomePageFragment extends Fragment {
         hrCard = view.findViewById(R.id.hr_data_get);
         tempCard = view.findViewById(R.id.temp_data_get);
         bpCard = view.findViewById(R.id.bp_data_get);
+        mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
         mAddContacter = view.findViewById(R.id.add_contacter);
         mMakePhone = view.findViewById(R.id.make_phone);
     }

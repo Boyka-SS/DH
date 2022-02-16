@@ -22,31 +22,28 @@
         app:cardElevation="5dp"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/alcohol_icon"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/home_page_icon_width"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:src="@mipmap/alcohol" />
 
             <TextView
                 android:id="@+id/alcohol_concentration_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:text="酒精浓度"
+                android:layout_toRightOf="@id/alcohol_icon"
+                android:gravity="start|center"
+                android:text="@string/today_alcohol"
                 android:textColor="@color/default_text_color"
-                android:textSize="24sp"
+                android:textSize="@dimen/home_page_text_size"
                 tools:ignore="InvalidId" />
-
-        </LinearLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -59,34 +56,33 @@
         android:padding="5dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
-
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/hr_icon"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/home_page_icon_width"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:src="@mipmap/hr" />
 
             <TextView
                 android:id="@+id/hr_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:text="心率"
+                android:layout_toRightOf="@id/hr_icon"
+                android:gravity="start|center"
+                android:text="@string/recently_hr"
                 android:textColor="@color/default_text_color"
-                android:textSize="24sp"
+                android:textSize="@dimen/home_page_text_size"
                 tools:ignore="InvalidId" />
+        </RelativeLayout>
 
-        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -101,15 +97,14 @@
         app:cardElevation="5dp"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/temp_icon"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/home_page_icon_width"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:src="@mipmap/temp" />
@@ -118,14 +113,15 @@
                 android:id="@+id/temp_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/temp_icon"
                 android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:text="温度"
+                android:gravity="start|center"
+                android:text="@string/recently_temp"
                 android:textColor="@color/default_text_color"
-                android:textSize="24sp"
+                android:textSize="@dimen/home_page_text_size"
                 tools:ignore="InvalidId" />
+        </RelativeLayout>
 
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -141,15 +137,15 @@
         app:cardElevation="5dp"
         tools:ignore="MissingConstraints">
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/bp_icon"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/home_page_icon_width"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:src="@mipmap/bp" />
@@ -158,14 +154,16 @@
                 android:id="@+id/bp_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/bp_icon"
                 android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:text="血压"
+                android:gravity="start|center"
+                android:text="@string/recently_bp"
                 android:textColor="@color/default_text_color"
-                android:textSize="24sp"
+                android:textSize="@dimen/home_page_text_size"
                 tools:ignore="InvalidId" />
+        </RelativeLayout>
 
-        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
