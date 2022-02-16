@@ -39,24 +39,23 @@
         tools:replace="android:icon">
 
         <activity android:name=".activity.alcohol.AlcoholActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".activity.DemoActivity">
 
         </activity>
         <activity android:name=".activity.ContacterActivity" />
         <activity android:name=".activity.detail.AlcoholDeatilActivity">
-
         </activity>
         <activity android:name=".activity.detail.BPDetailActivity" />
         <activity android:name=".activity.detail.TempDetailActivity" />
         <activity android:name=".activity.detail.HRDetailActivity" />
         <activity android:name=".activity.HealthDetailActivity" />
         <activity android:name=".MainActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

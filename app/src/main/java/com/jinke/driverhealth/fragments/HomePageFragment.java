@@ -1,7 +1,6 @@
 package com.jinke.driverhealth.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,18 +50,17 @@ public class HomePageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent intent = result.getData();
-                            //TODO Handle the Intent
-                            Log.d(TAG, "get alcohol data back" );
-                        }
-                    }
-                });
+        //registerForActivityResult() 方法注册结果回调（在 onStart() 之前调用）
+        mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == 1) {
+                    Intent data = result.getData();
+                    Log.d(TAG, "get alcohol data back 1--> " + data.getStringExtra("alcohol"));
+                    Log.d(TAG, "get alcohol data back 2--> " + data.getStringExtra("alcoholCreateTime"));
+                }
+            }
+        });
     }
 
     @Override
@@ -93,8 +92,7 @@ public class HomePageFragment extends Fragment {
         alcoholCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAlcoholData();
-                //startActivity(new Intent(getActivity(), AlcoholActivity.class));
+                navigateToTestAlcoholPage();
             }
         });
         hrCard.setOnClickListener(new View.OnClickListener() {
@@ -126,8 +124,7 @@ public class HomePageFragment extends Fragment {
     /**
      * 跳转到 获取酒精浓度页面
      */
-    private void getAlcoholData() {
-        Log.d(TAG, "--> alcohol");
+    private void navigateToTestAlcoholPage() {
         mIntentActivityResultLauncher.launch(new Intent(getActivity(), AlcoholActivity.class));
     }
 
@@ -182,15 +179,27 @@ public class HomePageFragment extends Fragment {
             }
         }
 
-
         return "120";
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        unbinder.unbind();//视图销毁时必须解绑,否则会造成内存泄漏.
-    }
 
+    class ResultContract extends ActivityResultContract<Intent, String> {
+
+        @NonNull
+        @Override
+        public Intent createIntent(@NonNull Context context, Intent input) {
+            Intent intent = new Intent(getActivity(), AlcoholActivity.class);
+            return intent;
+        }
+
+        @Override
+        public String parseResult(int resultCode, @Nullable Intent intent) {
+            String alcohol = intent.getStringExtra("alcohol");
+            String alcoholCreateTime = intent.getStringExtra("alcoholCreateTime");
+            Log.d(TAG, "get alcohol data back 2--> " + alcohol);
+            Log.d(TAG, "get alcohol data back 3--> " + alcoholCreateTime);
+            return alcohol + " " + alcoholCreateTime;
+        }
+    }
 
 }

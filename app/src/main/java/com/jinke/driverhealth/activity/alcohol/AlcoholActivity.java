@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,13 +26,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
-import com.jinke.driverhealth.utils.ShowDialog;
 import com.jinke.driverhealth.views.TitleLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AlcoholActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,20 +42,22 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
 
     private InputStream mInputStream;    //输入流，用来接收蓝牙数据
     private BluetoothDevice mRemoteBTDevice = null;     //蓝牙设备
-    private BluetoothSocket _socket = null;      //蓝牙通信socket
+    private BluetoothSocket socket = null;      //蓝牙通信socket
 
     private int threshold = 20, flag = 0;
     private Button connectBTDevice, thresholdValueAdd, thresholdValueSub;
-    private TextView mTextView, mToday, mThreshold;
+    private TextView mAlcoholConcentration, mToday, mThreshold;
     private ImageView mWarnImg;
 
     boolean bRun = true;
     boolean bThread = false;
-    int t, h;
+    //酒精测量值
+    private int h;
     //获取本地蓝牙适配器，即蓝牙设备
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter nativeMachineBTAdapter;
-
+    //测量事件
+    private String currentTime = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm");
     /**
      * 接收酒精浓度显示的函数
      * 酒精浓度数据显示
@@ -68,6 +72,8 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
                     /*接收到数据后显示*/
                     refreshView(buffer);
                     break;
+                default:
+                    break;
             }
         }
 
@@ -76,17 +82,37 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
             if (h >= threshold) {
 
                 //检测数据超过阈值，颜色变红，并且提示是否需要拨打电话
-                mTextView.setTextColor(Color.parseColor("#DD6B55"));
+                mAlcoholConcentration.setTextColor(Color.parseColor("#DD6B55"));
                 if (flag == 0) {
-                    ShowDialog.showWarnDialog(AlcoholActivity.this, "是否拨打紧急电话");
+                    //警报提示
+                    new SweetAlertDialog(AlcoholActivity.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("是否拨打紧急电话")
+                            .setConfirmText("Yes,do it!")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+
+                                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                                    intent.setData(Uri.parse("tel:120"));
+                                    startActivity(intent);
+                                }
+                            })
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                }
+                            })
+                            .show();
                 }
                 mWarnImg.setVisibility(View.VISIBLE);
                 flag++;
             } else {
-                mTextView.setTextColor(Color.parseColor("#FFFFFFFF"));
+                mAlcoholConcentration.setTextColor(Color.parseColor("#FFFFFFFF"));
                 mWarnImg.setVisibility(View.INVISIBLE);
             }
-            mTextView.setText(h + " %");
+            mAlcoholConcentration.setText(h + " %");
         }
     };
 
@@ -99,7 +125,6 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         hideActionBar("检测今日酒精浓度");
         initView();
         initBT();
-
     }
 
 
@@ -129,10 +154,10 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         connectBTDevice = findViewById(R.id.connect_bt);
         connectBTDevice.setOnClickListener(this);
 
-        mTextView = findViewById(R.id.alcohol_concentration_txt);
+        mAlcoholConcentration = findViewById(R.id.alcohol_concentration_txt);
 
         mToday = findViewById(R.id.alcohol_concentration_today);
-        mToday.setText("今日日期：" + CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm"));
+        mToday.setText("今日日期：" + currentTime);
 
         mThreshold = findViewById(R.id.alcohol_concentration_threshold);
         mThreshold.setText("阈值：" + threshold + " %");
@@ -188,9 +213,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         mThreshold.setText("阈值：" + ++threshold + " %");
         String str = "a";
         byte[] fasong1 = str.getBytes();
-        if (_socket != null) {
+        if (socket != null) {
             try {
-                OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
+                OutputStream os1 = socket.getOutputStream();   //蓝牙连接输出流
                 os1.write(fasong1);
             } catch (IOException e) {
             }
@@ -206,9 +231,9 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         mThreshold.setText("阈值：" + --threshold + " %");
         String str = "b";
         byte[] fasong1 = str.getBytes();
-        if (_socket != null) {
+        if (socket != null) {
             try {
-                OutputStream os1 = _socket.getOutputStream();   //蓝牙连接输出流
+                OutputStream os1 = socket.getOutputStream();   //蓝牙连接输出流
                 os1.write(fasong1);
             } catch (IOException e) {
             }
@@ -221,6 +246,8 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
      * 连接蓝牙设备,并开始接受数据
      */
     private void connectBtDevice() {
+
+
         //如果蓝牙服务不可用则提示
         if (nativeMachineBTAdapter.isEnabled() == false) {
             Toast.makeText(AlcoholActivity.this, " 打开蓝牙中...", Toast.LENGTH_LONG).show();
@@ -231,32 +258,35 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         mRemoteBTDevice = nativeMachineBTAdapter.getRemoteDevice(Config.REMOTE_DEVICE_MAC);
         // 用服务号得到socket
         try {
-            _socket = mRemoteBTDevice.createRfcommSocketToServiceRecord(UUID.fromString(Config.DEVICE_UUID));
-            if (_socket == null) {
+            socket = mRemoteBTDevice.createRfcommSocketToServiceRecord(UUID.fromString(Config.DEVICE_UUID));
+            if (socket == null) {
                 Log.e(TAG, "connect BL device fail");
             }
         } catch (IOException e) {
+            Log.e(TAG, "socket=null");
             Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
         }
         //连接socket
         try {
-            _socket.connect();
+            socket.connect();
             Toast.makeText(this, "连接" + mRemoteBTDevice.getName() + "成功！", Toast.LENGTH_SHORT).show();
             //	btn.setText("断开");
         } catch (IOException e) {
+            Log.e(TAG, "socket connect fail");
             try {
                 Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
-                _socket.close();
-                _socket = null;
+                socket.close();
+                socket = null;
             } catch (IOException ee) {
                 Toast.makeText(this, "连接失败！", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "socket close fail");
             }
             return;
         }
 
         //打开接收线程
         try {
-            mInputStream = _socket.getInputStream();   //得到蓝牙数据输入流
+            mInputStream = socket.getInputStream();   //得到蓝牙数据输入流
         } catch (IOException e) {
             Toast.makeText(this, "接收数据失败！", Toast.LENGTH_SHORT).show();
             return;
@@ -309,15 +339,31 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
         super.onDestroy();
         threshold = 20;
         /* 关闭连接socket */
-        if (_socket != null) {
+        if (socket != null) {
             try {
-                _socket.close();
+                socket.close();
             } catch (IOException e) {
             }
         }
         //	_bluetooth.disable();  //关闭蓝牙服务
     }
 
+    /**
+     * 调用onBackPressed()方法，点击返回键返回数据给上一个Activity
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("alcohol", h);
+        intent.putExtra("alcoholCreateTime", currentTime);
+        Log.d(TAG, "酒精测量值 --> " + h);
+        setResult(1, intent);
+
+        super.onBackPressed();
+
+        //返回数据后结束当前活动
+        finish();
+    }
 }
 // Android App开发进阶与项目实战
 
