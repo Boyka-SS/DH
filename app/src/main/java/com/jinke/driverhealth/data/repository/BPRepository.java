@@ -5,7 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.jinke.driverhealth.beans.BloodPressure;
-import com.jinke.driverhealth.data.network.BPNetWork;
+import com.jinke.driverhealth.beans.SingleBp;
+import com.jinke.driverhealth.data.network.BPNetwork;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,11 +20,21 @@ public class BPRepository {
     private static final String TAG = "BPRepository";
 
 
+    /**
+     * 获取血压数据
+     * @param token
+     * @param startTime
+     * @param endTime
+     * @param page
+     * @param limit
+     * @param sort
+     * @return
+     */
     public static MutableLiveData<BloodPressure> fetchBPData(String token, String startTime, String endTime, String page, String limit, String sort) {
 
         MutableLiveData<BloodPressure> liveData = new MutableLiveData<>();
 
-        new BPNetWork().requestBPData(token, startTime, endTime, page, limit, sort, new Callback<BloodPressure>() {
+        new BPNetwork().requestBPData(token, startTime, endTime, page, limit, sort, new Callback<BloodPressure>() {
             @Override
             public void onResponse(Call<BloodPressure> call, Response<BloodPressure> response) {
                 if (response.isSuccessful()) {
@@ -39,6 +50,29 @@ public class BPRepository {
             }
         });
 
+        return liveData;
+    }
+
+    /**
+     * 获取最近一次血压数据
+     */
+    public static MutableLiveData<SingleBp> fetchRecentBpData(String token, String imei) {
+        MutableLiveData<SingleBp> liveData = new MutableLiveData<>();
+
+        new BPNetwork().requestRecentBPData(token, imei, new Callback<SingleBp>() {
+            @Override
+            public void onResponse(Call<SingleBp> call, Response<SingleBp> response) {
+                if (response.isSuccessful()) {
+                    liveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SingleBp> call, Throwable t) {
+                //TODO request recently bp data fail
+                Log.e(TAG, "request recently bp data fail");
+            }
+        });
         return liveData;
     }
 }

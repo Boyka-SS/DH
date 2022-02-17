@@ -14,10 +14,10 @@
     <string name="today">今日日期：</string>
     <string name="threshold">阈值：</string>
     <!--home page fragment-->
-    <string name="recently_hr">" 最近一次心率：0 次/分"</string>
-    <string name="today_alcohol">" 本日酒精浓度：0 %"</string>
-    <string name="recently_temp">" 最近一次体温：0 ℃"</string>
-    <string name="recently_bp">" 最近一次体温：0 mmgh"</string>
+    <string name="recently_hr">" 获取最近一次心率：0 bpm"</string>
+    <string name="today_alcohol">" 获取本日酒精浓度：0 %"</string>
+    <string name="recently_temp">" 获取最近一次体温：0 ℃"</string>
+    <string name="recently_bp">" 获取最近一次体温：0 mmgh"</string>
 
 
 </resources>

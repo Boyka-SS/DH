@@ -46,6 +46,9 @@ public class Config {
     public static final String HR_TRANSID_SUFFIX = "vB3dB3nD7mA1";
     public static final String TEMP_TRANSID_SUFFIX = "pB3aK2kH3aF1";
     public static final String BP_TRANSID_SUFFIX = "aA5bF5eJ1dG5";
+    public static final String RECENTLY_HR_TRANSID_SUFFIX = "Ze05Q7pNnzF9";
+    public static final String RECENTLY_TEMP_TRANSID_SUFFIX = "udzN5qJB50oh";
+    public static final String RECENTLY_BP_TRANSID_SUFFIX = "vr6vMS9dRbbQ";
 
     /**
      * 事务序列号

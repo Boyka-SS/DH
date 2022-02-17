@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.data.network;
 
 import com.jinke.driverhealth.beans.BloodPressure;
+import com.jinke.driverhealth.beans.SingleBp;
 import com.jinke.driverhealth.data.network.api.BPService;
 import com.jinke.driverhealth.utils.Config;
 
@@ -13,15 +14,13 @@ import retrofit2.Callback;
  * @author: fanlihao
  * @date: 2022/2/7
  */
-public class BPNetWork {
+public class BPNetwork {
 
 
     private ServiceCreator serviceCreator = new ServiceCreator();
-
     private BPService mBPService = serviceCreator.create(BPService.class);
 
     /**
-     *
      * @param token
      * @param startTime
      * @param endTime
@@ -48,5 +47,22 @@ public class BPNetWork {
         bpQueryParams.put("sort", sort);
 
         mBPService.getBPData(header, bpQueryParams).enqueue(callback);
+    }
+
+    /**
+     * 获取最近一次血压数据
+     *
+     * @param token
+     * @param callback
+     */
+    public void requestRecentBPData(String token, String imei, Callback<SingleBp> callback) {
+        Map<String, String> header = new HashMap<>();
+        String transId = Config.getTransId(Config.RECENTLY_BP_TRANSID_SUFFIX);
+        header.put("transid", transId);
+        header.put("token", token);
+
+        Map<String, String> hrQueryParams = new HashMap<>();
+        hrQueryParams.put("imei_sn", imei);
+        mBPService.getRecentBPData(header, hrQueryParams).enqueue(callback);
     }
 }

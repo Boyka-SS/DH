@@ -210,13 +210,14 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
      */
 
     private void addThreshold() {
-        mThreshold.setText("阈值：" + ++threshold + " %");
+
         String str = "a";
         byte[] fasong1 = str.getBytes();
         if (socket != null) {
             try {
                 OutputStream os1 = socket.getOutputStream();   //蓝牙连接输出流
                 os1.write(fasong1);
+                mThreshold.setText("阈值：" + ++threshold + " %");
             } catch (IOException e) {
             }
         } else {
@@ -228,13 +229,14 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
      * 阈值-
      */
     private void subThreshold() {
-        mThreshold.setText("阈值：" + --threshold + " %");
+
         String str = "b";
         byte[] fasong1 = str.getBytes();
         if (socket != null) {
             try {
                 OutputStream os1 = socket.getOutputStream();   //蓝牙连接输出流
                 os1.write(fasong1);
+                mThreshold.setText("阈值：" + --threshold + " %");
             } catch (IOException e) {
             }
         } else {
@@ -354,7 +356,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("alcohol", h);
+        intent.putExtra("alcohol", "" + h);
         intent.putExtra("alcoholCreateTime", currentTime);
         Log.d(TAG, "酒精测量值 --> " + h);
         setResult(1, intent);

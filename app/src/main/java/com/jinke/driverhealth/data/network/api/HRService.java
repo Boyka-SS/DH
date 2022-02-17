@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.data.network.api;
 
 import com.jinke.driverhealth.beans.HeartRate;
+import com.jinke.driverhealth.beans.SingleHr;
 
 import java.util.Map;
 
@@ -17,4 +18,7 @@ public interface HRService {
 
     @GET("tsp/hearts/get")
     Call<HeartRate> getHRData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
+
+    @GET("tsp/heart/get")
+    Call<SingleHr> getRecentHRData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
 }

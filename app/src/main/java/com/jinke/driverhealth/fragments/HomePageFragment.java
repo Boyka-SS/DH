@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +25,7 @@ import com.jinke.driverhealth.AppDatabase;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.ContacterActivity;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
+import com.jinke.driverhealth.activity.hr.HrActivity;
 import com.jinke.driverhealth.beans.Contactor;
 import com.jinke.driverhealth.dao.ContactorDao;
 import com.jinke.driverhealth.repository.ContactorRepository;
@@ -48,20 +48,23 @@ public class HomePageFragment extends Fragment {
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
 
     //data
-    private String mAlcohol = "待测", mAlcoholCreateTime;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //registerForActivityResult() 方法注册结果回调（在 onStart() 之前调用）
-        //获取检测到的酒精数据
+
         mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
+                //获取检测到的酒精数据，并存入room
                 if (result.getResultCode() == 1) {
                     Intent data = result.getData();
-                    mAlcohol = data.getStringExtra("alcohol");
-                    mAlcoholCreateTime = data.getStringExtra("alcoholCreateTime");
+                    String alcohol = data.getStringExtra("alcohol");
+                    String alcoholCreateTime = data.getStringExtra("alcoholCreateTime");
+                    mAlcoholConcentration.setText("获取本日酒精浓度：" + alcohol + " %");
+                    //TODO add room
                 }
             }
         });
@@ -103,8 +106,7 @@ public class HomePageFragment extends Fragment {
         hrCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                Log.d(TAG, "--> hr");
+                navigateToHrPage();
             }
         });
         tempCard.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +126,13 @@ public class HomePageFragment extends Fragment {
         });
 
 
+    }
+
+    /**
+     * 跳转到 获取心率页面
+     */
+    private void navigateToHrPage() {
+        mIntentActivityResultLauncher.launch(new Intent(getActivity(), HrActivity.class));
     }
 
     /**
@@ -187,24 +196,5 @@ public class HomePageFragment extends Fragment {
         return "120";
     }
 
-
-    class ResultContract extends ActivityResultContract<Intent, String> {
-
-        @NonNull
-        @Override
-        public Intent createIntent(@NonNull Context context, Intent input) {
-            Intent intent = new Intent(getActivity(), AlcoholActivity.class);
-            return intent;
-        }
-
-        @Override
-        public String parseResult(int resultCode, @Nullable Intent intent) {
-            String alcohol = intent.getStringExtra("alcohol");
-            String alcoholCreateTime = intent.getStringExtra("alcoholCreateTime");
-            Log.d(TAG, "get alcohol data back 2--> " + alcohol);
-            Log.d(TAG, "get alcohol data back 3--> " + alcoholCreateTime);
-            return alcohol + " " + alcoholCreateTime;
-        }
-    }
 
 }

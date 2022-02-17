@@ -1,5 +1,6 @@
 package com.jinke.driverhealth.data.network;
 
+import com.jinke.driverhealth.beans.SingleTemp;
 import com.jinke.driverhealth.beans.Temperature;
 import com.jinke.driverhealth.data.network.api.TempService;
 import com.jinke.driverhealth.utils.Config;
@@ -19,13 +20,7 @@ public class TempNetwork {
     private TempService mTempService = serviceCreator.create(TempService.class);
 
     /**
-     * 获取心率数据
-     *
-     * @param startTime 开始时间 字符串，格式为 2006-01-01 00:00:00
-     * @param endTime   结束时间 字符串，格式为 2006-01-01 00:00:00
-     * @param page      页码 整数，范围为 1-5000
-     * @param limit     每页条数 整数，范围为 1-100
-     * @param callback
+     * 获取体温数据，参数见文档
      */
     public void requestTempData(String token, String startTime, String endTime, String page, String limit, String sort, Callback<Temperature> callback) {
 
@@ -48,4 +43,19 @@ public class TempNetwork {
 
         mTempService.getTempData(header, tempQueryParams).enqueue(callback);
     }
+
+    /**
+     * 获取最近一次体温数据
+     */
+    public void requestRecentTempData(String token, String imei, Callback<SingleTemp> callback) {
+        Map<String, String> header = new HashMap<>();
+        String transId = Config.getTransId(Config.RECENTLY_TEMP_TRANSID_SUFFIX);
+        header.put("transid", transId);
+        header.put("token", token);
+
+        Map<String, String> hrQueryParams = new HashMap<>();
+        hrQueryParams.put("imei_sn", imei);
+        mTempService.getRecentTempData(header, hrQueryParams).enqueue(callback);
+    }
+
 }

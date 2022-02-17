@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.data.network.api;
 
 import com.jinke.driverhealth.beans.BloodPressure;
+import com.jinke.driverhealth.beans.SingleBp;
 
 import java.util.Map;
 
@@ -17,6 +18,11 @@ public interface BPService {
 
     @GET("tsp/bloods/get")
     Call<BloodPressure> getBPData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
+
+    @GET("tsp/blood/get")
+    Call<SingleBp> getRecentBPData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
+
+
 }
 /**
  * https://www.cnblogs.com/ganchuanpu/p/8570218.html

@@ -1,5 +1,6 @@
 package com.jinke.driverhealth.data.network.api;
 
+import com.jinke.driverhealth.beans.SingleTemp;
 import com.jinke.driverhealth.beans.Temperature;
 
 import java.util.Map;
@@ -16,4 +17,7 @@ import retrofit2.http.QueryMap;
 public interface TempService {
     @GET("tsp/temperatures/get")
     Call<Temperature> getTempData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
+
+    @GET("tsp/temperature/get")
+    Call<SingleTemp> getRecentTempData(@HeaderMap Map<String, String> headers, @QueryMap Map<String, String> queryParams);
 }

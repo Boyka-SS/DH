@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.jinke.driverhealth.beans.HeartRate;
+import com.jinke.driverhealth.beans.SingleHr;
 import com.jinke.driverhealth.data.network.HRNetwork;
 
 import retrofit2.Call;
@@ -20,16 +21,17 @@ public class HRRepository {
     private static final String TAG = "HRRepository";
 
 
-
-    public static MutableLiveData<HeartRate> fetchHRData(String token,String startTime, String endTime, String page, String limit,String sort) {
+    /**
+     * 获取心率数据
+     */
+    public static MutableLiveData<HeartRate> fetchHRData(String token, String startTime, String endTime, String page, String limit, String sort) {
 
         MutableLiveData<HeartRate> liveData = new MutableLiveData<>();
 
-        new HRNetwork().requestHRData(token,startTime, endTime, page, limit, sort, new Callback<HeartRate>() {
+        new HRNetwork().requestHRData(token, startTime, endTime, page, limit, sort, new Callback<HeartRate>() {
             @Override
             public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
                 if (response.isSuccessful()) {
-
                     liveData.postValue(response.body());
                 }
             }
@@ -41,6 +43,29 @@ public class HRRepository {
             }
         });
 
+        return liveData;
+    }
+
+    /**
+     * 获取最近一次心率数据
+     */
+    public static MutableLiveData<SingleHr> fetchRecentHrData(String token, String imei) {
+        MutableLiveData<SingleHr> liveData = new MutableLiveData<>();
+
+        new HRNetwork().requestRecentHRData(token, imei, new Callback<SingleHr>() {
+            @Override
+            public void onResponse(Call<SingleHr> call, Response<SingleHr> response) {
+                if (response.isSuccessful()) {
+                    liveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SingleHr> call, Throwable t) {
+                //TODO request recently bp data fail
+                Log.e(TAG, "request recently hr data fail");
+            }
+        });
         return liveData;
     }
 }

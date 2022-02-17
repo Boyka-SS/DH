@@ -1,6 +1,7 @@
 package com.jinke.driverhealth.data.network;
 
 import com.jinke.driverhealth.beans.HeartRate;
+import com.jinke.driverhealth.beans.SingleHr;
 import com.jinke.driverhealth.data.network.api.HRService;
 import com.jinke.driverhealth.utils.Config;
 
@@ -15,18 +16,16 @@ import retrofit2.Callback;
  */
 public class HRNetwork {
     private ServiceCreator serviceCreator = new ServiceCreator();
-
     private HRService mHRService = serviceCreator.create(HRService.class);
 
     /**
-     *
-     * @param token 公共参数
+     * @param token     公共参数
      * @param startTime 起始时间
      * @param endTime   结束时间
-     * @param page  页数
-     * @param limit 每页条数
-     * @param sort 数据排序方式
-     * @param callback 请求数据的回调
+     * @param page      页数
+     * @param limit     每页条数
+     * @param sort      数据排序方式
+     * @param callback  请求数据的回调
      * @return
      */
     public void requestHRData(String token, String startTime, String endTime, String page, String limit, String sort, Callback<HeartRate> callback) {
@@ -47,5 +46,22 @@ public class HRNetwork {
         hrQueryParams.put("sort", sort);
 
         mHRService.getHRData(header, hrQueryParams).enqueue(callback);
+    }
+
+    /**
+     * 获取最近一次心率数据
+     *
+     * @param token
+     * @param callback
+     */
+    public void requestRecentHRData(String token, String imei, Callback<SingleHr> callback) {
+        Map<String, String> header = new HashMap<>();
+        String transId = Config.getTransId(Config.RECENTLY_HR_TRANSID_SUFFIX);
+        header.put("transid", transId);
+        header.put("token", token);
+
+        Map<String, String> hrQueryParams = new HashMap<>();
+        hrQueryParams.put("imei_sn", imei);
+        mHRService.getRecentHRData(header, hrQueryParams).enqueue(callback);
     }
 }
