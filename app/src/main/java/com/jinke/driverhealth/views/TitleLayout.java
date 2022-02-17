@@ -17,6 +17,30 @@ import com.jinke.driverhealth.R;
 
 public class TitleLayout {
 
+    public View getTitleView() {
+        return titleView;
+    }
+
+    public RelativeLayout getRl_title_bar() {
+        return rl_title_bar;
+    }
+
+    public LinearLayout getLl_title_bar() {
+        return ll_title_bar;
+    }
+
+    public ImageView getIv_left_icon() {
+        return iv_left_icon;
+    }
+
+    public ImageView getIv_rightIco() {
+        return iv_rightIco;
+    }
+
+    public TextView getTv_title_middle() {
+        return tv_title_middle;
+    }
+
     /**
      * 左侧/右侧图标和中间标题
      */
@@ -59,6 +83,8 @@ public class TitleLayout {
         iv_left_icon = (ImageView)titleView.findViewById(R.id.iv_left_icon);
         iv_rightIco = (ImageView)titleView.findViewById(R.id.iv_rightIco);
     }
+
+
 
     /**
      * 用于设置标题栏文字

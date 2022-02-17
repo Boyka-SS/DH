@@ -42,7 +42,7 @@ public class HomePageFragment extends Fragment {
 
     //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
-    private TextView mAlcoholConcentration;
+    private TextView mAlcoholConcentration,mHr;
     private FloatingActionButton mAddContacter, mMakePhone;
 
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
@@ -58,13 +58,20 @@ public class HomePageFragment extends Fragment {
         mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                //获取检测到的酒精数据，并存入room
+
                 if (result.getResultCode() == 1) {
+                    //获取检测到的酒精数据，并存入room
                     Intent data = result.getData();
                     String alcohol = data.getStringExtra("alcohol");
                     String alcoholCreateTime = data.getStringExtra("alcoholCreateTime");
                     mAlcoholConcentration.setText("获取本日酒精浓度：" + alcohol + " %");
                     //TODO add room
+                } else if (result.getResultCode() == 2) {
+                    //获取最近一次 心率 数据
+
+                    Intent data = result.getData();
+                    String hr = data.getStringExtra("hr");
+                    mHr.setText(" 获取最近一次心率：" + hr + " bpm");
                 }
             }
         });
@@ -89,6 +96,7 @@ public class HomePageFragment extends Fragment {
         tempCard = view.findViewById(R.id.temp_data_get);
         bpCard = view.findViewById(R.id.bp_data_get);
         mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
+        mHr = view.findViewById(R.id.hr_txt);
         mAddContacter = view.findViewById(R.id.add_contacter);
         mMakePhone = view.findViewById(R.id.make_phone);
     }

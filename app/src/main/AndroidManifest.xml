@@ -33,7 +33,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.hr.HrActivity"></activity>
+        <activity android:name=".activity.hr.HrActivity">
+
+        </activity>
         <activity android:name=".activity.alcohol.AlcoholActivity"></activity>
         <activity android:name=".activity.DemoActivity"></activity>
         <activity android:name=".activity.ContacterActivity" />

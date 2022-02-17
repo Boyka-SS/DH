@@ -17,7 +17,12 @@
     <string name="recently_hr">" 获取最近一次心率：0 bpm"</string>
     <string name="today_alcohol">" 获取本日酒精浓度：0 %"</string>
     <string name="recently_temp">" 获取最近一次体温：0 ℃"</string>
-    <string name="recently_bp">" 获取最近一次体温：0 mmgh"</string>
+    <string name="recently_bp">" 获取最近一次血压：0 mmgh"</string>
+    <!--HrActivity-->
+    <string name="hr_unit">BPM</string>
+    <string name="lower_hr_limit">&lt; 60</string>
+    <string name="higher_hr_limit">&gt; 100</string>
+    <string name="normal_hr_limit">60 - 100</string>
 
 
 </resources>

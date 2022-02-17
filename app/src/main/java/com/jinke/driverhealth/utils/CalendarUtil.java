@@ -32,6 +32,14 @@ public class CalendarUtil {
         return dateNowStr;
     }
 
+    public static String getFormatCalendar(String date, String pattern) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parseDate = format.parse(date);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String formatDate = sdf.format(parseDate);
+        return formatDate;
+    }
+
 
     /**
      * 获取指定日期前后 past 天
@@ -41,7 +49,7 @@ public class CalendarUtil {
      * @param isAdd 控制前后
      * @return
      */
-    public static String getFormatCalendar(String date, int past, boolean isAdd) throws ParseException {
+    public static String getCalCalendar(String date, int past, boolean isAdd) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date briefDate = format.parse(date);

@@ -62,8 +62,8 @@ public class TempDetailActivity extends AppCompatActivity {
         //请求数据  起始日期-7 截止日期+1
         String endTime = null, startTime = null;
         try {
-            endTime = CalendarUtil.getFormatCalendar(createTime, 1, true);
-            startTime = CalendarUtil.getFormatCalendar(endTime, 8, false);
+            endTime = CalendarUtil.getCalCalendar(createTime, 1, true);
+            startTime = CalendarUtil.getCalCalendar(endTime, 8, false);
         } catch (ParseException e) {
             e.printStackTrace();
         }
