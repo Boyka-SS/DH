@@ -23,6 +23,11 @@
     <string name="lower_hr_limit">&lt; 60</string>
     <string name="higher_hr_limit">&gt; 100</string>
     <string name="normal_hr_limit">60 - 100</string>
+    <!--    TempActivity-->
+    <string name="singleTemp">体温</string>
+    <string name="temp_create_time1">生成时间：</string>
+    <string name="temp_create_time2"></string>
+    <string name="temp_load_more">查看更多</string>
 
 
 </resources>

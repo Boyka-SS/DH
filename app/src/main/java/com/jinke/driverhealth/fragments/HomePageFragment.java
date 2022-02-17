@@ -26,6 +26,7 @@ import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.ContacterActivity;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
 import com.jinke.driverhealth.activity.hr.HrActivity;
+import com.jinke.driverhealth.activity.temp.TempActivity;
 import com.jinke.driverhealth.beans.Contactor;
 import com.jinke.driverhealth.dao.ContactorDao;
 import com.jinke.driverhealth.repository.ContactorRepository;
@@ -42,7 +43,7 @@ public class HomePageFragment extends Fragment {
 
     //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
-    private TextView mAlcoholConcentration,mHr;
+    private TextView mAlcoholConcentration, mHr, mTemp,mBp;
     private FloatingActionButton mAddContacter, mMakePhone;
 
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
@@ -68,10 +69,14 @@ public class HomePageFragment extends Fragment {
                     //TODO add room
                 } else if (result.getResultCode() == 2) {
                     //获取最近一次 心率 数据
-
                     Intent data = result.getData();
                     String hr = data.getStringExtra("hr");
                     mHr.setText(" 获取最近一次心率：" + hr + " bpm");
+                } else if (result.getResultCode() == 3) {
+                    //获取最近一次 体温 数据
+                    Intent data = result.getData();
+                    String temp = data.getStringExtra("temp");
+                    mTemp.setText(" 获取最近一次体温：" + temp + " ℃");
                 }
             }
         });
@@ -97,6 +102,8 @@ public class HomePageFragment extends Fragment {
         bpCard = view.findViewById(R.id.bp_data_get);
         mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
         mHr = view.findViewById(R.id.hr_txt);
+        mTemp = view.findViewById(R.id.temp_txt);
+        mBp = view.findViewById(R.id.bp_txt);
         mAddContacter = view.findViewById(R.id.add_contacter);
         mMakePhone = view.findViewById(R.id.make_phone);
     }
@@ -120,8 +127,7 @@ public class HomePageFragment extends Fragment {
         tempCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                Log.d(TAG, "--> temp");
+                navigateToTempPage();
             }
         });
 
@@ -134,6 +140,13 @@ public class HomePageFragment extends Fragment {
         });
 
 
+    }
+
+    /**
+     * 跳转到 获取体温页面
+     */
+    private void navigateToTempPage() {
+        mIntentActivityResultLauncher.launch(new Intent(getActivity(), TempActivity.class));
     }
 
     /**

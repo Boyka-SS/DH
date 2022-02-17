@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_background_color"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
+    <LinearLayout
+        android:id="@+id/temp_op"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="start|center"
+                android:text="@string/temp_create_time1"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/create_time_temp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="start|bottom"
+                android:text="@string/temp_create_time2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/load_more_temp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end|bottom"
+                android:text="@string/temp_load_more"
+                android:textColor="@color/main_theme"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/temp_pic"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="10dp"
+        android:gravity="center">
+
+        <com.github.lzyzsd.circleprogress.ArcProgress
+            android:id="@+id/arc_progress"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:background="@drawable/round_rectangular"
+            custom:arc_bottom_text="@string/singleTemp"
+            custom:arc_bottom_text_size="36sp"
+            custom:arc_finished_color="@color/arc_progress_finished_txt_color"
+            custom:arc_max="100"
+            custom:arc_progress="20"
+            custom:arc_suffix_text="℃"
+            custom:arc_suffix_text_size="25dp"
+            custom:arc_text_color="@color/arc_progress_txt_color"
+            custom:arc_text_size="36sp"
+            custom:arc_unfinished_color="@color/arc_progress_unfinished_txt_color" />
+    </LinearLayout>
+
+
+</LinearLayout>

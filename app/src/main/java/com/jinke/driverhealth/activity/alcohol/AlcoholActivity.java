@@ -88,6 +88,7 @@ public class AlcoholActivity extends AppCompatActivity implements View.OnClickLi
                     new SweetAlertDialog(AlcoholActivity.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("是否拨打紧急电话")
                             .setConfirmText("Yes,do it!")
+                            .setCancelText("No,thanks!")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {

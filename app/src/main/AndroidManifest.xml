@@ -33,13 +33,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.hr.HrActivity">
+        <activity android:name=".activity.temp.TempActivity">
 
         </activity>
-        <activity android:name=".activity.alcohol.AlcoholActivity"></activity>
-        <activity android:name=".activity.DemoActivity"></activity>
+        <activity android:name=".activity.hr.HrActivity"></activity>
+        <activity android:name=".activity.alcohol.AlcoholActivity" />
+        <activity android:name=".activity.DemoActivity" />
         <activity android:name=".activity.ContacterActivity" />
-        <activity android:name=".activity.detail.AlcoholDeatilActivity"></activity>
+        <activity android:name=".activity.detail.AlcoholDeatilActivity" />
         <activity android:name=".activity.detail.BPDetailActivity" />
         <activity android:name=".activity.detail.TempDetailActivity" />
         <activity android:name=".activity.detail.HRDetailActivity" />

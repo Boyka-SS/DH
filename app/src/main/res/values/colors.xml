@@ -34,4 +34,8 @@
     <color name="normal_hr_green">#228B22</color>
     <color name="higher_normal_hr_red">#FF6347</color>
     <color name="lower_normal_hr_yellow">#FFA500</color>
+    <!--  TempActivity  -->
+    <color name="arc_progress_txt_color">#fffff0</color>
+    <color name="arc_progress_finished_txt_color">#fffff0</color>
+    <color name="arc_progress_unfinished_txt_color">#D2691E</color>
 </resources>
