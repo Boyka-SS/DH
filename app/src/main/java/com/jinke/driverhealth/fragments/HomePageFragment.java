@@ -25,6 +25,7 @@ import com.jinke.driverhealth.AppDatabase;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.ContacterActivity;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
+import com.jinke.driverhealth.activity.bp.BpActivity;
 import com.jinke.driverhealth.activity.hr.HrActivity;
 import com.jinke.driverhealth.activity.temp.TempActivity;
 import com.jinke.driverhealth.beans.Contactor;
@@ -43,7 +44,7 @@ public class HomePageFragment extends Fragment {
 
     //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
-    private TextView mAlcoholConcentration, mHr, mTemp,mBp;
+    private TextView mAlcoholConcentration, mHr, mTemp, mBp;
     private FloatingActionButton mAddContacter, mMakePhone;
 
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
@@ -77,6 +78,12 @@ public class HomePageFragment extends Fragment {
                     Intent data = result.getData();
                     String temp = data.getStringExtra("temp");
                     mTemp.setText(" 获取最近一次体温：" + temp + " ℃");
+                } else if (result.getResultCode() == 4) {
+                    //获取最近一次 血压 数据
+                    Intent data = result.getData();
+                    String max = data.getStringExtra("max");
+                    String min = data.getStringExtra("min");
+                    mBp.setText(" 获取最近一次血压：" + max + "/" + min + " mmhg");
                 }
             }
         });
@@ -134,12 +141,18 @@ public class HomePageFragment extends Fragment {
         bpCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                Log.d(TAG, "--> bp");
+                navigateToBpPage();
             }
         });
 
 
+    }
+
+    /**
+     * 跳转到 获取血压页面
+     */
+    private void navigateToBpPage() {
+        mIntentActivityResultLauncher.launch(new Intent(getActivity(), BpActivity.class));
     }
 
     /**

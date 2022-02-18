@@ -48,10 +48,9 @@ public class HrActivity extends AppCompatActivity implements View.OnClickListene
 
     private void initView() {
         mTextView = findViewById(R.id.hr_single_data);
-        mCreatedTime = findViewById(R.id.create_time_hr);
+        mCreatedTime = findViewById(R.id.create_time_bp);
         mLoadMore = findViewById(R.id.load_more_hr);
         mLoadMore.setOnClickListener(this);
-
     }
 
 

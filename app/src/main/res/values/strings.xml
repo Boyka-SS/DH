@@ -28,6 +28,15 @@
     <string name="temp_create_time1">生成时间：</string>
     <string name="temp_create_time2"></string>
     <string name="temp_load_more">查看更多</string>
+    <!--    BpActivity-->
+    <string name="bp_unit">mmhg</string>
+    <string name="normal_bp_max_limit">90-140</string>
+    <string name="lower_bp_max_limit">&lt; 90</string>
+    <string name="higher_bp_max_limit">&gt; 140</string>
+
+    <string name="normal_bp_min_limit">60-90</string>
+    <string name="higher_bp_min_limit">&gt; 90</string>
+    <string name="lower_bp_min_limit">&lt; 60</string>
 
 
 </resources>
