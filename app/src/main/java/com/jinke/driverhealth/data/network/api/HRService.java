@@ -1,7 +1,7 @@
 package com.jinke.driverhealth.data.network.api;
 
-import com.jinke.driverhealth.beans.HeartRate;
-import com.jinke.driverhealth.beans.SingleHr;
+import com.jinke.driverhealth.data.network.beans.HeartRate;
+import com.jinke.driverhealth.data.network.beans.SingleHr;
 
 import java.util.Map;
 

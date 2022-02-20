@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.beans;
+package com.jinke.driverhealth.data.network.beans;
 
 import java.util.List;
 
@@ -6,7 +6,8 @@ import java.util.List;
  * @author: fanlihao
  * @date: 2022/1/20
  */
-public class BloodPressure {
+public class Temperature {
+
     private DataDTO data;
     private String message;
     private int status;
@@ -56,20 +57,10 @@ public class BloodPressure {
         }
 
         public static class ResultDTO {
-            private String blood_rate;
             private String created;
             private String imei_sn;
-            private int max_rate;
-            private int min_rate;
+            private String temperature;
             private String uuid;
-
-            public String getBlood_rate() {
-                return blood_rate;
-            }
-
-            public void setBlood_rate(String blood_rate) {
-                this.blood_rate = blood_rate;
-            }
 
             public String getCreated() {
                 return created;
@@ -87,20 +78,12 @@ public class BloodPressure {
                 this.imei_sn = imei_sn;
             }
 
-            public int getMax_rate() {
-                return max_rate;
+            public String getTemperature() {
+                return temperature;
             }
 
-            public void setMax_rate(int max_rate) {
-                this.max_rate = max_rate;
-            }
-
-            public int getMin_rate() {
-                return min_rate;
-            }
-
-            public void setMin_rate(int min_rate) {
-                this.min_rate = min_rate;
+            public void setTemperature(String temperature) {
+                this.temperature = temperature;
             }
 
             public String getUuid() {

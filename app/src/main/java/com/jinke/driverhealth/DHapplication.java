@@ -3,7 +3,7 @@ package com.jinke.driverhealth;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.jinke.driverhealth.beans.Token;
+import com.jinke.driverhealth.data.network.beans.Token;
 import com.jinke.driverhealth.data.network.TokenNetwork;
 
 import retrofit2.Call;
@@ -17,8 +17,11 @@ import retrofit2.Response;
 public class DHapplication extends Application {
 
     private static final String TAG = "DHapplication";
-    private AppDatabase mAppDatabase;
 
+
+    private static AppDatabase mAppDatabase;
+
+    private static DHapplication mInstance;
 
     @Override
     public void onCreate() {
@@ -27,12 +30,17 @@ public class DHapplication extends Application {
         fetchToken();
     }
 
+
+    public static DHapplication getInstance() {
+        return mInstance;
+    }
+
     /**
      * 获取 room database
      *
      * @return
      */
-    public AppDatabase getAppDatabase() {
+    public static AppDatabase getAppDatabase() {
         return mAppDatabase;
     }
 

@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.detail.HRDetailActivity;
-import com.jinke.driverhealth.beans.SingleHr;
+import com.jinke.driverhealth.data.network.beans.SingleHr;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.viewmodels.SingleDataViewModel;
@@ -48,7 +48,7 @@ public class HrActivity extends AppCompatActivity implements View.OnClickListene
 
     private void initView() {
         mTextView = findViewById(R.id.hr_single_data);
-        mCreatedTime = findViewById(R.id.create_time_bp);
+        mCreatedTime = findViewById(R.id.create_time_hr);
         mLoadMore = findViewById(R.id.load_more_hr);
         mLoadMore.setOnClickListener(this);
     }
@@ -99,7 +99,7 @@ public class HrActivity extends AppCompatActivity implements View.OnClickListene
                 String formatCalendar = null;
                 try {
                     formatCalendar = CalendarUtil.getFormatCalendar(created, "yyyy-MM-dd HH:mm:ss");
-                    mCreatedTime.setText(formatCalendar);
+                    mCreatedTime.setText(formatCalendar+"");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

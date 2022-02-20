@@ -3,9 +3,9 @@ package com.jinke.driverhealth.viewmodels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.jinke.driverhealth.beans.BloodPressure;
-import com.jinke.driverhealth.beans.HeartRate;
-import com.jinke.driverhealth.beans.Temperature;
+import com.jinke.driverhealth.data.network.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.beans.HeartRate;
+import com.jinke.driverhealth.data.network.beans.Temperature;
 import com.jinke.driverhealth.data.repository.BPRepository;
 import com.jinke.driverhealth.data.repository.HRRepository;
 import com.jinke.driverhealth.data.repository.TempRepository;

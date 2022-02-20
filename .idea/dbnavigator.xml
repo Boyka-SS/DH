@@ -66,7 +66,7 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="9ce21bd2-623f-42cb-ab1c-c9cd66c3f08a" active="true">
+      <connection id="9ce21bd2-623f-42cb-ab1c-c9cd66c3f08a" active="true" signed="true">
         <database>
           <name value="Connection" />
           <description value="" />
@@ -82,7 +82,7 @@
           <database value="" />
           <files>
             <file path="sqlite.db" schema="main" />
-            <file path="C:\Users\HP\Desktop\driverHealth.db" schema="" />
+            <file path="C:\Users\HP\Desktop\driverHealth.db" schema="driverHealth" />
           </files>
           <type value="NONE" />
           <user value="" />

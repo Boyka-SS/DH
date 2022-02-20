@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.detail.BPDetailActivity;
-import com.jinke.driverhealth.beans.SingleBp;
+import com.jinke.driverhealth.data.network.beans.SingleBp;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.viewmodels.SingleDataViewModel;

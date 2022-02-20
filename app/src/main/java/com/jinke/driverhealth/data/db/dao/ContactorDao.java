@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.dao;
+package com.jinke.driverhealth.data.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.jinke.driverhealth.beans.Contactor;
+import com.jinke.driverhealth.data.network.beans.Contactor;
 
 import java.util.List;
 

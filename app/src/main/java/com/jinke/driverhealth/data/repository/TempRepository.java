@@ -4,8 +4,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.jinke.driverhealth.beans.SingleTemp;
-import com.jinke.driverhealth.beans.Temperature;
+import com.jinke.driverhealth.data.network.beans.SingleTemp;
+import com.jinke.driverhealth.data.network.beans.Temperature;
 import com.jinke.driverhealth.data.network.TempNetwork;
 
 import retrofit2.Call;

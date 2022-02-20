@@ -11,9 +11,9 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.beans.BloodPressure;
-import com.jinke.driverhealth.beans.HeartRate;
-import com.jinke.driverhealth.beans.Temperature;
+import com.jinke.driverhealth.data.network.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.beans.HeartRate;
+import com.jinke.driverhealth.data.network.beans.Temperature;
 import com.jinke.driverhealth.interfaces.OnItemClickListener;
 import com.jinke.driverhealth.views.ZQImageViewRoundOval;
 

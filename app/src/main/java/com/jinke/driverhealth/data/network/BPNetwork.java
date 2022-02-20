@@ -1,7 +1,7 @@
 package com.jinke.driverhealth.data.network;
 
-import com.jinke.driverhealth.beans.BloodPressure;
-import com.jinke.driverhealth.beans.SingleBp;
+import com.jinke.driverhealth.data.network.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.beans.SingleBp;
 import com.jinke.driverhealth.data.network.api.BPService;
 import com.jinke.driverhealth.utils.Config;
 

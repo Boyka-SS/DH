@@ -2,8 +2,8 @@ package com.jinke.driverhealth.repository;
 
 import android.util.Log;
 
-import com.jinke.driverhealth.beans.Contactor;
-import com.jinke.driverhealth.dao.ContactorDao;
+import com.jinke.driverhealth.data.network.beans.Contactor;
+import com.jinke.driverhealth.data.db.dao.ContactorDao;
 
 import java.util.List;
 import java.util.concurrent.Callable;

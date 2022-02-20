@@ -1,6 +1,6 @@
 package com.jinke.driverhealth.data.network.api;
 
-import com.jinke.driverhealth.beans.Token;
+import com.jinke.driverhealth.data.network.beans.Token;
 
 import java.util.Map;
 

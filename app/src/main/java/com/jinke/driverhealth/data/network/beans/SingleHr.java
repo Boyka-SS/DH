@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.beans;
+package com.jinke.driverhealth.data.network.beans;
 
 /**
  * 最近一次 心率 数据

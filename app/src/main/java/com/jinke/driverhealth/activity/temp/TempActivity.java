@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.detail.TempDetailActivity;
-import com.jinke.driverhealth.beans.SingleTemp;
+import com.jinke.driverhealth.data.network.beans.SingleTemp;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.viewmodels.SingleDataViewModel;

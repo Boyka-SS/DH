@@ -1,7 +1,7 @@
 package com.jinke.driverhealth.data.network.api;
 
-import com.jinke.driverhealth.beans.SingleTemp;
-import com.jinke.driverhealth.beans.Temperature;
+import com.jinke.driverhealth.data.network.beans.SingleTemp;
+import com.jinke.driverhealth.data.network.beans.Temperature;
 
 import java.util.Map;
 

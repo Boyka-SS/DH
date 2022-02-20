@@ -19,8 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jinke.driverhealth.AppDatabase;
 import com.jinke.driverhealth.DHapplication;
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.beans.Contactor;
-import com.jinke.driverhealth.dao.ContactorDao;
+import com.jinke.driverhealth.data.network.beans.Contactor;
+import com.jinke.driverhealth.data.db.dao.ContactorDao;
 import com.jinke.driverhealth.repository.ContactorRepository;
 import com.jinke.driverhealth.views.TitleLayout;
 

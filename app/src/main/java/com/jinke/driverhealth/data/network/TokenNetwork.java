@@ -1,6 +1,6 @@
 package com.jinke.driverhealth.data.network;
 
-import com.jinke.driverhealth.beans.Token;
+import com.jinke.driverhealth.data.network.beans.Token;
 import com.jinke.driverhealth.data.network.api.TokenService;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.EncryptUtil;

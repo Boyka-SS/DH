@@ -4,8 +4,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.jinke.driverhealth.beans.BloodPressure;
-import com.jinke.driverhealth.beans.SingleBp;
+import com.jinke.driverhealth.data.network.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.beans.SingleBp;
 import com.jinke.driverhealth.data.network.BPNetwork;
 
 import retrofit2.Call;

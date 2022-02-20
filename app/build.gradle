@@ -89,6 +89,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-guava:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
+    //调试 SQLite
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //butterknife

@@ -22,14 +22,17 @@ import androidx.fragment.app.Fragment;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.jinke.driverhealth.AppDatabase;
+import com.jinke.driverhealth.DHapplication;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.ContacterActivity;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
 import com.jinke.driverhealth.activity.bp.BpActivity;
 import com.jinke.driverhealth.activity.hr.HrActivity;
 import com.jinke.driverhealth.activity.temp.TempActivity;
-import com.jinke.driverhealth.beans.Contactor;
-import com.jinke.driverhealth.dao.ContactorDao;
+import com.jinke.driverhealth.data.db.beans.Alcohol;
+import com.jinke.driverhealth.data.db.dao.AlcoholDao;
+import com.jinke.driverhealth.data.db.dao.ContactorDao;
+import com.jinke.driverhealth.data.network.beans.Contactor;
 import com.jinke.driverhealth.repository.ContactorRepository;
 
 import java.util.Iterator;
@@ -48,6 +51,7 @@ public class HomePageFragment extends Fragment {
     private FloatingActionButton mAddContacter, mMakePhone;
 
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
+    private AlcoholDao mAlcoholDao = DHapplication.getAppDatabase().getAlcoholDao();
 
     //data
 
@@ -60,7 +64,7 @@ public class HomePageFragment extends Fragment {
         mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-
+                //向第二个页面拿回数据
                 if (result.getResultCode() == 1) {
                     //获取检测到的酒精数据，并存入room
                     Intent data = result.getData();
@@ -68,6 +72,7 @@ public class HomePageFragment extends Fragment {
                     String alcoholCreateTime = data.getStringExtra("alcoholCreateTime");
                     mAlcoholConcentration.setText("获取本日酒精浓度：" + alcohol + " %");
                     //TODO add room
+                    storageData(alcohol, alcoholCreateTime, 1);
                 } else if (result.getResultCode() == 2) {
                     //获取最近一次 心率 数据
                     Intent data = result.getData();
@@ -99,6 +104,19 @@ public class HomePageFragment extends Fragment {
         setOnCardClickEvent();
         initViewEvent(view);
         return view;
+    }
+
+    private void storageData(String data, String alcoholCreateTime, int i) {
+        if (i == 1) {
+            //存储酒精数据
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Alcohol alcohol = new Alcohol(alcoholCreateTime, Integer.parseInt(data));
+                    mAlcoholDao.insertAlcohol(alcohol);
+                }
+            }).start();
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.dao;
+package com.jinke.driverhealth.data.network.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.jinke.driverhealth.beans.HeartRate;
+import com.jinke.driverhealth.data.network.beans.HeartRate;
 
 import java.util.List;
 

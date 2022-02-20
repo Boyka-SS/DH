@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.beans;
+package com.jinke.driverhealth.data.network.beans;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
