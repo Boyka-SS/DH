@@ -71,7 +71,6 @@ public class HomePageFragment extends Fragment {
                     String alcohol = data.getStringExtra("alcohol");
                     String alcoholCreateTime = data.getStringExtra("alcoholCreateTime");
                     mAlcoholConcentration.setText("获取本日酒精浓度：" + alcohol + " %");
-                    //TODO add room
                     storageData(alcohol, alcoholCreateTime, 1);
                 } else if (result.getResultCode() == 2) {
                     //获取最近一次 心率 数据
@@ -106,6 +105,13 @@ public class HomePageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 存取数据
+     *
+     * @param data              数据
+     * @param alcoholCreateTime 数据生成时间
+     * @param i                 数据类型：酒精、心率、血压等
+     */
     private void storageData(String data, String alcoholCreateTime, int i) {
         if (i == 1) {
             //存储酒精数据
