@@ -17,6 +17,8 @@ public class Config {
     public final static String ASC_DATA = "asc";
     //数据降序
     public final static String DESC_DATA = "desc";
+    //高德地图
+    public final static String GAODE_MAP = "65d0e1875c70e8d693ef2a8f0e5c417d";
 
 
     //alcohol device name

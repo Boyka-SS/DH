@@ -23,12 +23,10 @@ import com.jinke.driverhealth.data.network.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
 import com.jinke.driverhealth.data.network.beans.Temperature;
 import com.jinke.driverhealth.interfaces.OnItemClickListener;
+import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.WrapContentLinearLayoutManager;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -39,9 +37,7 @@ public class DataFragment extends Fragment {
     private DataAdapter mDataAdapter;
     private DataViewModel mDataViewModel;
 
-    public static DataFragment newInstance() {
-        return new DataFragment();
-    }
+
 
 
     @Override
@@ -92,7 +88,7 @@ public class DataFragment extends Fragment {
         });
 
         mRecyclerView.setAdapter(mDataAdapter);
-        String endTime = getCurrentTime();
+        String endTime = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm:ss");
         //fetch data
         getData("", endTime, "1", "20");
 
@@ -100,11 +96,7 @@ public class DataFragment extends Fragment {
         return view;
     }
 
-    private String getCurrentTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = format.format(new Date());
-        return currentTime;
-    }
+
 
     /**
      * @param startTime 开始时间 2021-10-01 00:00:00

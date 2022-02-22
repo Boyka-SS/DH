@@ -19,7 +19,6 @@ import com.jinke.driverhealth.views.ZQImageViewRoundOval;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.StringTokenizer;
 
 /**
@@ -62,7 +61,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         //模拟酒精浓度数据
         String[] alcoholArr = new String[]{"56.0", "43.0", "12.0", "5.0", "93.4"};
         //mock 酒精浓度
-        String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
+//        String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
+        String mockAlcoholData = "0.0";
         //这里设置数据
         holder.itemView.setTag(position);
         holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position), mockAlcoholData);
@@ -198,7 +198,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
          * @param alcohol     酒精浓度  正常 20mg/100ml 饮酒 80mg/100ml 醉酒
          *                    <p>
          *                    只有满足无效条件均在正常范围内即可健康，否则全是虚弱.以上范围来源自网络
-         *
          */
         private int isHealth(String temperature, int heartRate, int maxRate, int minRate, String alcohol) {
 

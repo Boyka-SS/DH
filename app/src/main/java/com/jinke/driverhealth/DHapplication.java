@@ -3,8 +3,10 @@ package com.jinke.driverhealth;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.jinke.driverhealth.data.network.beans.Token;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
 import com.jinke.driverhealth.data.network.TokenNetwork;
+import com.jinke.driverhealth.data.network.beans.Token;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,11 +25,16 @@ public class DHapplication extends Application {
 
     private static DHapplication mInstance;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         mAppDatabase = AppDatabase.getInstance(getApplicationContext());
         fetchToken();
+
+
+
     }
 
 
