@@ -38,5 +38,10 @@
     <string name="higher_bp_min_limit">&gt; 90</string>
     <string name="lower_bp_min_limit">&lt; 60</string>
 
+    <!--ContactotActivity-->
+    <string name="contactor">联系人</string>
+    <string name="contactor_add">添加联系人</string>
+    <string name="contactor_refresh">刷新</string>
+
 
 </resources>

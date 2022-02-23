@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/contactor_add"
+        android:title="@string/contactor_add"></item>
+    <item
+        android:id="@+id/contactor_refresh"
+        android:title="@string/contactor_refresh"></item>
+</menu>

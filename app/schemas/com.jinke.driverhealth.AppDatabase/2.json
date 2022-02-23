@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "5633ab41905b3baf77f85edfb2f5f0f0",
+    "identityHash": "cbc4903d6930cbaa001d01393061b395",
     "entities": [
       {
         "tableName": "heart_rate",
@@ -18,56 +18,6 @@
         "primaryKey": {
           "columnNames": [
             "heart_rate_id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "contactor",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `姓名` TEXT, `电话` TEXT, `邮箱` TEXT, `是否第一联系人` INTEGER NOT NULL, `头像路径` TEXT)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "姓名",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "phone",
-            "columnName": "电话",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "mail",
-            "columnName": "邮箱",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "isFirstContactor",
-            "columnName": "是否第一联系人",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "imageUrl",
-            "columnName": "头像路径",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
           ],
           "autoGenerate": true
         },
@@ -142,7 +92,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5633ab41905b3baf77f85edfb2f5f0f0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cbc4903d6930cbaa001d01393061b395')"
     ]
   }
 }

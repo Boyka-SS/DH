@@ -1,11 +1,8 @@
 package com.jinke.driverhealth.fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,36 +17,26 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.jinke.driverhealth.AppDatabase;
 import com.jinke.driverhealth.DHapplication;
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.activity.ContacterActivity;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
 import com.jinke.driverhealth.activity.bp.BpActivity;
 import com.jinke.driverhealth.activity.hr.HrActivity;
 import com.jinke.driverhealth.activity.temp.TempActivity;
 import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
-import com.jinke.driverhealth.data.db.dao.ContactorDao;
-import com.jinke.driverhealth.data.network.beans.Contactor;
-import com.jinke.driverhealth.repository.ContactorRepository;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class HomePageFragment extends Fragment {
     private static final String TAG = "HomePageFragment";
 
 
-    private ContactorDao mContactorDao;
+
 
     //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
     private TextView mAlcoholConcentration, mHr, mTemp, mBp;
-    private FloatingActionButton mAddContacter, mMakePhone;
 
+    //android reuslt api  用于在activity（fragment)间通信
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
     private AlcoholDao mAlcoholDao = DHapplication.getAppDatabase().getAlcoholDao();
 
@@ -101,7 +88,6 @@ public class HomePageFragment extends Fragment {
         View view = inflater.inflate(R.layout.home_page_fragment, container, false);
         initView(view);
         setOnCardClickEvent();
-        initViewEvent(view);
         return view;
     }
 
@@ -135,8 +121,7 @@ public class HomePageFragment extends Fragment {
         mHr = view.findViewById(R.id.hr_txt);
         mTemp = view.findViewById(R.id.temp_txt);
         mBp = view.findViewById(R.id.bp_txt);
-        mAddContacter = view.findViewById(R.id.add_contacter);
-        mMakePhone = view.findViewById(R.id.make_phone);
+
     }
 
     /**
@@ -201,58 +186,7 @@ public class HomePageFragment extends Fragment {
     }
 
 
-    /**
-     * 悬浮按钮 点击事件
-     */
-    private void initViewEvent(View view) {
-        mAddContacter = view.findViewById(R.id.add_contacter);
-        mAddContacter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(getActivity(), ContacterActivity.class);
-                startActivity(intent1);
-            }
-        });
-        mMakePhone = view.findViewById(R.id.make_phone);
-        mMakePhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent2 = new Intent(Intent.ACTION_DIAL);
-                try {
-                    intent2.setData(Uri.parse("tel:" + getFirstContactorPhone(getContext())));
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                startActivity(intent2);
-            }
-        });
-    }
-
-    /**
-     * 拨打第一联系人，如果没有就打120
-     *
-     * @return
-     */
-    private String getFirstContactorPhone(Context context) throws ExecutionException, InterruptedException {
-        mContactorDao = AppDatabase.getInstance(context).getContactorDao();
-
-        List<Contactor> contactors = new ContactorRepository(mContactorDao).getAllContactorData();
-        Log.d(TAG, "contactors.size :" + contactors.size());
-
-        if (contactors.size() != 0) {
-            Iterator<Contactor> iterator = contactors.iterator();
-            while (iterator.hasNext()) {
-                Contactor next = iterator.next();
-                if (next.isFirstContactor() == 1) {
-                    Log.d(TAG, "name :" + next.getName());
-                    return next.getPhone();
-                }
-            }
-        }
-
-        return "120";
-    }
 
 
 }
