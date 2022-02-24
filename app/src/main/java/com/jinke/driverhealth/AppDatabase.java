@@ -7,7 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.jinke.driverhealth.data.db.beans.Alcohol;
+import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
+import com.jinke.driverhealth.data.db.dao.ContactorDao;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
 import com.jinke.driverhealth.data.network.beans.Token;
 import com.jinke.driverhealth.data.network.dao.HeartRateDao;
@@ -17,8 +19,8 @@ import com.jinke.driverhealth.data.network.dao.HeartRateDao;
  * @date: 2022/1/20
  */
 @Database(
-        entities = {HeartRate.class, Token.class, Alcohol.class},
-        version = 2,
+        entities = {HeartRate.class, Token.class, Alcohol.class, Contactor.class},
+        version = 1,
         exportSchema = true
 
 )
@@ -32,7 +34,7 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
                     instance = Room
-                            .databaseBuilder(context.getApplicationContext(), AppDatabase.class, "driverHealth.db")         .fallbackToDestructiveMigration()
+                            .databaseBuilder(context.getApplicationContext(), AppDatabase.class, "driverHealth.db").fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -43,9 +45,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract HeartRateDao getHeartRateDao();
 
-
-
     public abstract AlcoholDao getAlcoholDao();
 
+    public abstract ContactorDao getContactorDao();
 
 }

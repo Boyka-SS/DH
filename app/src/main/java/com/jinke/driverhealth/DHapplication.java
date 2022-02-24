@@ -3,8 +3,6 @@ package com.jinke.driverhealth;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
 import com.jinke.driverhealth.data.network.TokenNetwork;
 import com.jinke.driverhealth.data.network.beans.Token;
 
@@ -32,9 +30,6 @@ public class DHapplication extends Application {
         super.onCreate();
         mAppDatabase = AppDatabase.getInstance(getApplicationContext());
         fetchToken();
-
-
-
     }
 
 
