@@ -38,10 +38,14 @@
     <string name="higher_bp_min_limit">&gt; 90</string>
     <string name="lower_bp_min_limit">&lt; 60</string>
 
-    <!--ContactotActivity-->
+    <!--ContactorActivity-->
     <string name="contactor">联系人</string>
     <string name="contactor_add">添加联系人</string>
     <string name="contactor_refresh">刷新</string>
+    <string name="mine_history_data">历史数据</string>
+    <string name="mine_user_info">个人资料</string>
+    <string name="mine_addvise">意见反馈</string>
+    <string name="mine_about_us">关于我们</string>
 
 
 </resources>

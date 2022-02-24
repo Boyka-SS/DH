@@ -13,9 +13,7 @@
     <color name="shallowSeaOfGreen">#20B2AA</color>
     <color name="black_semi_transparent">#F5F5F5</color>
 
-    <!--悬浮按钮-->
-    <color name="text">#FF0000</color>
-    <color name="colorAccent">#D2691E</color>
+
 
     <color name="color_line_chart">#000000</color>
     <color name="color_limit_line_chart">#A9A9A9</color>
@@ -27,7 +25,7 @@
     <color name="main_theme">#6495ED</color>
     <!--默认字体颜色-->
     <color name="default_text_color">#515151</color>
-    <color name="page_background_color">#F5F5F5</color>
+    <color name="page_background_color">#FFFACD</color>
     <!---->
     <color name="alcohol_instrument_bg">#fffff0</color>
     <!--HrActivity-->
@@ -38,4 +36,7 @@
     <color name="arc_progress_txt_color">#fffff0</color>
     <color name="arc_progress_finished_txt_color">#fffff0</color>
     <color name="arc_progress_unfinished_txt_color">#D2691E</color>
+
+    <!--    ContactorActivity-->
+    <color name="account_line">	#EEE8AA</color>
 </resources>

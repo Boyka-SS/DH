@@ -20,16 +20,15 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private LinearLayout mContactor;
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.mine_fragment, container, false);
         initView(view);
         return view;
