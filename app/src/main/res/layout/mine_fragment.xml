@@ -14,20 +14,54 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:background="@color/main_theme"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"></LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/round_linearlayout"
+        android:orientation="horizontal"
+        android:paddingStart="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/mine_login_status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="5"
+            android:gravity="center_vertical"
+            android:text="未登录"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/mine_login"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:gravity="center|end"
+            android:text="点击登录"
+            android:textColor="@color/main_theme" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_margin="50dp"
+        android:layout_height="310dp"
+        android:layout_margin="20dp"
         android:background="@drawable/round_linearlayout"
         android:divider="@drawable/divider_linearlayout"
         android:orientation="vertical"
@@ -35,8 +69,12 @@
         android:paddingTop="10dp"
         android:paddingEnd="15dp"
         android:showDividers="middle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="0.096"
         tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -225,5 +263,12 @@
 
 
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

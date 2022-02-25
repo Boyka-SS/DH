@@ -19,9 +19,8 @@ public class DHapplication extends Application {
     private static final String TAG = "DHapplication";
 
 
-    private static AppDatabase mAppDatabase;
+    public static AppDatabase mAppDatabase;
 
-    private static DHapplication mInstance;
 
 
 
@@ -33,9 +32,7 @@ public class DHapplication extends Application {
     }
 
 
-    public static DHapplication getInstance() {
-        return mInstance;
-    }
+
 
     /**
      * 获取 room database

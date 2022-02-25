@@ -10,16 +10,13 @@ import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
 import com.jinke.driverhealth.data.db.dao.ContactorDao;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
-import com.jinke.driverhealth.data.network.beans.Token;
-import com.jinke.driverhealth.data.network.dao.HeartRateDao;
 
 /**
  * @author: fanlihao
  * @date: 2022/1/20
  */
 @Database(
-        entities = {HeartRate.class, Token.class, Alcohol.class, Contactor.class},
+        entities = {Alcohol.class, Contactor.class},
         version = 1,
         exportSchema = true
 
@@ -43,7 +40,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
 
-    public abstract HeartRateDao getHeartRateDao();
+
 
     public abstract AlcoholDao getAlcoholDao();
 

@@ -1,16 +1,18 @@
 package com.jinke.driverhealth.activity.contactor;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.ContactorAdapter;
@@ -28,8 +29,12 @@ import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.PermissionUtil;
 import com.jinke.driverhealth.viewmodels.ContactorViewModel;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
-import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
 import java.util.List;
 
@@ -49,7 +54,7 @@ public class ContactorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contactor);
-
+        this.setTitle("联系人管理");
         applyForPermission(ContactorActivity.this);
     }
 
@@ -122,28 +127,59 @@ public class ContactorActivity extends AppCompatActivity {
         mSwipeRecyclerView.setLayoutManager(linearLayoutManager);
 
 
-
         //开启侧滑删除
-        mSwipeRecyclerView.setItemViewSwipeEnabled(true);
-        // 监听拖拽，更新UI。
-        mSwipeRecyclerView.setOnItemMoveListener(new OnItemMoveListener() {
-
+//        mSwipeRecyclerView.setItemViewSwipeEnabled(true);
+        // 设置监听器，创建菜单
+        mSwipeRecyclerView.setSwipeMenuCreator(new SwipeMenuCreator() {
+            @SuppressLint("ResourceAsColor")
             @Override
-            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
-                // 此方法在Item拖拽交换位置时被调用。
-                // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
-                return false;
+            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+
+                // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+                // 2. 指定具体的高，比如80;
+                // 3. WRAP_CONTENT，自身高度，不推荐;
+
+                // 设置 menu 中的 item 宽高 字体 背景
+                SwipeMenuItem modifyItem = new SwipeMenuItem(ContactorActivity.this)
+                        .setBackground(R.color.light_blue)
+                        .setText("修改")
+                        .setTextSize(12)
+                        .setTextColor(Color.parseColor("#ffffff"))
+                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
+                        .setWidth(180);
+                SwipeMenuItem deleteItem = new SwipeMenuItem(ContactorActivity.this)
+                        .setBackground(R.color.red)
+                        .setText("删除")
+                        .setTextSize(12)
+                        .setTextColor(Color.parseColor("#ffffff"))
+                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
+                        .setWidth(180);
+
+                SwipeMenuItem setIsFirstManToContact = new SwipeMenuItem(ContactorActivity.this)
+                        .setBackground(R.color.deep_orange)
+                        .setText("设为第一联系人")
+                        .setTextSize(12)
+                        .setTextColor(Color.parseColor("#ffffff"))
+                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
+                        .setWidth(250);
+
+                rightMenu.addMenuItem(modifyItem);
+                rightMenu.addMenuItem(setIsFirstManToContact);
+                rightMenu.addMenuItem(deleteItem);
             }
-
+        });
+        // 菜单点击监听
+        mSwipeRecyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener() {
             @Override
-            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-                // 此方法在Item在侧滑删除时被调用。
-                // 从数据源移除该Item对应的数据，并刷新Adapter。
-//                int position = srcHolder.getBindingAdapterPosition();
-                int position = srcHolder.getAbsoluteAdapterPosition();
-                Log.d(TAG, "remote contactors item --> " + contactors.get(position));
-                contactors.remove(position);
-                contactorAdapter.notifyItemRemoved(position);
+            public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+                // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱
+                menuBridge.closeMenu();
+                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单
+                int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+
+                if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
+                    Toast.makeText(ContactorActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         // 监听点击事件
@@ -164,7 +200,7 @@ public class ContactorActivity extends AppCompatActivity {
     private void getContactorsData() {
 
         mContactorViewModel = new ViewModelProvider(this).get(ContactorViewModel.class);
-        mContactorViewModel.loadAllContactors(getContentResolver()).observe(this, new Observer<List<Contactor>>() {
+        mContactorViewModel.loadAllContactors(ContactorActivity.this, getContentResolver()).observe(this, new Observer<List<Contactor>>() {
             @Override
             public void onChanged(List<Contactor> contactors) {
                 if (!contactors.isEmpty()) {

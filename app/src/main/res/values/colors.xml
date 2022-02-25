@@ -7,12 +7,11 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="black">#000000</color>
-    <color name="white">#FFFFFFFF</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
 
     <color name="shallowSeaOfGreen">#20B2AA</color>
     <color name="black_semi_transparent">#F5F5F5</color>
-
 
 
     <color name="color_line_chart">#000000</color>
@@ -22,11 +21,12 @@
     <!--底部导航栏和viewpager2之间的分割线-->
     <color name="viewpager2_divider_bottom_navigation_bar">#C0C0C0</color>
     <!--主题颜色-->
-    <color name="main_theme">#6495ED</color>
+    <color name="main_theme">#1E90FF</color>
+
     <!--默认字体颜色-->
     <color name="default_text_color">#515151</color>
-    <color name="page_background_color">#FFFACD</color>
-    <!---->
+    <color name="page_background_color">#F5F5F5</color>
+
     <color name="alcohol_instrument_bg">#fffff0</color>
     <!--HrActivity-->
     <color name="normal_hr_green">#228B22</color>
@@ -38,5 +38,9 @@
     <color name="arc_progress_unfinished_txt_color">#D2691E</color>
 
     <!--    ContactorActivity-->
-    <color name="account_line">	#EEE8AA</color>
+    <color name="account_line">#EEE8AA</color>
+    <color name="light_blue">#87CEFA</color>
+    <color name="deep_orange">#FF8C00</color>
+
+
 </resources>

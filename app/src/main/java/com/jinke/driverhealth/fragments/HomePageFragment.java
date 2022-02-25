@@ -30,15 +30,13 @@ public class HomePageFragment extends Fragment {
     private static final String TAG = "HomePageFragment";
 
 
-
-
     //View
     private CardView tempCard, hrCard, bpCard, alcoholCard;
     private TextView mAlcoholConcentration, mHr, mTemp, mBp;
 
     //android reuslt api  用于在activity（fragment)间通信
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
-    private AlcoholDao mAlcoholDao = DHapplication.getAppDatabase().getAlcoholDao();
+    private AlcoholDao mAlcoholDao = DHapplication.mAppDatabase.getAlcoholDao();
 
     //data
 
@@ -184,9 +182,6 @@ public class HomePageFragment extends Fragment {
     private void navigateToTestAlcoholPage() {
         mIntentActivityResultLauncher.launch(new Intent(getActivity(), AlcoholActivity.class));
     }
-
-
-
 
 
 }

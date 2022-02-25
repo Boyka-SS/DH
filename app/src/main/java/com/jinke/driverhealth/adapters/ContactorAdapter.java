@@ -62,8 +62,8 @@ public class ContactorAdapter extends RecyclerView.Adapter<ContactorAdapter.View
         public void setData(Contactor contactor) {
             initBindView();
             mContactorPortrait.setImageResource(portraitsMale[new Random().nextInt(5)]);
-            mContactorPhone.setText("电话：" + contactor.getPhone());
-            mContactorName.setText("姓名：" + contactor.getName());
+            mContactorPhone.setText("电话：" + contactor.phone);
+            mContactorName.setText("姓名：" + contactor.name);
         }
 
         private void initBindView() {

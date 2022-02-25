@@ -16,93 +16,34 @@ public class Contactor {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int id;
+    public int id;
     @ColumnInfo(name = "姓名")
-    private String name;
+    public String name;
     @ColumnInfo(name = "手机号码")
-    private String phone;
-    @ColumnInfo(name = "头像")
-    private String contactorProtrait;
-    @ColumnInfo(name = "邮箱")
-    private String email;
+    public String phone;
+    @ColumnInfo(name = "联系人系统ID")
+    public String sys_id;
+    @ColumnInfo(name = "联系人系统LookUpKey")
+    public String lookUpKey;
+
+    /**
+     * 1 是
+     * 0 否
+     */
     @ColumnInfo(name = "是否是第一联系人")
-    private int isFirstManToContact;
+    public int isFirstManToContact;
 
-    public String getContactorProtrait() {
-        return contactorProtrait;
-    }
-
-    public void setContactorProtrait(String contactorProtrait) {
-        this.contactorProtrait = contactorProtrait;
-    }
-
-    @Ignore
     public Contactor() {
     }
 
-    public Contactor(String name, String phone, String contactorProtrait, String email, int isFirstManToContact) {
-        this.name = name;
-        this.phone = phone;
-        this.contactorProtrait = contactorProtrait;
-        this.email = email;
-        this.isFirstManToContact = isFirstManToContact;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Ignore
-    public Contactor(String name, String phone, int isFirstManToContact) {
+    public Contactor(String name, String phone, String sys_id, String lookUpKey, int isFirstManToContact) {
         this.name = name;
         this.phone = phone;
+        this.sys_id = sys_id;
+        this.lookUpKey = lookUpKey;
         this.isFirstManToContact = isFirstManToContact;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getIsFirstManToContact() {
-        return isFirstManToContact;
-    }
-
-    public void setIsFirstManToContact(int isFirstManToContact) {
-        this.isFirstManToContact = isFirstManToContact;
-    }
-
-    @Override
-    public String toString() {
-        return "Contactor{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", isFirstManToContact=" + isFirstManToContact +
-                '}';
-    }
 }
