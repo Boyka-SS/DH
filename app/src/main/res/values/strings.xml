@@ -46,6 +46,8 @@
     <string name="mine_user_info">个人资料</string>
     <string name="mine_addvise">意见反馈</string>
     <string name="mine_about_us">关于我们</string>
+    <string name="contactor_name">姓名：樊力豪</string>
+    <string name="contactor_phone_number">电话：19524275642</string>
 
 
 </resources>

@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_background_color"
+    app:elevation="0dp"
     tools:context=".activity.contactor.ContactorActivity">
 
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="65dp"
         android:background="@color/main_theme"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"></LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_margin="20dp"
+        android:layout_margin="50dp"
         android:background="@drawable/round_linearlayout"
         android:divider="@drawable/divider_linearlayout"
         android:orientation="vertical"
@@ -25,12 +35,10 @@
         android:paddingTop="10dp"
         android:paddingEnd="15dp"
         android:showDividers="middle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.131"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,9 +70,9 @@
                     android:src="@mipmap/contactor2" />
 
                 <TextView
-                    android:layout_marginLeft="9dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical"
                     android:text="@string/contactor"
@@ -90,9 +98,9 @@
                     android:src="@mipmap/history_data" />
 
                 <TextView
-                    android:layout_marginLeft="9dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical"
                     android:text="@string/mine_history_data"
@@ -173,8 +181,8 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
                     android:layout_marginLeft="9dp"
+                    android:layout_weight="5"
                     android:gravity="center_vertical"
                     android:text="@string/mine_about_us"
                     android:textColor="@color/default_text_color"
@@ -219,5 +227,19 @@
 
 
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.56" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

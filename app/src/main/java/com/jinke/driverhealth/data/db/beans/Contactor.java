@@ -21,19 +21,29 @@ public class Contactor {
     private String name;
     @ColumnInfo(name = "手机号码")
     private String phone;
+    @ColumnInfo(name = "头像")
+    private String contactorProtrait;
     @ColumnInfo(name = "邮箱")
     private String email;
     @ColumnInfo(name = "是否是第一联系人")
     private int isFirstManToContact;
 
+    public String getContactorProtrait() {
+        return contactorProtrait;
+    }
+
+    public void setContactorProtrait(String contactorProtrait) {
+        this.contactorProtrait = contactorProtrait;
+    }
 
     @Ignore
     public Contactor() {
     }
 
-    public Contactor(String name, String phone, String email, int isFirstManToContact) {
+    public Contactor(String name, String phone, String contactorProtrait, String email, int isFirstManToContact) {
         this.name = name;
         this.phone = phone;
+        this.contactorProtrait = contactorProtrait;
         this.email = email;
         this.isFirstManToContact = isFirstManToContact;
     }

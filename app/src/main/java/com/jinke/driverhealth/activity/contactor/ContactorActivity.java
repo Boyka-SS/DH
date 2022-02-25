@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.adapters.ContactorAdapter;
 import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.PermissionUtil;
@@ -47,7 +48,7 @@ public class ContactorActivity extends AppCompatActivity {
     }
 
     /**
-     * 申请通讯录权限
+     * android6.0 以后 必须 动态 申请通讯录权限
      */
     private void applyForPermission(Activity activity) {
         String[] permissList = {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE};
@@ -102,8 +103,15 @@ public class ContactorActivity extends AppCompatActivity {
         startActivity(addIntent);
     }
 
-    private void initAdapter() {
+    /**
+     * 滑动  recyclerView
+     * @param contactors
+     */
+    private void initAdapter(List<Contactor> contactors) {
         mSwipeRecyclerView = findViewById(R.id.contactor_list);
+
+        ContactorAdapter contactorAdapter = new ContactorAdapter(contactors);
+
     }
 
     /**
@@ -116,7 +124,7 @@ public class ContactorActivity extends AppCompatActivity {
         mContactorViewModel.loadAllContactors(getContentResolver()).observe(this, new Observer<List<Contactor>>() {
             @Override
             public void onChanged(List<Contactor> contactors) {
-                //
+                initAdapter(contactors);
             }
         });
 
