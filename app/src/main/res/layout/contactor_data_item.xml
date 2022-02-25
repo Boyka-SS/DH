@@ -3,28 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="85dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/round_linearlayout">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:padding="10dp"
-        android:background="@drawable/round_linearlayout"
+
         android:orientation="horizontal"
+        android:padding="10dp"
         tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/contactor_portrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@mipmap/contactor_demo" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="12dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:orientation="vertical">
 
             <TextView
@@ -47,3 +51,5 @@
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+
+<!--3157923650@qq.com-->

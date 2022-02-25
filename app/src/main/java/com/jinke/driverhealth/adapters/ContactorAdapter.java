@@ -14,6 +14,7 @@ import com.jinke.driverhealth.data.db.beans.Contactor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author: fanlihao
@@ -60,9 +61,9 @@ public class ContactorAdapter extends RecyclerView.Adapter<ContactorAdapter.View
 
         public void setData(Contactor contactor) {
             initBindView();
-            mContactorPortrait.setImageResource(portraitsMale[Math.round(5f)]);
-            mContactorPhone.setText("姓名：" + contactor.getPhone());
-            mContactorName.setText("电话：" + contactor.getName());
+            mContactorPortrait.setImageResource(portraitsMale[new Random().nextInt(5)]);
+            mContactorPhone.setText("电话：" + contactor.getPhone());
+            mContactorName.setText("姓名：" + contactor.getName());
         }
 
         private void initBindView() {

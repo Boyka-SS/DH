@@ -7,8 +7,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.ContactorAdapter;
@@ -23,7 +27,9 @@ import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.PermissionUtil;
 import com.jinke.driverhealth.viewmodels.ContactorViewModel;
+import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
 import java.util.List;
 
@@ -105,13 +111,50 @@ public class ContactorActivity extends AppCompatActivity {
 
     /**
      * 滑动  recyclerView
+     *
      * @param contactors
      */
     private void initAdapter(List<Contactor> contactors) {
-        mSwipeRecyclerView = findViewById(R.id.contactor_list);
-
         ContactorAdapter contactorAdapter = new ContactorAdapter(contactors);
 
+        mSwipeRecyclerView = findViewById(R.id.contactor_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mSwipeRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+
+        //开启侧滑删除
+        mSwipeRecyclerView.setItemViewSwipeEnabled(true);
+        // 监听拖拽，更新UI。
+        mSwipeRecyclerView.setOnItemMoveListener(new OnItemMoveListener() {
+
+            @Override
+            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
+                // 此方法在Item拖拽交换位置时被调用。
+                // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+                return false;
+            }
+
+            @Override
+            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
+                // 此方法在Item在侧滑删除时被调用。
+                // 从数据源移除该Item对应的数据，并刷新Adapter。
+//                int position = srcHolder.getBindingAdapterPosition();
+                int position = srcHolder.getAbsoluteAdapterPosition();
+                Log.d(TAG, "remote contactors item --> " + contactors.get(position));
+                contactors.remove(position);
+                contactorAdapter.notifyItemRemoved(position);
+            }
+        });
+        // 监听点击事件
+        mSwipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int adapterPosition) {
+                //todo
+            }
+        });
+
+        mSwipeRecyclerView.setAdapter(contactorAdapter);
     }
 
     /**
@@ -124,11 +167,11 @@ public class ContactorActivity extends AppCompatActivity {
         mContactorViewModel.loadAllContactors(getContentResolver()).observe(this, new Observer<List<Contactor>>() {
             @Override
             public void onChanged(List<Contactor> contactors) {
-                initAdapter(contactors);
+                if (!contactors.isEmpty()) {
+                    initAdapter(contactors);
+                }
             }
         });
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
