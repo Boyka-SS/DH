@@ -48,7 +48,7 @@
     <string name="mine_about_us">关于我们</string>
     <string name="contactor_name">姓名：樊力豪</string>
     <string name="contactor_phone_number">电话：19524275642</string>
-    <string name="contactor_tip">tips:  麻烦向左滑设置第一联系人，  如页面为更新，请点击右上角刷新</string>
+    <string name="contactor_tip">tips: 如页面未更新，请点击右上角刷新</string>
 
 
 </resources>

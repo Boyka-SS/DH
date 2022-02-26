@@ -99,7 +99,7 @@ public class ContactorRepository {
      *
      * @param contactor
      */
-    private void insertContactors(Contactor contactor) {
+    public void insertContactors(Contactor contactor) {
 
         new Thread(new Runnable() {
             @Override

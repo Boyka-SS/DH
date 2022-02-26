@@ -13,5 +13,5 @@ import com.jinke.driverhealth.data.db.beans.Contactor;
 @Dao
 public interface ContactorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertContactor(Contactor contactors);
+    void insertContactor(Contactor contactor);
 }

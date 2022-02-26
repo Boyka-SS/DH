@@ -3,14 +3,12 @@ package com.jinke.driverhealth.activity.contactor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,8 +38,6 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ContactorActivity extends AppCompatActivity {
     private static final String TAG = "ContactorActivity";
@@ -184,15 +180,15 @@ public class ContactorActivity extends AppCompatActivity {
                     switch (menuPosition) {
                         case 0:
                             //modify
-                            modifyContacorInfo(contactor.sys_id, contactor.lookUpKey);
+                            mContactorViewModel.modifyContactorInfo(ContactorActivity.this,contactor.sys_id, contactor.lookUpKey);
                             break;
                         case 1:
                             //setIsFirstManToContact
-                            Toast.makeText(ContactorActivity.this, "右边菜单，第" + menuPosition + "菜单", Toast.LENGTH_SHORT).show();
+                            mContactorViewModel.insertFirstManToContact(contactor);
                             break;
                         case 2:
                             //delete
-                            deleteContactorByContactId(contactor.lookUpKey, new DeleteCallback() {
+                            mContactorViewModel.deleteContactorByLookUpKey(ContactorActivity.this,contactor.lookUpKey,new DeleteCallback() {
                                 @Override
                                 public void success() {
                                     mContactorAdapter.removeData(position);
@@ -203,9 +199,7 @@ public class ContactorActivity extends AppCompatActivity {
                                     // update fail
                                 }
                             });
-
                             break;
-
                         default:
                             break;
                     }
@@ -227,64 +221,6 @@ public class ContactorActivity extends AppCompatActivity {
 
 
         mSwipeRecyclerView.setAdapter(mContactorAdapter);
-    }
-
-    /**
-     * 删除 系统 某一联系人
-     */
-    private void deleteContactorByContactId(String id, DeleteCallback deleteCallback) {
-        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("操作警告！")
-                .setContentText("此项操作不可逆")
-                .setConfirmText("删除")
-                .setCancelText("取消")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
-                        ContentResolver contentResolver = getContentResolver();
-                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, id);
-                        contentResolver.delete(uri, null, null);
-                        deleteCallback.success();
-                    }
-                })
-                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.cancel();
-                    }
-                })
-                .show();
-
-    }
-
-    /**
-     * 跳转 编辑 系统联系人 界面
-     */
-    private void modifyContacorInfo(String sysId, String lookUpKey) {
-        new SweetAlertDialog(this)
-                .setTitleText("此操作会修改系统数据")
-                .setConfirmText("确认")
-                .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
-                        Intent intent = new Intent(Intent.ACTION_EDIT);
-                        Uri data = ContactsContract.Contacts.getLookupUri(Long.parseLong(sysId), lookUpKey);
-                        intent.setDataAndType(data, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-                        intent.putExtra("finishActivityOnSaveCompleted", true);
-                        startActivity(intent);
-                    }
-                })
-                .setCancelText("取消")
-                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
-                    }
-                })
-                .show();
     }
 
     /**
@@ -327,7 +263,7 @@ public class ContactorActivity extends AppCompatActivity {
 
 
     //删除联系人操作的结果
-    private interface DeleteCallback {
+    public interface DeleteCallback {
         void success();
         void fail();
     }
