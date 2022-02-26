@@ -7,11 +7,16 @@
     android:layout_marginLeft="20dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="20dp"
-    android:background="@drawable/round_linearlayout">
+    android:background="@drawable/round_linearlayout"
+    android:paddingStart="5dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
         android:gravity="center"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">

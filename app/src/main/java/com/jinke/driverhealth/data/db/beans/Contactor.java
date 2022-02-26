@@ -17,6 +17,7 @@ public class Contactor {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
+
     @ColumnInfo(name = "姓名")
     public String name;
     @ColumnInfo(name = "手机号码")
@@ -25,6 +26,8 @@ public class Contactor {
     public String sys_id;
     @ColumnInfo(name = "联系人系统LookUpKey")
     public String lookUpKey;
+    @ColumnInfo(name = "联系人系统rawContactorsId")
+    public String rawContactorsId;
 
     /**
      * 1 是

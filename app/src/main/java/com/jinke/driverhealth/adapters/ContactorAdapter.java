@@ -47,6 +47,27 @@ public class ContactorAdapter extends RecyclerView.Adapter<ContactorAdapter.View
         return mContactors.size();
     }
 
+
+    /**
+     * 添加数据
+     *
+     * @param contactor
+     */
+    public void addData(Contactor contactor) {
+        mContactors.add(contactor);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除 位置上的数据
+     *
+     * @param position
+     */
+    public void removeData(int position) {
+        mContactors.remove(position);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mContactorPortrait;
         private TextView mContactorName, mContactorPhone;

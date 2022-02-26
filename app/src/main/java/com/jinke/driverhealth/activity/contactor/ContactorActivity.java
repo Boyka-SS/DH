@@ -3,12 +3,14 @@ package com.jinke.driverhealth.activity.contactor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,18 +38,22 @@ import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class ContactorActivity extends AppCompatActivity {
-
-
     private static final String TAG = "ContactorActivity";
 
     private SwipeRecyclerView mSwipeRecyclerView;
-
     private ContactorViewModel mContactorViewModel;
 
     private static final int PERMISS_CONTACT = 1;
+
+
+    private List<Contactor> mContactors = new ArrayList<>();
+    private ContactorAdapter mContactorAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -62,13 +68,12 @@ public class ContactorActivity extends AppCompatActivity {
      * android6.0 以后 必须 动态 申请通讯录权限
      */
     private void applyForPermission(Activity activity) {
-        String[] permissList = {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE};
+        String[] permissList = {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_CONTACTS};
         PermissionUtil.addPermissByPermissionList(activity, permissList, PERMISS_CONTACT, new ApplyPermissionCallback() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void success() {
                 getContactorsData();
-                Toast.makeText(activity, "同意授权", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -120,15 +125,13 @@ public class ContactorActivity extends AppCompatActivity {
      * @param contactors
      */
     private void initAdapter(List<Contactor> contactors) {
-        ContactorAdapter contactorAdapter = new ContactorAdapter(contactors);
+        mContactorAdapter = new ContactorAdapter(contactors);
 
         mSwipeRecyclerView = findViewById(R.id.contactor_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mSwipeRecyclerView.setLayoutManager(linearLayoutManager);
 
 
-        //开启侧滑删除
-//        mSwipeRecyclerView.setItemViewSwipeEnabled(true);
         // 设置监听器，创建菜单
         mSwipeRecyclerView.setSwipeMenuCreator(new SwipeMenuCreator() {
             @SuppressLint("ResourceAsColor")
@@ -176,21 +179,112 @@ public class ContactorActivity extends AppCompatActivity {
                 menuBridge.closeMenu();
                 int direction = menuBridge.getDirection(); // 左侧还是右侧菜单
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-
+                Contactor contactor = mContactors.get(position);
                 if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                    Toast.makeText(ContactorActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                    switch (menuPosition) {
+                        case 0:
+                            //modify
+                            modifyContacorInfo(contactor.sys_id, contactor.lookUpKey);
+                            break;
+                        case 1:
+                            //setIsFirstManToContact
+                            Toast.makeText(ContactorActivity.this, "右边菜单，第" + menuPosition + "菜单", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            //delete
+                            deleteContactorByContactId(contactor.lookUpKey, new DeleteCallback() {
+                                @Override
+                                public void success() {
+                                    mContactorAdapter.removeData(position);
+                                }
+
+                                @Override
+                                public void fail() {
+                                    // update fail
+                                }
+                            });
+
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
         });
-        // 监听点击事件
+        // recyclerView-item 监听点击事件 点击 前往电话拨打页面
         mSwipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int adapterPosition) {
-                //todo
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mContactors.get(position).phone));
+                startActivity(intent);
             }
         });
+        // add  FooterView。
+        View footerView = getLayoutInflater().inflate(R.layout.contactor_list_footerview, mSwipeRecyclerView, false);
+        mSwipeRecyclerView.addFooterView(footerView);
 
-        mSwipeRecyclerView.setAdapter(contactorAdapter);
+
+        mSwipeRecyclerView.setAdapter(mContactorAdapter);
+    }
+
+    /**
+     * 删除 系统 某一联系人
+     */
+    private void deleteContactorByContactId(String id, DeleteCallback deleteCallback) {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("操作警告！")
+                .setContentText("此项操作不可逆")
+                .setConfirmText("删除")
+                .setCancelText("取消")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        ContentResolver contentResolver = getContentResolver();
+                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, id);
+                        contentResolver.delete(uri, null, null);
+                        deleteCallback.success();
+                    }
+                })
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.cancel();
+                    }
+                })
+                .show();
+
+    }
+
+    /**
+     * 跳转 编辑 系统联系人 界面
+     */
+    private void modifyContacorInfo(String sysId, String lookUpKey) {
+        new SweetAlertDialog(this)
+                .setTitleText("此操作会修改系统数据")
+                .setConfirmText("确认")
+                .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                        Intent intent = new Intent(Intent.ACTION_EDIT);
+                        Uri data = ContactsContract.Contacts.getLookupUri(Long.parseLong(sysId), lookUpKey);
+                        intent.setDataAndType(data, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                        intent.putExtra("finishActivityOnSaveCompleted", true);
+                        startActivity(intent);
+                    }
+                })
+                .setCancelText("取消")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     /**
@@ -198,12 +292,12 @@ public class ContactorActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getContactorsData() {
-
         mContactorViewModel = new ViewModelProvider(this).get(ContactorViewModel.class);
         mContactorViewModel.loadAllContactors(ContactorActivity.this, getContentResolver()).observe(this, new Observer<List<Contactor>>() {
             @Override
             public void onChanged(List<Contactor> contactors) {
                 if (!contactors.isEmpty()) {
+                    mContactors = contactors;
                     initAdapter(contactors);
                 }
             }
@@ -229,6 +323,13 @@ public class ContactorActivity extends AppCompatActivity {
         } else {    //拒绝授权做的处理，弹出弹框提示用户授权
             PermissionUtil.dealwithPermiss(ContactorActivity.this, permissions[0]);
         }
+    }
+
+
+    //删除联系人操作的结果
+    private interface DeleteCallback {
+        void success();
+        void fail();
     }
 }
 /**

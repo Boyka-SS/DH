@@ -23,7 +23,6 @@ public class ServiceCreator {
         //添加打印拦截器
 
         okHttpClient
-
                 .addInterceptor(new LoggingInterceptor.Builder()
                 .setLevel(Level.BASIC)
                 .log(VERBOSE)

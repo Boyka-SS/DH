@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -29,7 +30,7 @@ public class ContactorViewModel extends ViewModel {
 
     @SuppressLint("Range")
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public MutableLiveData<List<Contactor>> loadAllContactors(Context ctx, ContentResolver cr) {
-        return new ContactorRepository().fetchAllContactors(ctx,cr);
+    public LiveData<List<Contactor>> loadAllContactors(Context ctx, ContentResolver cr) {
+        return new ContactorRepository().fetchAllContactorFromSys(ctx, cr);
     }
 }

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "3deae470d5e5c5be60da2bff0d7bb84b",
+    "version": 2,
+    "identityHash": "69fdf78615522fcac94d318fec22febb",
     "entities": [
       {
         "tableName": "alcohol",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "contactor",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `姓名` TEXT, `手机号码` TEXT, `联系人系统ID` TEXT, `联系人系统LookUpKey` TEXT, `是否是第一联系人` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `姓名` TEXT, `手机号码` TEXT, `联系人系统ID` TEXT, `联系人系统LookUpKey` TEXT, `联系人系统rawContactorsId` TEXT, `是否是第一联系人` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -71,6 +71,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "rawContactorsId",
+            "columnName": "联系人系统rawContactorsId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "isFirstManToContact",
             "columnName": "是否是第一联系人",
             "affinity": "INTEGER",
@@ -90,7 +96,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3deae470d5e5c5be60da2bff0d7bb84b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69fdf78615522fcac94d318fec22febb')"
     ]
   }
 }

@@ -17,7 +17,7 @@ import com.jinke.driverhealth.data.db.dao.ContactorDao;
  */
 @Database(
         entities = {Alcohol.class, Contactor.class},
-        version = 1,
+        version = 2,
         exportSchema = true
 
 )
