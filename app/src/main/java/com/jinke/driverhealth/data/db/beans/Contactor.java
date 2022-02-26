@@ -15,25 +15,25 @@ import androidx.room.PrimaryKey;
 public class Contactor {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo
     public int id;
 
-    @ColumnInfo(name = "姓名")
+    @ColumnInfo
     public String name;
-    @ColumnInfo(name = "手机号码")
+    @ColumnInfo
     public String phone;
-    @ColumnInfo(name = "联系人系统ID")
+    @ColumnInfo
     public String sys_id;
-    @ColumnInfo(name = "联系人系统LookUpKey")
+    @ColumnInfo
     public String lookUpKey;
-    @ColumnInfo(name = "联系人系统rawContactorsId")
+    @ColumnInfo
     public String rawContactorsId;
 
     /**
      * 1 是
      * 0 否
      */
-    @ColumnInfo(name = "是否是第一联系人")
+    @ColumnInfo
     public int isFirstManToContact;
 
     public Contactor() {

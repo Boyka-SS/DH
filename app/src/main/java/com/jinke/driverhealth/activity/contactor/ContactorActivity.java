@@ -39,6 +39,8 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class ContactorActivity extends AppCompatActivity {
     private static final String TAG = "ContactorActivity";
 
@@ -180,18 +182,29 @@ public class ContactorActivity extends AppCompatActivity {
                     switch (menuPosition) {
                         case 0:
                             //modify
-                            mContactorViewModel.modifyContactorInfo(ContactorActivity.this,contactor.sys_id, contactor.lookUpKey);
+                            mContactorViewModel.modifyContactorInfo(ContactorActivity.this, contactor.sys_id, contactor.lookUpKey);
                             break;
                         case 1:
                             //setIsFirstManToContact
-                            mContactorViewModel.insertFirstManToContact(contactor);
+                            mContactorViewModel.insertFirstManToContact(contactor, new OpCallback() {
+                                @Override
+                                public void success() {
+                                    Toasty.success(ContactorActivity.this,"设置成功",Toasty.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void fail() {
+
+                                }
+                            });
                             break;
                         case 2:
                             //delete
-                            mContactorViewModel.deleteContactorByLookUpKey(ContactorActivity.this,contactor.lookUpKey,new DeleteCallback() {
+                            mContactorViewModel.deleteContactorByLookUpKey(ContactorActivity.this, contactor.lookUpKey, new OpCallback() {
                                 @Override
                                 public void success() {
                                     mContactorAdapter.removeData(position);
+                                    Toasty.success(ContactorActivity.this, "删除成功",Toasty.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -218,7 +231,6 @@ public class ContactorActivity extends AppCompatActivity {
         // add  FooterView。
         View footerView = getLayoutInflater().inflate(R.layout.contactor_list_footerview, mSwipeRecyclerView, false);
         mSwipeRecyclerView.addFooterView(footerView);
-
 
         mSwipeRecyclerView.setAdapter(mContactorAdapter);
     }
@@ -261,10 +273,9 @@ public class ContactorActivity extends AppCompatActivity {
         }
     }
 
-
-    //删除联系人操作的结果
-    public interface DeleteCallback {
+    public interface OpCallback {
         void success();
+
         void fail();
     }
 }

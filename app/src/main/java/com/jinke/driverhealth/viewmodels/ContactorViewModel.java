@@ -46,8 +46,11 @@ public class ContactorViewModel extends ViewModel {
      * 设置为 第一联系人 将会存储的 本机 DB
      *
      * @param contactor
+     * @param callback
      */
-    public void insertFirstManToContact(Contactor contactor) {
+    public void insertFirstManToContact(Contactor contactor, ContactorActivity.OpCallback callback) {
+        contactor.isFirstManToContact = 1;
+        callback.success();
         new ContactorRepository().insertContactors(contactor);
     }
 
@@ -87,9 +90,9 @@ public class ContactorViewModel extends ViewModel {
      * 删除 系统 某一联系人
      *
      * @param lookUpKey
-     * @param deleteCallback
+     * @param callback
      */
-    public void deleteContactorByLookUpKey(Context context, String lookUpKey, ContactorActivity.DeleteCallback deleteCallback) {
+    public void deleteContactorByLookUpKey(Context context, String lookUpKey, ContactorActivity.OpCallback callback) {
         new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("操作警告！")
                 .setContentText("此项操作不可逆")
@@ -102,7 +105,7 @@ public class ContactorViewModel extends ViewModel {
                         ContentResolver contentResolver = context.getContentResolver();
                         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookUpKey);
                         contentResolver.delete(uri, null, null);
-                        deleteCallback.success();
+                        callback.success();
                     }
                 })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {

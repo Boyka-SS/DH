@@ -3,6 +3,7 @@ package com.jinke.driverhealth.data.db.dao;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 import com.jinke.driverhealth.data.db.beans.Contactor;
 
@@ -14,4 +15,10 @@ import com.jinke.driverhealth.data.db.beans.Contactor;
 public interface ContactorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertContactor(Contactor contactor);
+
+    @Query("SELECT * FROM contactor where isfirstmantocontact = :id ")
+    Contactor loadContactorByFirstMan(int id);
+
+    @Query("SELECT * FROM contactor where lookUpKey = :key ")
+    Contactor loadContactorByLookUpKey(String key);
 }
