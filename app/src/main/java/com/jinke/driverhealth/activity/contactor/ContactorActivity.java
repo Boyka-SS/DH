@@ -9,8 +9,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -81,31 +79,31 @@ public class ContactorActivity extends AppCompatActivity {
         });
     }
 
+//永不删除，学习 menu
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        //getMenuInflater()获得MenuIflater对象，inflate()方法给当前活动创建菜单
+//        getMenuInflater().inflate(R.menu.contactot_op, menu);
+//        //true 代表允许创建的菜单显示出来
+//        return true;
+//    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater()获得MenuIflater对象，inflate()方法给当前活动创建菜单
-        getMenuInflater().inflate(R.menu.contactot_op, menu);
-        //true 代表允许创建的菜单显示出来
-        return true;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.contactor_add:
-                //跳转 系统 添加联系人界面
-                navigativeToAddContactorPage();
-                break;
-            case R.id.contactor_refresh:
-                //todo 刷新列表获取新的联系人列表
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.contactor_add:
+//                //跳转 系统 添加联系人界面
+//                navigativeToAddContactorPage();
+//                break;
+//            case R.id.contactor_refresh:
+//                //todo 刷新列表获取新的联系人列表
+//                break;
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
 
 
     //跳转 系统 添加联系人界面
@@ -190,6 +188,7 @@ public class ContactorActivity extends AppCompatActivity {
                                 @Override
                                 public void success() {
                                     Toasty.success(ContactorActivity.this,"设置成功",Toasty.LENGTH_SHORT).show();
+
                                 }
 
                                 @Override
