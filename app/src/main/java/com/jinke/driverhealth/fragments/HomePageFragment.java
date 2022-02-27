@@ -84,8 +84,8 @@ public class HomePageFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.home_page_fragment, container, false);
-        initView(view);
-        setOnCardClickEvent();
+        //initView(view);
+       //setOnCardClickEvent();
         return view;
     }
 
@@ -111,14 +111,14 @@ public class HomePageFragment extends Fragment {
 
 
     private void initView(View view) {
-        alcoholCard = view.findViewById(R.id.alcohol_data_get);
-        hrCard = view.findViewById(R.id.hr_data_get);
-        tempCard = view.findViewById(R.id.temp_data_get);
-        bpCard = view.findViewById(R.id.bp_data_get);
-        mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
-        mHr = view.findViewById(R.id.hr_txt);
-        mTemp = view.findViewById(R.id.temp_txt);
-        mBp = view.findViewById(R.id.bp_txt);
+//        alcoholCard = view.findViewById(R.id.alcohol_data_get);
+//        hrCard = view.findViewById(R.id.hr_data_get);
+//        tempCard = view.findViewById(R.id.temp_data_get);
+//        bpCard = view.findViewById(R.id.bp_data_get);
+//        mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
+//        mHr = view.findViewById(R.id.hr_txt);
+//        mTemp = view.findViewById(R.id.temp_txt);
+//        mBp = view.findViewById(R.id.bp_txt);
 
     }
 

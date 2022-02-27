@@ -13,7 +13,7 @@
         android:id="@+id/alcohol_data_get"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
         android:layout_marginTop="36dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -46,135 +46,325 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/hr_data_get"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:padding="5dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        tools:ignore="MissingConstraints">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:id="@+id/hr_icon"
-                android:layout_width="@dimen/home_page_icon_width"
-                android:layout_height="match_parent"
-                android:src="@mipmap/hr" />
-
-            <TextView
-                android:id="@+id/hr_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/hr_icon"
-                android:gravity="start|center"
-                android:text="@string/recently_hr"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/home_page_text_size"
-                tools:ignore="InvalidId" />
-        </RelativeLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/temp_data_get"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:padding="5dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        tools:ignore="MissingConstraints">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:id="@+id/temp_icon"
-                android:layout_width="@dimen/home_page_icon_width"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@mipmap/temp" />
-
-            <TextView
-                android:id="@+id/temp_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/temp_icon"
-                android:layout_weight="4"
-                android:gravity="start|center"
-                android:text="@string/recently_temp"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/home_page_text_size"
-                tools:ignore="InvalidId" />
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bp_data_get"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:clickable="true"
-
-        android:foreground="?android:attr/selectableItemBackground"
-        android:padding="5dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        tools:ignore="MissingConstraints">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:id="@+id/bp_icon"
-                android:layout_width="@dimen/home_page_icon_width"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@mipmap/bp" />
-
-            <TextView
-                android:id="@+id/bp_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/bp_icon"
-                android:layout_weight="4"
-                android:gravity="start|center"
-                android:text="@string/recently_bp"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/home_page_text_size"
-                tools:ignore="InvalidId" />
-        </RelativeLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="430dp"
-        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:background="@drawable/round_linearlayout"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/home_page_title"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:background="@drawable/gradient_linearlayout"
+            android:divider="@drawable/divider_linearlayout_d3d3d3"
+            android:orientation="vertical"
+
+            android:paddingBottom="10dp"
+            android:showDividers="end">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingStart="15dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|bottom"
+                        android:text="@string/home_page_label"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/home_page_recent_data_create_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="最近检测：2021.05.20 10:00:05"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/home_page_history_data"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|end"
+                        android:text="历史数据"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:labelFor="@id/home_page_history_data"
+                        android:src="@mipmap/arrow_right" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/home_page_hr_single_data"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center|bottom"
+                        android:text="@string/bp_max_name"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/home_page_recent_bp_max_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="135"
+                        android:textColor="@color/warning_bp_color"
+                        android:textSize="36sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="top|center"
+                        android:text="@string/bp_unit"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center|bottom"
+                        android:text="@string/bp_min_name"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/home_page_recent_bp_min_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="75"
+                        android:textColor="@color/white"
+                        android:textSize="36sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="top|center"
+                        android:text="@string/bp_unit"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center|bottom"
+                        android:text="@string/hr_name"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/home_page_recent_hr_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="68"
+                        android:textColor="@color/white"
+                        android:textSize="36sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="top|center"
+                        android:text="@string/hr_unit"
+                        android:textColor="@color/home_page_lowercase_text_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="本次监测结果根据世卫组织监测标准"
+                    android:textColor="#9599A4"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:gravity="center|end">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="35dp"
+                            android:labelFor="@id/home_page_bp_status"
+                            android:src="@mipmap/exception_bp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/home_page_bp_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center|start"
+                            android:text="血压异常"
+                            android:textColor="@color/warning_color"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|start">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="36dp"
+                            android:labelFor="@id/home_page_bp_status"
+                            android:src="@mipmap/normal_hr" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|start">
+
+                        <TextView
+                            android:id="@+id/home_page_hr_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical|start"
+                            android:text="心率正常"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
 </LinearLayout>
+
+    <!--#E9832D-->

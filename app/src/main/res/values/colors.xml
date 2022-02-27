@@ -25,7 +25,7 @@
 
     <!--默认字体颜色-->
     <color name="default_text_color">#515151</color>
-<!--    <color name="page_background_color">#F5F5F5</color>-->
+    <!--    <color name="page_background_color">#F5F5F5</color>-->
     <color name="page_background_color">#ADD8E6</color>
 
     <color name="alcohol_instrument_bg">#fffff0</color>
@@ -42,6 +42,10 @@
     <color name="account_line">#EEE8AA</color>
     <color name="light_blue">#87CEFA</color>
     <color name="deep_orange">#FF8C00</color>
+    <!--    HomePageFragment-->
+    <color name="home_page_lowercase_text_color">#F5F5F5</color>
+    <color name="warning_bp_color">#E4D472</color>
+    <color name="warning_color">#E9832D</color>
 
 
 </resources>

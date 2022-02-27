@@ -29,7 +29,7 @@
     <string name="temp_create_time2"></string>
     <string name="temp_load_more">查看更多</string>
     <!--    BpActivity-->
-    <string name="bp_unit">mmhg</string>
+    <string name="bp_unit">mmHg</string>
     <string name="normal_bp_max_limit">90-140</string>
     <string name="lower_bp_max_limit">&lt; 90</string>
     <string name="higher_bp_max_limit">&gt; 140</string>
@@ -49,6 +49,12 @@
     <string name="contactor_name">姓名：樊力豪</string>
     <string name="contactor_phone_number">电话：19524275642</string>
     <string name="contactor_tip">tips: 如页面未更新，请点击右上角刷新</string>
+    <!--HomePageFragment-->
+    <string name="home_page_title">高血压智能管家</string>
+    <string name="home_page_label">健康数据监测</string>
+    <string name="bp_max_name">收缩压</string>
+    <string name="bp_min_name">舒张压</string>
+    <string name="hr_name">心率</string>
 
 
 </resources>
