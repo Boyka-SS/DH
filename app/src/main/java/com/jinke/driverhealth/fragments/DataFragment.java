@@ -1,31 +1,24 @@
 package com.jinke.driverhealth.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.activity.HealthDetailActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.data.network.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
 import com.jinke.driverhealth.data.network.beans.Temperature;
-import com.jinke.driverhealth.interfaces.OnItemClickListener;
-import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
-import com.jinke.driverhealth.utils.WrapContentLinearLayoutManager;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -43,8 +36,10 @@ public class DataFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
         View view = inflater.inflate(R.layout.data_fragment, container, false);
-        //RecyclerView 使用
+
+       /* //RecyclerView 使用
         //1、找到控件
         mRecyclerView = view.findViewById(R.id.recycler_data_view);
         //2、设置布局管理器
@@ -90,7 +85,7 @@ public class DataFragment extends Fragment {
         mRecyclerView.setAdapter(mDataAdapter);
         String endTime = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm:ss");
         //fetch data
-        getData("", endTime, "1", "20");
+        getData("", endTime, "1", "20");*/
 
 
         return view;

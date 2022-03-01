@@ -24,7 +24,7 @@
     <color name="main_theme">#1E90FF</color>
 
     <!--默认字体颜色-->
-    <color name="default_text_color">#515151</color>
+    <color name="default_text_color">#9599A4</color>
     <!--    <color name="page_background_color">#F5F5F5</color>-->
     <color name="page_background_color">#ADD8E6</color>
 

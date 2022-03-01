@@ -34,9 +34,9 @@
     <string name="lower_bp_max_limit">&lt; 90</string>
     <string name="higher_bp_max_limit">&gt; 140</string>
 
-    <string name="normal_bp_min_limit">60-90</string>
-    <string name="higher_bp_min_limit">&gt; 90</string>
-    <string name="lower_bp_min_limit">&lt; 60</string>
+    <string name="normal_temp_limit">35.5-37.5</string>
+    <string name="higher_temp_limit">&gt; 37.5</string>
+    <string name="lower_temp_limit">&lt; 35.5</string>
 
     <!--ContactorActivity-->
     <string name="contactor">联系人</string>
@@ -55,6 +55,8 @@
     <string name="bp_max_name">收缩压</string>
     <string name="bp_min_name">舒张压</string>
     <string name="hr_name">心率</string>
+    <string name="temp_name">体温</string>
+    <string name="temp_unit">℃</string>
 
 
 </resources>
