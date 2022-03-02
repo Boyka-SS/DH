@@ -1,31 +1,32 @@
 package com.jinke.driverhealth.adapters;
 
-import android.os.Build;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.data.network.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
 import com.jinke.driverhealth.data.network.beans.Temperature;
-import com.jinke.driverhealth.interfaces.OnItemClickListener;
-import com.jinke.driverhealth.views.ZQImageViewRoundOval;
+import com.jinke.driverhealth.utils.CalendarUtil;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * @author: fanlihao
- * @date: 2022/1/20
+ * @date: 2022/3/1
  */
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
+
 
     private static final String TAG = "DataAdapter";
 
@@ -34,80 +35,63 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     private List<Temperature.DataDTO.ResultDTO> mTemperatureResult = new ArrayList<>();
 
 
-    private int healthState = 0;//健康状况
+    private Context mContext;
+    private List<String> mMeasureTime;
 
-    //事件回调监听
-    private OnItemClickListener mOnItemClickListener;
+    public DataAdapter(Context context) {
+        mContext = context;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //加载view
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.health_data_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        //模拟酒精浓度数据
-        String[] alcoholArr = new String[]{"56.0", "43.0", "12.0", "5.0", "93.4"};
-        //mock 酒精浓度
-//        String mockAlcoholData = alcoholArr[new Random().nextInt(5)];
-        String mockAlcoholData = "0.0";
         //这里设置数据
         holder.itemView.setTag(position);
-        holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position), mockAlcoholData);
-        //对RecyclerView的每一个itemView设置点击事件,并传递数据过去
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    int pos = holder.getLayoutPosition();
-                    mOnItemClickListener.onItemClick(
-                            holder.itemView,
-                            pos,
-                            mBloodPressureResult.get(position),
-                            mTemperatureResult.get(position),
-                            mHeartRateResult.get(position),
-                            mockAlcoholData,
-                            mHeartRateResult.get(position).getCreated());
-                }
+        holder.setData(mBloodPressureResult.get(position), mTemperatureResult.get(position), mHeartRateResult.get(position));
+
+    }
+
+    /**
+     * @param bpRes
+     * @param hrRes
+     * @param holder
+     * @param position
+     * @throws ParseException 日期解析异常
+     */
+    private void refactorData(List<BloodPressure.DataDTO.ResultDTO> bpRes, List<HeartRate.DataDTO.ResultDTO> hrRes, ViewHolder holder, int position) throws ParseException {
+        mMeasureTime = new ArrayList<>();
+
+        Iterator<BloodPressure.DataDTO.ResultDTO> iterator = bpRes.iterator();
+        while (iterator.hasNext()) {
+            String created = iterator.next().getCreated();
+            String beginTime = CalendarUtil.getCalCalendar(created, 0, true);
+            String endTime = CalendarUtil.getCalCalendar(created, 1, true);
+
+            if (!mMeasureTime.contains(beginTime)) {
+                mMeasureTime.add(created);
             }
-        });
-        //长按监听
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mOnItemClickListener != null) {
-                    int pos = holder.getLayoutPosition();
-                    mOnItemClickListener.onItemLongClick(holder.itemView, pos);
-                }
-                //表示此事件已经消费，不会触发单击事件
-                return true;
-            }
-        });
+
+        }
+
+
     }
 
     @Override
     public int getItemCount() {
         //返回要显示的个数
-        int size = mHeartRateResult.size();
-        int size1 = mTemperatureResult.size();
-        if (size == 0 || size1 == 0) {
-            return 10;
-        }
-
-
-        return size <= size1 ? size : size1;
+        int hr = mHeartRateResult.size();
+        int temp = mTemperatureResult.size();
+        return hr <= temp ? hr : temp;
     }
 
     public void setBloodPressureResult(List<BloodPressure.DataDTO.ResultDTO> bloodPressureResult) {
@@ -116,7 +100,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             mBloodPressureResult.addAll(bloodPressureResult);
         }
 
-        //更新UI
+        //一定要记得加，否则视图不会更新！！！
         notifyDataSetChanged();
     }
 
@@ -139,112 +123,20 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView date, time, temperature, heartRate, hypertension, hypotension, alcohol;
 
-        ZQImageViewRoundOval healthAssessment;
-
+        private TextView mCreateTime;
+        private SwipeRecyclerView mSwipeRecyclerView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mCreateTime = itemView.findViewById(R.id.measurement_create_time);
+
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public void setData(BloodPressure.DataDTO.ResultDTO bloodPressureResultDto, Temperature.DataDTO.ResultDTO temperatureResultDto, HeartRate.DataDTO.ResultDTO heartRateResultDto, String alcoholMock) {
+        public void setData(BloodPressure.DataDTO.ResultDTO bloodPressureResultDto, Temperature.DataDTO.ResultDTO temperatureResultDto, HeartRate.DataDTO.ResultDTO heartRateResultDto) {
 
-            initBindView();
-
-            String s = bloodPressureResultDto.getCreated();
-            StringTokenizer st = new StringTokenizer(s);
-
-            int i = 0;
-            String[] strings = new String[2];
-
-            while (st.hasMoreElements()) {
-                strings[i] = (String) st.nextElement();
-                i++;
-            }
-
-
-            date.setText(strings[0]);
-            time.setText(strings[1]);
-            temperature.setText("体温：" + temperatureResultDto.getTemperature() + " ℃");
-            heartRate.setText("心率：" + heartRateResultDto.getHeart_rate() + " 次/分");
-            hypertension.setText("收缩压：" + bloodPressureResultDto.getMax_rate() + " mmHg");
-            hypotension.setText("舒张压：" + bloodPressureResultDto.getMin_rate() + " mmHg");
-            alcohol.setText("酒精：" + alcoholMock + " mg/100ml");
-
-            healthState = isHealth(temperatureResultDto.getTemperature(), heartRateResultDto.getHeart_rate(), bloodPressureResultDto.getMax_rate(), bloodPressureResultDto.getMin_rate(), alcoholMock);
-
-            switch (healthState) {
-                case 1:
-                    healthAssessment.setImageResource(R.mipmap.good1);
-                    break;
-                case 2:
-                    healthAssessment.setImageResource(R.mipmap.bad1);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /**
-         * 返回 健康 状况
-         *
-         * @param temperature 体温 35.5~37.5
-         * @param heartRate   心率 60~100 次/分
-         * @param maxRate     收缩压 90-139 mmHg
-         * @param minRate     舒张压 60-89 mmHg
-         * @param alcohol     酒精浓度  正常 20mg/100ml 饮酒 80mg/100ml 醉酒
-         *                    <p>
-         *                    只有满足无效条件均在正常范围内即可健康，否则全是虚弱.以上范围来源自网络
-         */
-        private int isHealth(String temperature, int heartRate, int maxRate, int minRate, String alcohol) {
-
-            double alcoholD = Double.parseDouble(alcohol);
-            double temperatureD = Double.parseDouble(temperature);
-
-            if (heartRate >= 60 && heartRate <= 100) {
-                if (temperatureD >= 35.5 && temperatureD <= 37.5) {
-                    if (maxRate >= 90 && maxRate <= 139) {
-                        if (minRate >= 60 && minRate <= 89) {
-                            if (alcoholD < 20.0) {
-                                return 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return 2;
-        }
-
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        private void initBindView() {
-            //日期
-            date = itemView.findViewById(R.id.item_date);
-
-            //时间
-            time = itemView.findViewById(R.id.item_time);
-            //体温
-            temperature = itemView.findViewById(R.id.item_temperature);
-            //心率
-            heartRate = itemView.findViewById(R.id.item_heart_rate);
-            //收缩压
-            hypertension = itemView.findViewById(R.id.item_hypertension);
-            //舒张压
-            hypotension = itemView.findViewById(R.id.item_hypotension);
-            alcohol = itemView.findViewById(R.id.item_alcohol_concentration);//mock 数据
-            healthAssessment = itemView.findViewById(R.id.item_health_assessment);//健康状况
-            //设置图片圆角
-            healthAssessment.setType(ZQImageViewRoundOval.TYPE_ROUND);
-            healthAssessment.setRoundRadius(45);//圆角大小
         }
     }
 }
-
-/**
- * item添加监听事件 ：可以通过在绑定ViewHolder的时候设置监听，然后通过Apater回调出去
- * recyclerView使用：https://www.jianshu.com/p/4f9591291365
- */

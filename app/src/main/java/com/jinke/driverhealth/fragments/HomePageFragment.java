@@ -476,6 +476,4 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         dataSet.setCircleColor(Color.parseColor(color));
 
     }
-
-
 }

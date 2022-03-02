@@ -65,4 +65,26 @@ public class CalendarUtil {
         String formatCalendar = sdf.format(today);
         return formatCalendar;
     }
+
+
+    /**
+     * 判断某个日期是否在指定范围内
+     *
+     * @param begin
+     * @param end
+     * @param target
+     * @return
+     * @throws ParseException
+     */
+    public static boolean judgeCalendarBeforeOrAfter(String begin, String end, String target) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date beginDate = sdf.parse(begin);
+        Date endDate = sdf.parse(end);
+        Date targetDate = sdf.parse(target);
+        if (targetDate.before(endDate) && targetDate.after(beginDate)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

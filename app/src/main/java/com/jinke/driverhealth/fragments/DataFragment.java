@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.DataAdapter;
@@ -23,12 +23,16 @@ import com.jinke.driverhealth.viewmodels.DataViewModel;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DataFragment extends Fragment {
+public class DataFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "DataFragment";
-    private RecyclerView mRecyclerView;
-    private DataAdapter mDataAdapter;
+
+
+    //view
+    private LinearLayout mCenterMeasurement, mHealthConsult, mHealthReport, mStepNumber;
+
     private DataViewModel mDataViewModel;
+    private DataAdapter mDataAdapter;
 
 
 
@@ -37,58 +41,21 @@ public class DataFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
+        getData("", "2022-03-02 00:00:00", "1", "20");
         View view = inflater.inflate(R.layout.data_fragment, container, false);
 
-       /* //RecyclerView 使用
-        //1、找到控件
-        mRecyclerView = view.findViewById(R.id.recycler_data_view);
-        //2、设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        initView(view);
 
-        mRecyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        //3、设置适配器
-        mDataAdapter = new DataAdapter();
-        //添加点击事件，通过接口回调的方式将recyclerView item中对应的数据 拿到，传给  detail页面
-        mDataAdapter.setOnItemClickListener(new OnItemClickListener() {
-
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-                //TODO:监听长按事件 暂时用不上
-                Toast.makeText(getActivity(), "long click " + position + " item", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onLongClick  --> item" + position);
-            }
-
-            //点击跳转对应健康数据详情页面
-            @Override
-            public void onItemClick(View itemView, int pos, BloodPressure.DataDTO.ResultDTO bpResDTO, Temperature.DataDTO.ResultDTO tempResDTO, HeartRate.DataDTO.ResultDTO hrResDTO, String mockAlcoholData, String createDate) {
-
-                Log.d(TAG, "onClick -->  item" + pos);
-                Intent intent = new Intent(getActivity(), HealthDetailActivity.class);
-
-                //用Bundle携带数据
-                Bundle bundle = new Bundle();
-
-                bundle.putString("heart_rate", "" + hrResDTO.getHeart_rate());
-                bundle.putString("temperature", "" + tempResDTO.getTemperature());
-                bundle.putString("blood_max_pressure", "" + bpResDTO.getMax_rate());
-                bundle.putString("blood_min_pressure", "" + bpResDTO.getMin_rate());
-                bundle.putString("alcohol", mockAlcoholData);
-                bundle.putString("create_date", createDate);
-
-                intent.putExtras(bundle);
-
-                startActivity(intent);
-            }
-        });
-
-        mRecyclerView.setAdapter(mDataAdapter);
-        String endTime = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm:ss");
-        //fetch data
-        getData("", endTime, "1", "20");*/
 
 
         return view;
+    }
+
+    private void initView(View view) {
+        mCenterMeasurement = view.findViewById(R.id.center_measurement);
+        mHealthConsult = view.findViewById(R.id.health_consult);
+        mHealthReport = view.findViewById(R.id.health_report);
+        mStepNumber = view.findViewById(R.id.step_number);
     }
 
 
@@ -103,32 +70,58 @@ public class DataFragment extends Fragment {
         if (startTime == "") {
             startTime = Config.START_TIME;
         }
+
         String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
         //hr
-        mDataViewModel.loadHRData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
+        mDataViewModel.loadHRData(token, startTime, endTime, page, limit, "").observe(getViewLifecycleOwner(), new Observer<HeartRate>() {
             @Override
             public void onChanged(HeartRate heartRate) {
-                mDataAdapter.setHeartRateResult(heartRate.getData().getResult());
+                if (heartRate.getStatus() == 200) {
+                    mDataAdapter.setHeartRateResult(heartRate.getData().getResult());
+                }
             }
         });
 
         //bp
-        mDataViewModel.loadBPData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
+        mDataViewModel.loadBPData(token, startTime, endTime, page, limit, "").observe(getViewLifecycleOwner(), new Observer<BloodPressure>() {
             @Override
             public void onChanged(BloodPressure bloodPressure) {
-                mDataAdapter.setBloodPressureResult(bloodPressure.getData().getResult());
+                if (bloodPressure.getStatus() == 200) {
+                    mDataAdapter.setBloodPressureResult(bloodPressure.getData().getResult());
+                }
             }
         });
 
         //temp
-        mDataViewModel.loadTempData(token, startTime, endTime, page, limit,"").observe(getViewLifecycleOwner(), new Observer<Temperature>() {
+        mDataViewModel.loadTempData(token, startTime, endTime, page, limit, "").observe(getViewLifecycleOwner(), new Observer<Temperature>() {
             @Override
             public void onChanged(Temperature temperature) {
-                mDataAdapter.setTemperatureResult(temperature.getData().getResult());
+                if (temperature.getStatus() == 200) {
+                    mDataAdapter.setTemperatureResult(temperature.getData().getResult());
+                }
             }
         });
+    }
+
+    //TODO click event
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.center_measurement:
+
+                break;
+            case R.id.health_consult:
+
+                break;
+            case R.id.health_report:
+                break;
+            case R.id.step_number:
+                break;
+            default:
+                break;
+        }
     }
 }
 //解决 RecyclerView 存在的 数组越界 BUG 参考链接：

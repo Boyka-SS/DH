@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:background="@color/main_theme"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="60dp"
         android:layout_margin="20dp"
         android:background="@drawable/round_linearlayout"
         android:orientation="horizontal"
