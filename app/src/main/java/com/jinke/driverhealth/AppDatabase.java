@@ -8,15 +8,17 @@ import androidx.room.RoomDatabase;
 
 import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.data.db.beans.Contactor;
+import com.jinke.driverhealth.data.db.beans.Question;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
 import com.jinke.driverhealth.data.db.dao.ContactorDao;
+import com.jinke.driverhealth.data.db.dao.QuestionDao;
 
 /**
  * @author: fanlihao
  * @date: 2022/1/20
  */
 @Database(
-        entities = {Alcohol.class, Contactor.class},
+        entities = {Alcohol.class, Contactor.class, Question.class},
         version = 2,
         exportSchema = true
 
@@ -45,5 +47,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract AlcoholDao getAlcoholDao();
 
     public abstract ContactorDao getContactorDao();
+
+    public abstract QuestionDao getQuestionDao();
 
 }

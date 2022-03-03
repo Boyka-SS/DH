@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/account_line" />
-    <size android:height="1px" />
+    <solid android:color="#A9A9A9" />
+    <size android:height="0.5px" />
 </shape>

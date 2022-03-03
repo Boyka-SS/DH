@@ -1,5 +1,6 @@
 package com.jinke.driverhealth.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.consult.HealthConsultActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.data.network.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
@@ -35,8 +37,6 @@ public class DataFragment extends Fragment implements View.OnClickListener {
     private DataAdapter mDataAdapter;
 
 
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -47,17 +47,20 @@ public class DataFragment extends Fragment implements View.OnClickListener {
         initView(view);
 
 
-
         return view;
     }
 
     private void initView(View view) {
         mCenterMeasurement = view.findViewById(R.id.center_measurement);
+        mCenterMeasurement.setOnClickListener(this);
         mHealthConsult = view.findViewById(R.id.health_consult);
+        mHealthConsult.setOnClickListener(this);
         mHealthReport = view.findViewById(R.id.health_report);
+        mHealthReport.setOnClickListener(this);
+        mHealthReport.setOnClickListener(this);
         mStepNumber = view.findViewById(R.id.step_number);
+        mStepNumber.setOnClickListener(this);
     }
-
 
 
     /**
@@ -105,7 +108,6 @@ public class DataFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    //TODO click event
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -113,7 +115,7 @@ public class DataFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.health_consult:
-
+                startActivity(new Intent(getActivity(), HealthConsultActivity.class));
                 break;
             case R.id.health_report:
                 break;

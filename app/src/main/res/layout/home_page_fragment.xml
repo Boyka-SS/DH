@@ -272,7 +272,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:text="本次监测结果根据世卫组织监测标准"
-                                android:textColor="	#696969"
+                                android:textColor="#696969"
                                 android:textSize="12sp" />
                         </LinearLayout>
 

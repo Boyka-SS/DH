@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_title_bar"
-    android:paddingTop="10dp"
-    android:background="@color/blue_500"
-    android:gravity="center_vertical"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/main_theme"
+    android:gravity="center_vertical"
+    android:paddingTop="10dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_title_bar"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
         //返回箭头
+
         <ImageView
             android:id="@+id/iv_left_icon"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_baseline_arrow_back_24"
-            android:layout_width="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="40dp" />
+            android:layout_width="15dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_arrow_back_24" />
         //标题
+
         <TextView
             android:id="@+id/tv_title_middle"
-            android:textSize="23dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:gravity="center"
             android:text="Demo"
             android:textColor="@color/white"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="20dp" />
         //右侧图标
+
         <ImageView
-            android:visibility="gone"
-            android:layout_centerVertical="true"
             android:id="@+id/iv_rightIco"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </RelativeLayout>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -47,6 +47,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
+        <activity android:name=".activity.consult.history.HistoryQuestionActivity"></activity>
+        <activity android:name=".activity.consult.make.MakeQuesActivity" />
         <activity android:name=".activity.consult.HealthConsultActivity">
 
         </activity>

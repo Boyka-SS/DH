@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 日期转化类
@@ -28,12 +29,14 @@ public class CalendarUtil {
     public static String getNowFormatCalendar(String pattern) {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         String dateNowStr = sdf.format(d);
         return dateNowStr;
     }
 
     public static String getFormatCalendar(String date, String pattern) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         Date parseDate = format.parse(date);
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         String formatDate = sdf.format(parseDate);

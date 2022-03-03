@@ -21,16 +21,15 @@
     <!--底部导航栏和viewpager2之间的分割线-->
     <color name="viewpager2_divider_bottom_navigation_bar">#C0C0C0</color>
     <!--主题颜色-->
-<!--    <color name="main_theme">#1E90FF</color>-->
-<!--    <color name="main_theme">#12B7F5</color>-->
-<!--    <color name="main_theme">#114DA8</color>-->
-    <color name="main_theme">#EDEDED</color>
+    <color name="main_theme">#1E90FF</color>
+    <!--    <color name="main_theme">#EDEDED</color>-->
 
 
     <!--默认字体颜色-->
     <color name="default_text_color">#000000</color>
-    <!--    <color name="page_background_color">#F5F5F5</color>-->
-    <color name="page_background_color">#EDEDED</color>
+
+<!--        <color name="page_background_color">#EDEDED</color>-->
+        <color name="page_background_color">#E8EFF5</color>
 
     <color name="alcohol_instrument_bg">#fffff0</color>
     <!--HrActivity-->
@@ -43,7 +42,7 @@
     <color name="arc_progress_unfinished_txt_color">#D2691E</color>
 
     <!--    ContactorActivity-->
-<!--    <color name="account_line">#EEE8AA</color>-->
+    <!--    <color name="account_line">#EEE8AA</color>-->
     <color name="account_line">#ffffff</color>
     <color name="light_blue">#87CEFA</color>
     <color name="deep_orange">#FF8C00</color>

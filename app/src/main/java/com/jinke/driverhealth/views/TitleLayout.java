@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jinke.driverhealth.R;
@@ -21,7 +20,7 @@ public class TitleLayout {
         return titleView;
     }
 
-    public RelativeLayout getRl_title_bar() {
+    public LinearLayout getRl_title_bar() {
         return rl_title_bar;
     }
 
@@ -49,7 +48,7 @@ public class TitleLayout {
     /**
      * 左侧/右侧图标和中间标题
      */
-    private RelativeLayout rl_title_bar;
+    private LinearLayout rl_title_bar;
 
     /**
      * 跟布局
@@ -77,7 +76,7 @@ public class TitleLayout {
      * */
     public TitleLayout(Activity context){
         titleView = context.findViewById(R.id.rl_title_bar);
-        rl_title_bar = (RelativeLayout)titleView.findViewById(R.id.rl_title_bar);
+        rl_title_bar = (LinearLayout)titleView.findViewById(R.id.rl_title_bar);
         ll_title_bar = (LinearLayout) context.findViewById(R.id.ll_title_bar);
         tv_title_middle = (TextView)titleView.findViewById(R.id.tv_title_middle);
         iv_left_icon = (ImageView)titleView.findViewById(R.id.iv_left_icon);
