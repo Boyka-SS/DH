@@ -50,6 +50,7 @@
     <color name="home_page_lowercase_text_color">#F5F5F5</color>
     <color name="warning_bp_color">#E4D472</color>
     <color name="warning_color">#E9832D</color>
+    <color name="light_green">#A7CC26</color>
 
 
 </resources>

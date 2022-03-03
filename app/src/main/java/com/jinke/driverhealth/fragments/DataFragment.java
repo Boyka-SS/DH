@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.center.CenterActivity;
 import com.jinke.driverhealth.activity.consult.HealthConsultActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.data.network.beans.BloodPressure;
@@ -45,7 +46,6 @@ public class DataFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.data_fragment, container, false);
 
         initView(view);
-
 
         return view;
     }
@@ -112,7 +112,7 @@ public class DataFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.center_measurement:
-
+                startActivity(new Intent(getActivity(), CenterActivity.class));
                 break;
             case R.id.health_consult:
                 startActivity(new Intent(getActivity(), HealthConsultActivity.class));

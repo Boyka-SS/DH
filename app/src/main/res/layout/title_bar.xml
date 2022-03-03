@@ -18,7 +18,7 @@
             android:id="@+id/iv_left_icon"
             android:layout_width="15dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
+
             android:layout_weight="1"
             android:src="@drawable/ic_baseline_arrow_back_24" />
         //标题
