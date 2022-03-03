@@ -42,11 +42,6 @@ public class HrFragment extends Fragment {
     private DataViewModel mDataViewModel;
     private LineChart mChart;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
