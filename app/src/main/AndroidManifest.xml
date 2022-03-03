@@ -47,12 +47,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.center.alcohol.AlcoholCenterActivity"></activity>
-        <activity android:name=".activity.center.temp.TempActivity" />
-        <activity android:name=".activity.center.hr.HrActivity" />
-        <activity android:name=".activity.center.CenterActivity">
+        <activity android:name=".activity.step.StepActivity"></activity>
+        <activity android:name=".activity.report.ReportActivity">
 
         </activity>
+        <activity android:name=".activity.center.alcohol.AlcoholCenterActivity" />
+        <activity android:name=".activity.center.temp.TempActivity" />
+        <activity android:name=".activity.center.hr.HrActivity" />
+        <activity android:name=".activity.center.CenterActivity" />
         <activity android:name=".activity.center.bp.BpActivity" />
         <activity android:name=".activity.consult.history.HistoryQuestionActivity" />
         <activity android:name=".activity.consult.make.MakeQuesActivity" />
@@ -66,12 +68,8 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />
-        <activity android:name=".activity.DemoActivity" />
-        <activity android:name=".activity.detail.AlcoholDeatilActivity" />
-        <activity android:name=".activity.detail.BPDetailActivity" />
-        <activity android:name=".activity.detail.TempDetailActivity" />
-        <activity android:name=".activity.detail.HRDetailActivity" />
-        <activity android:name=".activity.HealthDetailActivity" />
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

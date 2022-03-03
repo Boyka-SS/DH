@@ -57,6 +57,8 @@
     <string name="hr_name">心率</string>
     <string name="temp_name">体温</string>
     <string name="temp_unit">℃</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

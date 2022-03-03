@@ -37,6 +37,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.DHapplication;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
+import com.jinke.driverhealth.activity.center.CenterActivity;
 import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
 import com.jinke.driverhealth.data.network.beans.SingleBp;
@@ -363,8 +364,9 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_page_history_data:
-                Toasty.success(getActivity(), "success click", Toasty.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), CenterActivity.class));
                 break;
+
             default:
                 break;
         }

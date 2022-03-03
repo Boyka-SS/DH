@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.center.CenterActivity;
 import com.jinke.driverhealth.activity.consult.HealthConsultActivity;
+import com.jinke.driverhealth.activity.report.ReportActivity;
+import com.jinke.driverhealth.activity.step.StepActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
 import com.jinke.driverhealth.data.network.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.beans.HeartRate;
@@ -118,8 +120,10 @@ public class DataFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), HealthConsultActivity.class));
                 break;
             case R.id.health_report:
+                startActivity(new Intent(getActivity(), ReportActivity.class));
                 break;
             case R.id.step_number:
+                startActivity(new Intent(getActivity(), StepActivity.class));
                 break;
             default:
                 break;

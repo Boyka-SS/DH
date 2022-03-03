@@ -1,13 +1,13 @@
-package com.jinke.driverhealth.activity.detail;
+package com.jinke.driverhealth.fragments.dataitem;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,80 +22,71 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.data.network.beans.Temperature;
-import com.jinke.driverhealth.utils.CalendarUtil;
+import com.jinke.driverhealth.data.network.beans.HeartRate;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.CustomXAxisRenderer;
-import com.jinke.driverhealth.utils.CustomerValueFormatter;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
-import com.jinke.driverhealth.views.TitleLayout;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 体温详情页面
- */
-public class TempDetailActivity extends AppCompatActivity {
+import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
-    private static final String TAG = "TempActivity";
+public class HrFragment extends Fragment {
+
+
     //体温折线图
-
+    private DataViewModel mDataViewModel;
     private LineChart mChart;
 
-
-    private DataViewModel mDataViewModel;
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_temp);
-
-        hideActionBar();
-
-        mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
-
-        String createTime = (String) getIntent().getExtras().get("create_time");
-        //请求数据  起始日期-7 截止日期+1
-        String endTime = null, startTime = null;
-        try {
-            endTime = CalendarUtil.getCalCalendar(createTime, 1, true);
-            startTime = CalendarUtil.getCalCalendar(endTime, 8, false);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        String token = getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
-        mDataViewModel.loadTempData(token, startTime, endTime, "1", "7", Config.ASC_DATA).observe(this, new Observer<Temperature>() {
-            @Override
-            public void onChanged(Temperature temperature) {
-                mChart = findViewById(R.id.line_chart_temp);
-                List<Temperature.DataDTO.ResultDTO> result = temperature.getData().getResult();
-                initChart(result);
-            }
-        });
 
     }
 
-    private void initChart(List<Temperature.DataDTO.ResultDTO> result) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_hr, container, false);
+        mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+
+
+        String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
+
+        //升序数据
+        mDataViewModel.loadHRData(token, "2022-01-01 00:00:00", "2022-02-01 00:00:00", "1", "20", Config.ASC_DATA).observe(getActivity(), new Observer<HeartRate>() {
+            @Override
+            public void onChanged(HeartRate heartRate) {
+                mChart = view.findViewById(R.id.line_chart_hr_report);
+                if (heartRate.getStatus() == 0) {
+                    List<HeartRate.DataDTO.ResultDTO> result = heartRate.getData().getResult();
+                    initChart(result);
+                } else {
+                    Toasty.error(getActivity(), "无数据", Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
+        return view;
+    }
+
+    private void initChart(List<HeartRate.DataDTO.ResultDTO> result) {
+
         //prepare data
-        List<Entry> tempEntries = new ArrayList<>();//心率
+        List<Entry> hrEntries = new ArrayList<>();//心率
         List<String> date = new ArrayList<>();//日期
 
 
         for (int i = 0; i < result.size(); i++) {
-            tempEntries.add(new Entry(i, new Double(result.get(i).getTemperature()).floatValue()));
+            hrEntries.add(new Entry(i, new Double(result.get(i).getHeart_rate()).floatValue()));
             date.add(result.get(i).getCreated().substring(5, 16));
         }
 
         date.add("");//解决X轴不匹配问题
-//        Collections.sort(tempEntries, new EntryXComparator());
-        Log.d(TAG, "date --> " + date);
-        Log.d(TAG, "tempEntries --> " + tempEntries);
+//        Collections.sort(hrEntries, new EntryXComparator());
 
 
         //设置x轴
@@ -118,17 +109,17 @@ public class TempDetailActivity extends AppCompatActivity {
         yAxis.setLabelCount(7);
         yAxis.setTextSize(12);
         yAxis.setDrawGridLines(false); //是否显示Y轴上的网格线
-        yAxis.setAxisMaximum(41.5f);
-        yAxis.setAxisMinimum(34.5f);
+        yAxis.setAxisMaximum(120f);
+        yAxis.setAxisMinimum(50f);
         yAxis.setDrawLabels(true);//绘制y轴标签
 
-        LineDataSet tempDataSet = new LineDataSet(tempEntries, "体温");
-        renderLine(tempDataSet, "#DC143C");
+        LineDataSet hrDataSet = new LineDataSet(hrEntries, "心率");
+        renderLine(hrDataSet, "#DC143C");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(tempDataSet);
+        dataSets.add(hrDataSet);
 
         LineData lineData = new LineData(dataSets);
-        lineData.setValueFormatter(new CustomerValueFormatter());
+
         if (result.isEmpty()) {
             mChart.clear();
         } else {
@@ -151,8 +142,8 @@ public class TempDetailActivity extends AppCompatActivity {
         legend.setTextSize(12);
 
         //添加界定线
-        LimitLine maxLimit = renderLimitLine(37.5f, "37.5 ℃", "#DC143C");
-        LimitLine minLimit = renderLimitLine(35.5f, "35.5 ℃", "#0000FF");
+        LimitLine maxLimit = renderLimitLine(100f, "100 次/分", "#DC143C");
+        LimitLine minLimit = renderLimitLine(60f, "60 次/分", "#0000FF");
         yAxis.addLimitLine(maxLimit);
         yAxis.addLimitLine(minLimit);
 
@@ -168,29 +159,13 @@ public class TempDetailActivity extends AppCompatActivity {
         mChart.setXAxisRenderer(new CustomXAxisRenderer(mChart.getViewPortHandler(), mChart.getXAxis(), mChart.getTransformer(YAxis.AxisDependency.LEFT)));
         mChart.setExtraRightOffset(30f);
 
-        mChart.getDescription().setText("体温分布图");
+        mChart.getDescription().setText("心率分布图");
         mChart.getDescription().setTextSize(12);//与图例字体大小一致
         // 设置LineChar间距
         mChart.setExtraBottomOffset(12f);//设置 legend 和 X轴 之间间距
         mChart.invalidate(); // refresh
         //设置从X轴出来的动画时间
         mChart.animateXY(1000, 1000);
-    }
-
-    /**
-     * 隐藏系统自带 头部导航栏
-     */
-    private void hideActionBar() {
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.hide();
-        }
-        new TitleLayout(this).setTitleText("体温详情").setLeftIcoListening(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     /**
@@ -205,7 +180,7 @@ public class TempDetailActivity extends AppCompatActivity {
         limitLine.enableDashedLine(15f, 10f, 0);//设置为虚线
         limitLine.setLineColor(Color.parseColor(color));
         limitLine.setLineWidth(2f);
-        limitLine.setTextColor(ContextCompat.getColor(this, R.color.color_limit_line_chart));
+        limitLine.setTextColor(ContextCompat.getColor(getActivity(), R.color.color_limit_line_chart));
         limitLine.setTextSize(12f);
         return limitLine;
     }
@@ -224,17 +199,10 @@ public class TempDetailActivity extends AppCompatActivity {
         dataSet.setColor(Color.parseColor(color));
         dataSet.setDrawFilled(true);//是否画数据覆盖的阴影层
         dataSet.setDrawValues(true);//是否绘制线的数据
-        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.color_line_chart));//设置数据的文本颜色，如果不绘制线的数据 这句代码也不用设置了
+        dataSet.setValueTextColor(ContextCompat.getColor(getActivity(), R.color.color_line_chart));//设置数据的文本颜色，如果不绘制线的数据 这句代码也不用设置了
         dataSet.setValueTextSize(10f);//如果不绘制线的数据 这句代码也不用设置了
         dataSet.setCircleRadius(4f);//设置每个折线点的大小
         dataSet.setCircleColor(Color.parseColor(color));
 
     }
-
-
 }
-
-/**
- * hello chart
- * https://www.cnblogs.com/tfxz/p/12621642.html
- */

@@ -1,14 +1,13 @@
-package com.jinke.driverhealth.activity.detail;
+package com.jinke.driverhealth.fragments.dataitem;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -21,84 +20,63 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.data.network.beans.BloodPressure;
-import com.jinke.driverhealth.utils.CalendarUtil;
-import com.jinke.driverhealth.utils.Config;
+import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.utils.CustomXAxisRenderer;
-import com.jinke.driverhealth.viewmodels.DataViewModel;
-import com.jinke.driverhealth.views.TitleLayout;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 血压详情页面
- */
-public class BPDetailActivity extends AppCompatActivity {
 
-    private static final String TAG = "BPDetailActivity";
+public class AlcoholFragment extends Fragment {
+
+
     //体温折线图
-    private DataViewModel mDataViewModel;
+
     private LineChart mChart;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blood_pressure);
-
-        hideActionBar();
-
-        mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
-
-        String createTime = (String) getIntent().getExtras().get("create_time");
-        //请求数据  起始日期-7 截止日期+1
-        String endTime = null, startTime = null;
-        try {
-            endTime = CalendarUtil.getCalCalendar(createTime, 1, true);
-            startTime = CalendarUtil.getCalCalendar(endTime, 8, false);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        String token = getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
-        //升序数据
-        mDataViewModel.loadBPData(token, startTime, endTime, "1", "7", Config.ASC_DATA).observe(this, new Observer<BloodPressure>() {
-            @Override
-            public void onChanged(BloodPressure bloodPressure) {
-                mChart = findViewById(R.id.line_chart_bp);
-                List<BloodPressure.DataDTO.ResultDTO> result = bloodPressure.getData().getResult();
-                try {
-                    initChart(result);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
     }
 
-    private void initChart(List<BloodPressure.DataDTO.ResultDTO> result) throws ParseException {
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_alcohol, container, false);
+
+        mChart = view.findViewById(R.id.line_chart_alcohol_report_1);
+
+
+        List<Alcohol> mList = new ArrayList<>();
+        Alcohol a1 = new Alcohol("2002-02-03 16:10:27", 0);
+        Alcohol a2 = new Alcohol("2002-03-03 06:20:40", 2);
+        Alcohol a3 = new Alcohol("2002-06-03 10:16:38", 6);
+        Alcohol a4 = new Alcohol("2002-08-03 13:01:38", 0);
+        Alcohol a5 = new Alcohol("2002-12-03 11:20:38", 20);
+        mList.add(a1);
+        mList.add(a2);
+        mList.add(a3);
+        mList.add(a4);
+        mList.add(a5);
+        initChart(mList);
+        return view;
+    }
+
+    private void initChart(List<Alcohol> result) {
+
         //prepare data
-        List<Entry> maxEntries = new ArrayList<>();//收缩压
-        List<Entry> minEntries = new ArrayList<>();//舒张压
-        List<String> date = new ArrayList<>();//舒张压
+        List<Entry> hrEntries = new ArrayList<>();//心率
+        List<String> date = new ArrayList<>();//日期
+
 
         for (int i = 0; i < result.size(); i++) {
-            maxEntries.add(new Entry(i, new Double(result.get(i).getMax_rate()).floatValue()));
-            minEntries.add(new Entry(i, new Double(result.get(i).getMin_rate()).floatValue()));
-            date.add(result.get(i).getCreated().substring(5,16));
+            hrEntries.add(new Entry(i, new Double(result.get(i).alcohol_concentration).floatValue()));
+            date.add(result.get(i).createdTime.substring(5, 16));
         }
 
         date.add("");//解决X轴不匹配问题
-//        Log.d(TAG, "date --> " + date);
-//        Log.d(TAG, "maxEntry --> " + maxEntries);
-//        Log.d(TAG, "minEntry --> " + minEntries);
-//        Collections.sort(maxEntries, new EntryXComparator());
-//        Collections.sort(minEntries, new EntryXComparator());
+//        Collections.sort(hrEntries, new EntryXComparator());
 
 
         //设置x轴
@@ -121,17 +99,15 @@ public class BPDetailActivity extends AppCompatActivity {
         yAxis.setLabelCount(7);
         yAxis.setTextSize(12);
         yAxis.setDrawGridLines(false); //是否显示Y轴上的网格线
-        yAxis.setAxisMaximum(160f);
-        yAxis.setAxisMinimum(50f);
-
+        yAxis.setAxisMaximum(100f);
+        yAxis.setAxisMinimum(0f);
         yAxis.setDrawLabels(true);//绘制y轴标签
 
-        LineDataSet maxDataSet = new LineDataSet(maxEntries, "收缩压");
-        renderLine(maxDataSet, "#DC143C");
-        LineDataSet minDataSet = new LineDataSet(minEntries, "舒张压");
-        renderLine(minDataSet, "#0000FF");
-        dataSets.add(maxDataSet);
-        dataSets.add(minDataSet);
+        LineDataSet hrDataSet = new LineDataSet(hrEntries, "心率");
+        renderLine(hrDataSet, "#DC143C");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(hrDataSet);
+
         LineData lineData = new LineData(dataSets);
 
         if (result.isEmpty()) {
@@ -148,7 +124,6 @@ public class BPDetailActivity extends AppCompatActivity {
         legend.setForm(Legend.LegendForm.LINE); // 线
         legend.setFormSize(14f); // 图形大小
         legend.setFormLineWidth(9f);  // 图形线宽
-//        legend.setXOffset();
         legend.setXEntrySpace(13f);//设置 各个legend之间的距离
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
@@ -157,9 +132,9 @@ public class BPDetailActivity extends AppCompatActivity {
         legend.setTextSize(12);
 
         //添加界定线
-        LimitLine maxLimit = renderLimitLine(140f, "140 mmHg", "#DC143C");
-        LimitLine minLimit = renderLimitLine(90f, "90 mmHg", "#0000FF");
-        yAxis.addLimitLine(maxLimit);
+//        LimitLine maxLimit = renderLimitLine(80f, "80 %", "#DC143C");
+        LimitLine minLimit = renderLimitLine(20f, "20 %", "#0000FF");
+//        yAxis.addLimitLine(maxLimit);
         yAxis.addLimitLine(minLimit);
 
         mChart.getAxisRight().setEnabled(false); //不绘制右侧轴线
@@ -169,15 +144,15 @@ public class BPDetailActivity extends AppCompatActivity {
         //设置是否可以触摸
         mChart.setTouchEnabled(true);
         mChart.setDragDecelerationFrictionCoef(0.9f);
+
         //X 轴 换行显示
         mChart.setXAxisRenderer(new CustomXAxisRenderer(mChart.getViewPortHandler(), mChart.getXAxis(), mChart.getTransformer(YAxis.AxisDependency.LEFT)));
         mChart.setExtraRightOffset(30f);
 
-        mChart.getDescription().setText("血压分布图");
+        mChart.getDescription().setText("");
         mChart.getDescription().setTextSize(12);//与图例字体大小一致
         // 设置LineChar间距
-        mChart.setExtraBottomOffset(2 * 12f);//设置 legend 和 X轴 之间间距
-
+        mChart.setExtraBottomOffset(12f);//设置 legend 和 X轴 之间间距
         mChart.invalidate(); // refresh
         //设置从X轴出来的动画时间
         mChart.animateXY(1000, 1000);
@@ -195,7 +170,7 @@ public class BPDetailActivity extends AppCompatActivity {
         limitLine.enableDashedLine(15f, 10f, 0);//设置为虚线
         limitLine.setLineColor(Color.parseColor(color));
         limitLine.setLineWidth(2f);
-        limitLine.setTextColor(ContextCompat.getColor(this, R.color.color_limit_line_chart));
+        limitLine.setTextColor(ContextCompat.getColor(getActivity(), R.color.color_limit_line_chart));
         limitLine.setTextSize(12f);
         return limitLine;
     }
@@ -214,35 +189,10 @@ public class BPDetailActivity extends AppCompatActivity {
         dataSet.setColor(Color.parseColor(color));
         dataSet.setDrawFilled(true);//是否画数据覆盖的阴影层
         dataSet.setDrawValues(true);//是否绘制线的数据
-        dataSet.setValueTextColor(ContextCompat.getColor(this, R.color.color_line_chart));//设置数据的文本颜色，如果不绘制线的数据 这句代码也不用设置了
+        dataSet.setValueTextColor(ContextCompat.getColor(getActivity(), R.color.color_line_chart));//设置数据的文本颜色，如果不绘制线的数据 这句代码也不用设置了
         dataSet.setValueTextSize(10f);//如果不绘制线的数据 这句代码也不用设置了
         dataSet.setCircleRadius(4f);//设置每个折线点的大小
         dataSet.setCircleColor(Color.parseColor(color));
 
     }
-
-    /**
-     * 隐藏系统自带 头部导航栏
-     */
-    private void hideActionBar() {
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.hide();
-        }
-        new TitleLayout(this).setTitleText("血压详情").setLeftIcoListening(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-
 }
-
-/**
- * 使用MpAndroidChart步骤（linechart为例）：
- * https://weeklycoding.com/mpandroidchart-documentation/getting-started/
- * MPAndroidChart的详细使用——Legend图例的详细设置：
- * https://blog.csdn.net/Honiler/article/details/80074019
- */
