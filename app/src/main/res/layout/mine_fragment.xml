@@ -52,6 +52,8 @@
             android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
+            android:background="@drawable/ripple_linearlayout"
+            android:clickable="true"
             android:gravity="center|end"
             android:text="点击登录"
             android:textColor="@color/main_theme" />

@@ -9,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +20,12 @@ import androidx.fragment.app.Fragment;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.contactor.ContactorActivity;
+import com.jinke.driverhealth.activity.user.LoginActivity;
 
 public class MineFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "MineFragment";
+
+    private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
 
     private LinearLayout mContactor, mHistoryData, mUserInfo, mAddvise, mAboutUs;
     private TextView mLoginStatus, mLogin;
@@ -26,6 +33,20 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //registerForActivityResult() 方法注册结果回调（在 onStart() 之前调用）
+
+        mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == 1) {
+                    Intent data = result.getData();
+                    String username = data.getStringExtra("username");
+                    mLoginStatus.setText("用户名：" + username);
+                    mLogin.setText("");
+                    mLogin.setClickable(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -77,11 +98,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.mine_login:
-                //TODO  navigate to login pager
-                Toast.makeText(getActivity(), "5", Toast.LENGTH_SHORT).show();
+                mIntentActivityResultLauncher.launch(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.mine_login_status:
-                //TODO  modify login status
+
                 Toast.makeText(getActivity(), "6", Toast.LENGTH_SHORT).show();
                 break;
             default:

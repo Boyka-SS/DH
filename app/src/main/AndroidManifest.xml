@@ -47,10 +47,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.step.StepActivity"></activity>
-        <activity android:name=".activity.report.ReportActivity">
+        <activity android:name=".activity.user.RegisterActivity" />
+        <activity android:name=".activity.user.LoginActivity">
 
         </activity>
+        <activity android:name=".activity.step.StepActivity" />
+        <activity android:name=".activity.report.ReportActivity" />
         <activity android:name=".activity.center.alcohol.AlcoholCenterActivity" />
         <activity android:name=".activity.center.temp.TempActivity" />
         <activity android:name=".activity.center.hr.HrActivity" />
@@ -68,8 +70,6 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />
-
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
