@@ -156,8 +156,21 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 refreshlayout.finishRefresh(1000);
             }
         });
-//!isBpNormal || !isTempNormal || !isHrNormal
-        if (true) {
+
+
+        return view;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "isHrNormal " + isHrNormal);
+
+        Log.d(TAG, "isTempNormal " + isTempNormal);
+        Log.d(TAG, "isTempNormal " + isTempNormal);
+        //TODO
+        if (false) {
             mContactorDao.loadContactorByFirstMan(1).observe(getActivity(), new Observer<Contactor>() {
                 @Override
                 public void onChanged(Contactor contactor) {
@@ -170,7 +183,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                                         applyForPermission(getActivity(), contactor.phone);
-                                        sendExeceptionAddress(contactor.phone, getActivity());
                                         sweetAlertDialog.dismiss();
                                     }
                                 })
@@ -186,13 +198,12 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                         Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
                         new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                                 .setTitleText("检测数据异常")
-                                .setContentText("是否拨打110，并编辑短信")
+                                .setContentText("是否拨打120，并编辑短信")
                                 .setConfirmText("是")
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        applyForPermission(getActivity(), "110");
-                                        sendExeceptionAddress("110", getActivity());
+                                        applyForPermission(getActivity(), "120");
                                         sweetAlertDialog.dismiss();
                                     }
                                 })
@@ -209,10 +220,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-
-        return view;
     }
-
 
     private String sendExeceptionAddress(String phone, Context context) {
 
@@ -244,10 +252,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 public void onLocationChanged(AMapLocation aMapLocation) {
                     if (aMapLocation != null) {
                         if (aMapLocation.getErrorCode() == 0) {
-//                            String city = aMapLocation.getCity();
-//                            Log.d(TAG, "city --> " + city);
-//                            String province = aMapLocation.getProvince();
-//                            Log.d(TAG, "province --> " + province);
                             String address = aMapLocation.getAddress();
                             Log.d(TAG, "address --> " + address);
                             Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
@@ -271,14 +275,16 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void applyForPermission(Activity activity, String phone) {
-        String[] permissList = {Manifest.permission.CALL_PHONE,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE};
+        String[] permissList = {Manifest.permission.CALL_PHONE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE};
         PermissionUtil.addPermissByPermissionList(activity, permissList, 1, new ApplyPermissionCallback() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void success() {
+                Toasty.success(getActivity(), "授权成功", Toasty.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + phone));
                 startActivity(intent);
+                sendExeceptionAddress(phone, getActivity());
             }
 
             @Override
@@ -626,7 +632,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         dataSet.setValueTextSize(10f);//如果不绘制线的数据 这句代码也不用设置了
         dataSet.setCircleRadius(4f);//设置每个折线点的大小
         dataSet.setCircleColor(Color.parseColor(color));
-
     }
 
 

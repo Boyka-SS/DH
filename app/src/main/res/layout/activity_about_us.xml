@@ -4,15 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/page_background_color"
-    tools:context=".activity.contactor.ContactorActivity">
+    tools:context=".activity.us.AboutUsActivity">
 
     <include layout="@layout/title_bar" />
-
-    <com.yanzhenjie.recyclerview.SwipeRecyclerView
-        android:id="@+id/contactor_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
 </LinearLayout>

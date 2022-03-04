@@ -39,7 +39,7 @@
     <string name="lower_temp_limit">&lt; 35.5</string>
 
     <!--ContactorActivity-->
-    <string name="contactor">联系人</string>
+    <string name="contactor">联系人管理</string>
     <string name="contactor_add">添加联系人</string>
     <string name="contactor_refresh">刷新</string>
     <string name="mine_history_data">历史数据</string>

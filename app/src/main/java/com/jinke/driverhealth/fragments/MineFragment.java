@@ -19,8 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.center.CenterActivity;
 import com.jinke.driverhealth.activity.contactor.ContactorActivity;
+import com.jinke.driverhealth.activity.feedback.AdviseActivity;
+import com.jinke.driverhealth.activity.us.AboutUsActivity;
 import com.jinke.driverhealth.activity.user.LoginActivity;
+import com.jinke.driverhealth.activity.user.UserInfoActivity;
 
 public class MineFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "MineFragment";
@@ -81,27 +85,24 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mine_contactor:
-                //跳转联系人管理页面
                 startActivity(new Intent(getActivity(), ContactorActivity.class));
                 break;
             case R.id.mine_history_data:
-                Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), CenterActivity.class));
                 break;
             case R.id.mine_user_info:
-                Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), UserInfoActivity.class));
                 break;
             case R.id.mine_addvise:
-                Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AdviseActivity.class));
                 break;
             case R.id.mine_about_us:
-                Toast.makeText(getActivity(), "4", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AboutUsActivity.class));
                 break;
-
             case R.id.mine_login:
                 mIntentActivityResultLauncher.launch(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.mine_login_status:
-
                 Toast.makeText(getActivity(), "6", Toast.LENGTH_SHORT).show();
                 break;
             default:

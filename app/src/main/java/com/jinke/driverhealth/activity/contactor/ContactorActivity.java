@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +27,7 @@ import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.PermissionUtil;
 import com.jinke.driverhealth.viewmodels.ContactorViewModel;
+import com.jinke.driverhealth.views.TitleLayout;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
@@ -56,10 +58,24 @@ public class ContactorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contactor);
-        this.setTitle("联系人管理");
+
+        hideActionBar("联系人管理");
         applyForPermission(ContactorActivity.this);
     }
 
+    //隐藏系统自带 头部导航栏
+    private void hideActionBar(String title) {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.hide();
+        }
+        new TitleLayout(this).setTitleText(title).setLeftIcoListening(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
     /**
      * android6.0 以后 必须 动态 申请通讯录权限
      */

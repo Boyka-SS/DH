@@ -48,10 +48,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
+        <activity android:name=".activity.us.AboutUsActivity"></activity>
+        <activity android:name=".activity.feedback.AdviseActivity" />
+        <activity android:name=".activity.user.UserInfoActivity" />
         <activity android:name=".activity.user.RegisterActivity" />
-        <activity android:name=".activity.user.LoginActivity">
-
-        </activity>
+        <activity android:name=".activity.user.LoginActivity" />
         <activity android:name=".activity.step.StepActivity" />
         <activity android:name=".activity.report.ReportActivity" />
         <activity android:name=".activity.center.alcohol.AlcoholCenterActivity" />
@@ -61,9 +62,7 @@
         <activity android:name=".activity.center.bp.BpActivity" />
         <activity android:name=".activity.consult.history.HistoryQuestionActivity" />
         <activity android:name=".activity.consult.make.MakeQuesActivity" />
-        <activity android:name=".activity.consult.HealthConsultActivity">
-
-        </activity>
+        <activity android:name=".activity.consult.HealthConsultActivity" />
         <activity android:name=".activity.contactor.ContactorActivity" />
 
         <meta-data
