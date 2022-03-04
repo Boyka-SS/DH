@@ -1,6 +1,5 @@
 package com.jinke.driverhealth.data.db.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -17,8 +16,8 @@ public interface ContactorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertContactor(Contactor contactor);
 
-    @Query("SELECT * FROM contactor where isfirstmantocontact = :id ")
-    LiveData<Contactor> loadContactorByFirstMan(int id);
+    @Query("SELECT * FROM contactor where isfirstmantocontact = :id ORDER BY id DESC ")
+    Contactor loadContactorByFirstMan(int id);
 
     @Query("SELECT * FROM contactor where lookUpKey = :key ")
     Contactor loadContactorByLookUpKey(String key);

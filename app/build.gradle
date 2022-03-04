@@ -67,6 +67,8 @@ dependencies {
     implementation('com.github.ihsanbal:LoggingInterceptor:3.1.0') {
         exclude group: 'org.json', module: 'json'
     }
+    //LoadingDialog
+    implementation 'com.github.ForgetAll:LoadingDialog:v1.1.2'
     implementation 'com.squareup.okio:okio:1.14.0'
     //magic-indicator
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0' // for androidx

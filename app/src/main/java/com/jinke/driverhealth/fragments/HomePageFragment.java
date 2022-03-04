@@ -67,6 +67,7 @@ import com.jinke.driverhealth.viewmodels.DataViewModel;
 import com.jinke.driverhealth.viewmodels.SingleDataViewModel;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -162,67 +163,73 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "isHrNormal " + isHrNormal);
-
-        Log.d(TAG, "isTempNormal " + isTempNormal);
-        Log.d(TAG, "isTempNormal " + isTempNormal);
-        //TODO
-        if (false) {
-            mContactorDao.loadContactorByFirstMan(1).observe(getActivity(), new Observer<Contactor>() {
-                @Override
-                public void onChanged(Contactor contactor) {
-                    if (contactor != null) {
-                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                .setTitleText("检测数据异常")
-                                .setContentText("是否拨打第一联系人电话，并发送位置")
-                                .setConfirmText("是")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        applyForPermission(getActivity(), contactor.phone);
-                                        sweetAlertDialog.dismiss();
-                                    }
-                                })
-                                .setCancelText("否")
-                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        sweetAlertDialog.dismiss();
-                                    }
-                                })
-                                .show();
-                    } else {
-                        Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
-                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
-                                .setTitleText("检测数据异常")
-                                .setContentText("是否拨打120，并编辑短信")
-                                .setConfirmText("是")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        applyForPermission(getActivity(), "120");
-                                        sweetAlertDialog.dismiss();
-                                    }
-                                })
-                                .setCancelText("否")
-                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        sweetAlertDialog.dismiss();
-                                    }
-                                })
-                                .show();
-                    }
-
-                }
-            });
+    /**
+     * 是否拨打电话
+     *
+     * @param isNormal
+     */
+    private void makeCall(boolean isNormal) {
+        if (isNormal) {
+        } else {
+            Contactor contactor = mContactorDao.loadContactorByFirstMan(1);
+            if (contactor != null) {
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("检测数据异常")
+                        .setContentText("是否拨打第一联系人电话，并发送位置")
+                        .setConfirmText("是")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                applyForPermission(getActivity(), contactor.phone);
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .setCancelText("否")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("检测数据异常")
+                        .setContentText("是否拨打120，并编辑短信")
+                        .setConfirmText("是")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                applyForPermission(getActivity(), "120");
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .setCancelText("否")
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
         }
     }
 
     private String sendExeceptionAddress(String phone, Context context) {
+
+        LoadingDialog loadingDialog = new LoadingDialog(context);
+        loadingDialog
+                .closeSuccessAnim()
+                .closeFailedAnim()
+                .setSize(60)
+                .setLoadingText("正在获取位置中，请稍等")
+                .setSuccessText("获取成功")
+                .setFailedText("获取失败")
+                .show();
+
 
         AMapLocationClient.updatePrivacyShow(getActivity(), true, true);
         AMapLocationClient.updatePrivacyAgree(getActivity(), true);
@@ -258,12 +265,14 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                             sendIntent.setData(Uri.parse("smsto:" + phone));
                             sendIntent.putExtra("sms_body", "我目前在" + address + "，我有紧急情况，请求救援");
                             context.startActivity(sendIntent);
+                            loadingDialog.loadSuccess();
                         } else {
                             //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                             Toasty.error(context, "错误，错误信息" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
                             Log.e(TAG, "location Error, ErrCode:"
                                     + aMapLocation.getErrorCode() + ", errInfo:"
                                     + aMapLocation.getErrorInfo());
+                            loadingDialog.loadFailed();
                         }
                     }
                 }
@@ -296,8 +305,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
-
-
         mToken = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
         //bp  data
         mSingleDataViewModel.loadSingleBPData(mToken, Config.IMEI).observe(getActivity(), new Observer<SingleBp>() {
@@ -368,6 +375,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+        makeCall(isTempNormal);
     }
 
 
@@ -390,6 +398,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             mHrStatus.setText("心率异常");
             mHrStatus.setTextColor(Color.parseColor("#E9832D"));
         }
+        makeCall(isHrNormal);
     }
 
     /**
@@ -429,7 +438,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             mBpStatus.setText("血压异常");
             mBpStatus.setTextColor(Color.parseColor("#E9832D"));
         }
-
     }
 
     /**

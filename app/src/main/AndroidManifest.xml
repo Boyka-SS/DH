@@ -48,7 +48,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.us.AboutUsActivity"></activity>
+        <activity android:name=".activity.us.waring.WaringTipsActivity"></activity>
+        <activity android:name=".activity.us.contactus.ContactUsActivity" />
+        <activity android:name=".activity.us.AboutUsActivity" />
         <activity android:name=".activity.feedback.AdviseActivity" />
         <activity android:name=".activity.user.UserInfoActivity" />
         <activity android:name=".activity.user.RegisterActivity" />

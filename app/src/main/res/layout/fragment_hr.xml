@@ -230,7 +230,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|start"
-                        android:text="该时间范围内，您测量血压次数太少，数据不够充分，无法给出具体建议，请及时测量血压"
+                        android:text="该时间范围内，您测量心率次数太少，数据不够充分，无法给出具体建议，请及时测量血压"
                         android:textColor="#000000" />
                 </LinearLayout>
             </LinearLayout>

@@ -23,7 +23,7 @@ import com.jinke.driverhealth.data.db.dao.UserInfoDao;
  */
 @Database(
         entities = {Alcohol.class, Contactor.class, Question.class, Advise.class, UserInfo.class},
-        version =2,
+        version =3,
         exportSchema = true
 
 )
@@ -37,7 +37,9 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
                     instance = Room
-                            .databaseBuilder(context.getApplicationContext(), AppDatabase.class, "driverHealth.db").fallbackToDestructiveMigration()
+                            .databaseBuilder(context.getApplicationContext(), AppDatabase.class, "driverHealth.db")
+                            .fallbackToDestructiveMigration()
+                            .allowMainThreadQueries()
                             .build();
                 }
             }
