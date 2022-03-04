@@ -1,9 +1,15 @@
 package com.jinke.driverhealth.fragments;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +25,16 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -39,15 +50,19 @@ import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.alcohol.AlcoholActivity;
 import com.jinke.driverhealth.activity.center.CenterActivity;
 import com.jinke.driverhealth.data.db.beans.Alcohol;
+import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
+import com.jinke.driverhealth.data.db.dao.ContactorDao;
 import com.jinke.driverhealth.data.network.beans.SingleBp;
 import com.jinke.driverhealth.data.network.beans.SingleHr;
 import com.jinke.driverhealth.data.network.beans.SingleTemp;
 import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.CustomXAxisRenderer;
 import com.jinke.driverhealth.utils.CustomerValueFormatter;
+import com.jinke.driverhealth.utils.PermissionUtil;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 import com.jinke.driverhealth.viewmodels.SingleDataViewModel;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -57,6 +72,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -85,7 +101,13 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     //data
     private SingleDataViewModel mSingleDataViewModel;
     private DataViewModel mDataViewModel;
-    ;
+    private ContactorDao mContactorDao = DHapplication.mAppDatabase.getContactorDao();
+    //map
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
     private boolean isBpNormal = true, isHrNormal = true, isTempNormal = true;
     //android reuslt api  用于在activity（fragment)间通信
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
@@ -134,9 +156,137 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 refreshlayout.finishRefresh(1000);
             }
         });
+//!isBpNormal || !isTempNormal || !isHrNormal
+        if (true) {
+            mContactorDao.loadContactorByFirstMan(1).observe(getActivity(), new Observer<Contactor>() {
+                @Override
+                public void onChanged(Contactor contactor) {
+                    if (contactor != null) {
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("检测数据异常")
+                                .setContentText("是否拨打第一联系人电话，并发送位置")
+                                .setConfirmText("是")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        applyForPermission(getActivity(), contactor.phone);
+                                        sendExeceptionAddress(contactor.phone, getActivity());
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                })
+                                .setCancelText("否")
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    } else {
+                        Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("检测数据异常")
+                                .setContentText("是否拨打110，并编辑短信")
+                                .setConfirmText("是")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        applyForPermission(getActivity(), "110");
+                                        sendExeceptionAddress("110", getActivity());
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                })
+                                .setCancelText("否")
+                                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
 
+                }
+            });
+        }
 
         return view;
+    }
+
+
+    private String sendExeceptionAddress(String phone, Context context) {
+
+        AMapLocationClient.updatePrivacyShow(getActivity(), true, true);
+        AMapLocationClient.updatePrivacyAgree(getActivity(), true);
+        //初始化定位
+        try {
+            mLocationClient = new AMapLocationClient(getActivity());
+
+            //初始化AMapLocationClientOption对象
+            mLocationOption = new AMapLocationClientOption();
+            mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport);
+            //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            //获取一次定位结果：
+            //该方法默认为false。
+            mLocationOption.setOnceLocation(true);
+            //获取最近3s内精度最高的一次定位结果
+            mLocationOption.setOnceLocationLatest(true);
+            if (null != mLocationClient) {
+                mLocationClient.setLocationOption(mLocationOption);
+                //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+                mLocationClient.stopLocation();
+                mLocationClient.startLocation();
+            }
+            //设置定位回调监听
+            mLocationClient.setLocationListener(new AMapLocationListener() {
+                @Override
+                public void onLocationChanged(AMapLocation aMapLocation) {
+                    if (aMapLocation != null) {
+                        if (aMapLocation.getErrorCode() == 0) {
+//                            String city = aMapLocation.getCity();
+//                            Log.d(TAG, "city --> " + city);
+//                            String province = aMapLocation.getProvince();
+//                            Log.d(TAG, "province --> " + province);
+                            String address = aMapLocation.getAddress();
+                            Log.d(TAG, "address --> " + address);
+                            Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                            sendIntent.setData(Uri.parse("smsto:" + phone));
+                            sendIntent.putExtra("sms_body", "我目前在" + address + "，我有紧急情况，请求救援");
+                            context.startActivity(sendIntent);
+                        } else {
+                            //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                            Toasty.error(context, "错误，错误信息" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
+                            Log.e(TAG, "location Error, ErrCode:"
+                                    + aMapLocation.getErrorCode() + ", errInfo:"
+                                    + aMapLocation.getErrorInfo());
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private void applyForPermission(Activity activity, String phone) {
+        String[] permissList = {Manifest.permission.CALL_PHONE,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE};
+        PermissionUtil.addPermissByPermissionList(activity, permissList, 1, new ApplyPermissionCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void success() {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phone));
+                startActivity(intent);
+            }
+
+            @Override
+            public void fail() {
+                //TODO 拒绝授权
+                Toasty.info(getActivity(), "您拒绝了权限的申请", Toasty.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initData() {
@@ -478,4 +628,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         dataSet.setCircleColor(Color.parseColor(color));
 
     }
+
+
 }

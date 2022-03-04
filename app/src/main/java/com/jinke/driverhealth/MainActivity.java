@@ -43,52 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
 
 
-//        AMapLocationClient.updatePrivacyShow(MainActivity.this,true,true);
-//        AMapLocationClient.updatePrivacyAgree(MainActivity.this,true);
-//        //初始化定位
-//        try {
-//
-//
-//            mLocationClient = new AMapLocationClient(MainActivity.this);
-//
-//            //初始化AMapLocationClientOption对象
-//            mLocationOption = new AMapLocationClientOption();
-//            mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport);
-//            //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-//            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//            //获取一次定位结果：
-//            //该方法默认为false。
-//            mLocationOption.setOnceLocation(true);
-//            //获取最近3s内精度最高的一次定位结果
-//            mLocationOption.setOnceLocationLatest(true);
-//            if (null != mLocationClient) {
-//                mLocationClient.setLocationOption(mLocationOption);
-//                //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-//                mLocationClient.stopLocation();
-//                mLocationClient.startLocation();
-//            }
-//            //设置定位回调监听
-//            mLocationClient.setLocationListener(new AMapLocationListener() {
-//                @Override
-//                public void onLocationChanged(AMapLocation aMapLocation) {
-//                    if (aMapLocation != null) {
-//                        if (aMapLocation.getErrorCode() == 0) {
-//                            Log.d(TAG, "city --> " + aMapLocation.getCity());
-//                            Log.d(TAG, "province --> " + aMapLocation.getProvince());
-//                            Log.d(TAG, "address --> " + aMapLocation.getAddress());
-//
-//                        } else {
-//                            //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-//                            Log.e("AmapError", "location Error, ErrCode:"
-//                                    + aMapLocation.getErrorCode() + ", errInfo:"
-//                                    + aMapLocation.getErrorInfo());
-//                        }
-//                    }
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     private void initView() {

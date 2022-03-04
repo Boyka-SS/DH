@@ -113,7 +113,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:background="@drawable/ripple_linearlayout_01b695"
                                 android:clickable="true"
                                 android:orientation="horizontal">
 

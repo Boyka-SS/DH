@@ -37,6 +37,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".DHapplication"
@@ -60,7 +61,9 @@
         <activity android:name=".activity.center.bp.BpActivity" />
         <activity android:name=".activity.consult.history.HistoryQuestionActivity" />
         <activity android:name=".activity.consult.make.MakeQuesActivity" />
-        <activity android:name=".activity.consult.HealthConsultActivity" />
+        <activity android:name=".activity.consult.HealthConsultActivity">
+
+        </activity>
         <activity android:name=".activity.contactor.ContactorActivity" />
 
         <meta-data

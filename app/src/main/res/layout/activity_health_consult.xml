@@ -119,7 +119,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="专家在线"
+                    android:text="历史提问"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -128,7 +128,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="top"
                     android:layout_weight="1"
-                    android:text="心血管行业资深专家"
+                    android:text="查看历史提问记录"
                     android:textColor="#696969"
                     android:textSize="14sp" />
 
