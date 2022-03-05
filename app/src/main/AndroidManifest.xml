@@ -67,10 +67,8 @@
         <activity android:name=".activity.consult.HealthConsultActivity" />
         <activity android:name=".activity.contactor.ContactorActivity" />
 
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="65d0e1875c70e8d693ef2a8f0e5c417d" />
 
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="65d0e1875c70e8d693ef2a8f0e5c417d" ></meta-data>
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />

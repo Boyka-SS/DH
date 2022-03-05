@@ -77,7 +77,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 
 import static android.content.Context.MODE_PRIVATE;
-
+//30:27:EA:3F:9F:F8:38:C4:D2:94:DE:71:E3:30:3D:29:33:A9:28:E5
+//30:27:EA:3F:9F:F8:38:C4:D2:94:DE:71:E3:30:3D:29:33:A9:28:E5
 public class HomePageFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "HomePageFragment";
 
@@ -295,7 +296,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 sendExeceptionAddress(phone, getActivity());
             }
-
             @Override
             public void fail() {
                 //TODO 拒绝授权
