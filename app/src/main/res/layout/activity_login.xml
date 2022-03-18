@@ -8,7 +8,7 @@
     app:maskLayerColor="#80000000"
     app:scrollOrientation="toTop"
     app:speed="5"
-    app:src="@mipmap/login_longpic_background"
+    app:src="@mipmap/mmexport1647174867396"
     tools:ignore="MissingClass">
 
     <androidx.constraintlayout.widget.ConstraintLayout

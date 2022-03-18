@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -372,7 +373,7 @@
 
                     <ImageView
                         android:id="@+id/alcohol_icon"
-                        android:layout_width="@dimen/home_page_icon_width"
+                        android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
@@ -385,7 +386,7 @@
                         android:gravity="start|center"
                         android:text="@string/today_alcohol"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/home_page_text_size"
+                        android:textSize="16sp"
                         tools:ignore="InvalidId" />
                 </LinearLayout>
 

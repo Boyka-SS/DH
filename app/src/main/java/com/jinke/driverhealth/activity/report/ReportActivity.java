@@ -118,7 +118,8 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
-                float navigatorHeight = context.getResources().getDimension(R.dimen.common_navigator_height);
+//                float navigatorHeight = context.getResources().getDimension(R.dimen.common_navigator_height);
+                float navigatorHeight = 45;
                 float borderWidth = UIUtil.dip2px(context, 1);
                 float lineHeight = navigatorHeight - 2 * borderWidth;
                 indicator.setLineHeight(lineHeight);
