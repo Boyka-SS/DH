@@ -424,4 +424,6 @@
     <dimen name="sp_42">42sp</dimen>
     <dimen name="sp_48">48sp</dimen>
 
+    <dimen name="common_navigator_height">45dp</dimen>
+
 </resources>

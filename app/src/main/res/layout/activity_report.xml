@@ -13,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:orientation="vertical">
 
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator1"
             android:layout_width="223dp"
-            android:layout_height="5dp"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
+            android:layout_height="@dimen/dp_30"
+
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
