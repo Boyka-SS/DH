@@ -29,4 +29,17 @@
         <item name="colorControlActivated">@color/white</item>
     </style>
 
+
+    <style name="NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Full" parent="NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+
+
+
 </resources>

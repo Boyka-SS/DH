@@ -42,13 +42,22 @@
     <application
         android:name=".DHapplication"
         android:allowBackup="true"
-        android:icon="@mipmap/app_icon180"
+        android:icon="@mipmap/app01"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/app_icon180"
+        android:roundIcon="@mipmap/app01"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-        <activity android:name=".activity.us.waring.WaringTipsActivity"></activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.us.waring.WaringTipsActivity" />
         <activity android:name=".activity.us.contactus.ContactUsActivity" />
         <activity android:name=".activity.us.AboutUsActivity" />
         <activity android:name=".activity.feedback.AdviseActivity" />
@@ -56,13 +65,7 @@
         <activity android:name=".activity.user.RegisterActivity" />
         <activity android:name=".activity.user.LoginActivity" />
         <activity android:name=".activity.step.StepActivity" />
-        <activity android:name=".activity.report.ReportActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activity.report.ReportActivity"></activity>
         <activity android:name=".activity.center.alcohol.AlcoholCenterActivity" />
         <activity android:name=".activity.center.temp.TempActivity" />
         <activity android:name=".activity.center.hr.HrActivity" />
@@ -73,10 +76,10 @@
         <activity android:name=".activity.consult.HealthConsultActivity" />
         <activity android:name=".activity.contactor.ContactorActivity" />
 
-
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="65d0e1875c70e8d693ef2a8f0e5c417d"></meta-data>
+            android:value="65d0e1875c70e8d693ef2a8f0e5c417d" />
+
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />

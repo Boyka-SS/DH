@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5F7FF"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/start" />
+
+    <!--    <ImageView-->
+    <!--        android:layout_width="@dimen/dp_220"-->
+    <!--        android:layout_height="@dimen/dp_220"-->
+    <!--        android:src="@mipmap/yishuti" />-->
+
+
+</LinearLayout>
+
+    <!--
+    bc26yi
+    1、图标：驾驶检测，突出驾驶 检测 最好蓝色（#1E90FF）
+    2、标语：艺术体，slogan：在想
+    -->
