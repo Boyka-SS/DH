@@ -15,6 +15,7 @@
         android:paddingEnd="15dp">
 
         <LinearLayout
+            android:layout_marginBottom="10dp"
             android:id="@+id/line_chart_bp_report"
             android:layout_width="match_parent"
             android:layout_height="350dp"
@@ -230,12 +231,28 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|start"
-                        android:text="该时间范围内，您测量心率次数太少，数据不够充分，无法给出具体建议，请及时测量血压"
+                        android:text="检测当前心率变化浮动较大，建议及时关注，保持日常运动，限制酒精的摄入，注重健康均衡的饮食习惯"
                         android:textColor="#000000" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
 
+            >
+
+            <Button
+                android:id="@+id/loadmore_hr"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/ripple_linearlayout_main_theme"
+                android:text="点击查看月度分析报告"
+                android:textSize="@dimen/dp_18" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

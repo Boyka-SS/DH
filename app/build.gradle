@@ -5,6 +5,14 @@ plugins {
 android {
 
 
+    signingConfigs {
+        release {
+            keyAlias 'release'
+            storeFile file('E:\\developtool\\android\\DriverHealth2\\app\\app_release.jks')
+            storePassword '123456'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 31
     buildToolsVersion '30.0.0'
 
@@ -31,6 +39,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
 
         }
 

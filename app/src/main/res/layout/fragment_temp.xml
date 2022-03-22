@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     tools:context=".fragments.dataitem.BpFragment">
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -15,6 +15,7 @@
         android:paddingEnd="15dp">
 
         <LinearLayout
+            android:layout_marginBottom="10dp"
             android:id="@+id/line_chart_bp_report"
             android:layout_width="match_parent"
             android:layout_height="350dp"
@@ -52,6 +53,7 @@
         </LinearLayout>
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="15dp"
@@ -186,10 +188,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="10dp"
+
             android:background="@drawable/round_linearlayout"
             android:orientation="vertical"
             android:paddingStart="15dp"
@@ -230,12 +233,30 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|start"
-                        android:text="该时间范围内，您测量血压次数太少，数据不够充分，无法给出具体建议，请及时测量血压"
+                        android:text="您当前的体温波动较小，处于正常范围内，请继续保持 "
                         android:textColor="#000000" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+
+            >
+
+            <Button
+                android:id="@+id/loadmore_temp"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/ripple_linearlayout_main_theme"
+                android:text="点击查看月度分析报告"
+                android:textSize="@dimen/dp_18" />
+        </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>

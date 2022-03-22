@@ -15,6 +15,7 @@
         android:paddingEnd="15dp">
 
         <LinearLayout
+            android:layout_marginBottom="10dp"
             android:id="@+id/line_chart_bp_report"
             android:layout_width="match_parent"
             android:layout_height="350dp"
@@ -236,7 +237,23 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
 
+            >
+
+            <Button
+                android:id="@+id/loadmore_bp"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/ripple_linearlayout_main_theme"
+                android:text="点击查看月度分析报告"
+                android:textSize="@dimen/dp_18" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

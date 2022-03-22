@@ -1,10 +1,12 @@
 package com.jinke.driverhealth.fragments.dataitem;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.activity.report.WebActivity;
 import com.jinke.driverhealth.data.network.beans.Temperature;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.CustomXAxisRenderer;
@@ -42,7 +45,7 @@ public class TempFragment extends Fragment {
 
     private DataViewModel mDataViewModel;
 
-
+    private Button mBtn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,14 @@ public class TempFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_temp, container, false);
 
+        mBtn = view.findViewById(R.id.loadmore_temp);
+        mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WebActivity.class);
+                startActivity(intent);
+            }
+        });
         mDataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
         String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("token", "");
 

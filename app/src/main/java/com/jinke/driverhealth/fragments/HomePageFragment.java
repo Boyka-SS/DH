@@ -99,6 +99,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     private LinearLayout mLoadHistoryData;
     private ImageView mBpStatusPic, mHrStatusPic, mTempStatusPic;
     private RefreshLayout refreshLayout;
+    private LoadingDialog mLoadingDialog;
     //data
     private SingleDataViewModel mSingleDataViewModel;
     private DataViewModel mDataViewModel;
@@ -112,6 +113,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     private boolean isBpNormal = true, isHrNormal = true, isTempNormal = true;
     //android reuslt api  用于在activity（fragment)间通信
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
+
     private AlcoholDao mAlcoholDao = DHapplication.mAppDatabase.getAlcoholDao();
     private String mToken;
 
@@ -192,8 +194,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                             }
                         })
                         .show();
-            }
-            else {
+            } else {
                 Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("检测数据异常")
@@ -218,10 +219,32 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String sendExeceptionAddress(String phone, Context context) {
 
-        LoadingDialog loadingDialog = new LoadingDialog(context);
-        loadingDialog
+    private void applyForPermission(Activity activity, String phone) {
+        String[] permissList = {Manifest.permission.CALL_PHONE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE};
+        PermissionUtil.addPermissByPermissionList(activity, permissList, 1, new ApplyPermissionCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void success() {
+                Toasty.success(getActivity(), "授权成功", Toasty.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phone));
+                startActivity(intent);
+                fetchExeceptionAddress(phone, getActivity());
+            }
+
+            @Override
+            public void fail() {
+                //TODO 拒绝授权
+                Toasty.info(getActivity(), "您拒绝了权限的申请", Toasty.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String fetchExeceptionAddress(String phone, Context context) {
+
+        mLoadingDialog = new LoadingDialog(context);
+        mLoadingDialog
                 .closeSuccessAnim()
                 .closeFailedAnim()
                 .setSize(60)
@@ -260,19 +283,23 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                     if (aMapLocation != null) {
                         if (aMapLocation.getErrorCode() == 0) {
                             String address = aMapLocation.getAddress();
-                            Log.d(TAG, "address --> " + address);
-                            Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                            sendIntent.setData(Uri.parse("smsto:" + phone));
-                            sendIntent.putExtra("sms_body", "我目前在" + address + "，我有紧急情况，请求救援");
-                            context.startActivity(sendIntent);
-                            loadingDialog.loadSuccess();
+                            if (isTempNormal) {
+                                editSmsContent(address, phone, context, 1);
+                            } else if (isBpNormal) {
+                                editSmsContent(address, phone, context, 2);
+                            } else if (isHrNormal) {
+                                editSmsContent(address, phone, context, 3);
+                            } else if (isHrNormal && isBpNormal) {
+                                editSmsContent(address, phone, context, 0);
+                            }
+
                         } else {
                             //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                            Toasty.error(context, "错误，错误信息" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
+                            Toasty.error(context, "错误，错误码" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
                             Log.e(TAG, "location Error, ErrCode:"
                                     + aMapLocation.getErrorCode() + ", errInfo:"
                                     + aMapLocation.getErrorInfo());
-                            loadingDialog.loadFailed();
+                            mLoadingDialog.loadFailed();
                         }
                     }
                 }
@@ -283,24 +310,35 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         return "";
     }
 
-    private void applyForPermission(Activity activity, String phone) {
-        String[] permissList = {Manifest.permission.CALL_PHONE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE};
-        PermissionUtil.addPermissByPermissionList(activity, permissList, 1, new ApplyPermissionCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void success() {
-                Toasty.success(getActivity(), "授权成功", Toasty.LENGTH_SHORT).show();
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phone));
-                startActivity(intent);
-                sendExeceptionAddress(phone, getActivity());
-            }
-            @Override
-            public void fail() {
-                //TODO 拒绝授权
-                Toasty.info(getActivity(), "您拒绝了权限的申请", Toasty.LENGTH_SHORT).show();
-            }
-        });
+    /**
+     * 编辑短信内容，发送位置
+     *
+     * @param address 位置
+     * @param phone   短信目标人
+     * @param context 上下文
+     */
+    private void editSmsContent(String address, String phone, Context context, int isNormal) {
+        String content = "我在" + address + "，我有紧急情况，请及时关注";
+        switch (isNormal) {
+            case 1:
+                content = "我在" + address + "，当前体温数据异常，已超过指定温度指标37.5℃ ，请及时关注";
+                break;
+            case 2:
+                content = "我在" + address + "，当前血压数据异常，已超过指定收缩压指标140mmHg，请及时关注";
+                break;
+            case 3:
+                content = "我在" + address + "，当前心率数据异常，已超过指定心率指标100bpm，请及时关注";
+                break;
+            default:
+                content = "我在" + address + "，当前检测多项数据异常，请及时关注";
+                break;
+        }
+
+        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+        sendIntent.setData(Uri.parse("smsto:" + phone));
+        sendIntent.putExtra("sms_body", content);
+        context.startActivity(sendIntent);
+        mLoadingDialog.loadSuccess();
     }
 
     private void initData() {
@@ -341,7 +379,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 获取temp数据更新界面
+     * 获取temp数据更新界面，isTempNormal 检测数据是否异常
      *
      * @param singleTemp
      */
@@ -379,7 +417,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
 
     /**
-     * 获取hr数据更新界面
+     * 获取hr数据更新界面，isHrNormal 检测数据是否异常
      *
      * @param singleHr
      */
@@ -401,7 +439,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 获取bp数据更新界面
+     * 获取bp数据更新界面，isBpNormal 检测数据是否异常
      *
      * @param singleBp
      */

@@ -6,17 +6,14 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 通讯录 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" /> <!-- 相机权限 -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 读写文件权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
     <uses-feature android:name="android.hardware.location.gps" /> <!-- <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" /> -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 蓝牙权限 -->
+    <!-- 蓝牙权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- LE Beacons位置相关权限 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 蓝牙模块 设置为true表示只有支持蓝牙的手机才能安装 -->
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -33,10 +30,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明 -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 联系人 -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -48,6 +41,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
+        <activity
+            android:name=".activity.report.WebActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -65,7 +63,7 @@
         <activity android:name=".activity.user.RegisterActivity" />
         <activity android:name=".activity.user.LoginActivity" />
         <activity android:name=".activity.step.StepActivity" />
-        <activity android:name=".activity.report.ReportActivity"></activity>
+        <activity android:name=".activity.report.ReportActivity" />
         <activity android:name=".activity.center.alcohol.AlcoholCenterActivity" />
         <activity android:name=".activity.center.temp.TempActivity" />
         <activity android:name=".activity.center.hr.HrActivity" />
@@ -83,9 +81,7 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
