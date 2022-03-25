@@ -78,6 +78,10 @@ import es.dmoral.toasty.Toasty;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * @author: fanlihao
+ * @date: 2022/3/25
+ */
 public class HomePageFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "HomePageFragment";
 
@@ -101,21 +105,21 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     private RefreshLayout refreshLayout;
     private LoadingDialog mLoadingDialog;
     //data
+    private String mToken;
     private SingleDataViewModel mSingleDataViewModel;
     private DataViewModel mDataViewModel;
     private ContactorDao mContactorDao = DHapplication.mAppDatabase.getContactorDao();
+    private AlcoholDao mAlcoholDao = DHapplication.mAppDatabase.getAlcoholDao();
     //map
     //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
+    private AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
-    public AMapLocationClientOption mLocationOption = null;
+    private AMapLocationClientOption mLocationOption = null;
+
 
     private boolean isBpNormal = true, isHrNormal = true, isTempNormal = true;
     //android reuslt api  用于在activity（fragment)间通信
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
-
-    private AlcoholDao mAlcoholDao = DHapplication.mAppDatabase.getAlcoholDao();
-    private String mToken;
 
 
     @Override
@@ -318,7 +322,8 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
      * @param context 上下文
      */
     private void editSmsContent(String address, String phone, Context context, int isNormal) {
-        String content = "我在" + address + "，我有紧急情况，请及时关注";
+        String content = "";
+        Log.d(TAG, "33 " + address);
         switch (isNormal) {
             case 1:
                 content = "我在" + address + "，当前体温数据异常，已超过指定温度指标37.5℃ ，请及时关注";
@@ -680,4 +685,11 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.onDestroy();
+        }
+    }
 }

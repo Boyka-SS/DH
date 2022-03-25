@@ -15,6 +15,7 @@ import com.jinke.driverhealth.R;
 public class SplashActivity extends AppCompatActivity {
 
 
+
     private int i;
     private int count = 5;
     private Button mBtnSkip;
@@ -29,6 +30,8 @@ public class SplashActivity extends AppCompatActivity {
 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         window.setStatusBarColor(Color.TRANSPARENT);
+
+
 
         new Thread() {
             @Override
@@ -45,6 +48,11 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
         }.start();
 
     }
+
+
+
+
+
 
 
 }

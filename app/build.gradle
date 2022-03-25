@@ -7,10 +7,16 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'release'
-            storeFile file('E:\\developtool\\android\\DriverHealth2\\app\\app_release.jks')
+            keyAlias 'key'
+            storeFile file('app_release.keystore')
             storePassword '123456'
             keyPassword '123456'
+        }
+        debug {
+            storeFile file('C:\\Users\\HP\\.android\\debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
     }
     compileSdkVersion 31
