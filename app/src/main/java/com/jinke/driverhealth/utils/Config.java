@@ -18,15 +18,15 @@ public class Config {
     //数据降序
     public final static String DESC_DATA = "desc";
     //高德地图
-    public final static String GAODE_MAP = "";
+    public final static String GAODE_MAP = "65d0e1875c70e8d693ef2a8f0e5c417d";
 
 
     //alcohol device name
-    public final static String REMOTE_DEVICE_NAME = "";
+    public final static String REMOTE_DEVICE_NAME = "JDY-31-SPP";
     // alcohol device mac
-    public final static String REMOTE_DEVICE_MAC = "";
+    public final static String REMOTE_DEVICE_MAC = "50:E9:06:01:65:00";
     //SPP服务UUID号
-    public final static String DEVICE_UUID = "";
+    public final static String DEVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     /**
      * 兔盯云平台
      */
@@ -37,9 +37,9 @@ public class Config {
      * <p>
      * IMEI：设备号
      */
-    public static final String APPKEY = "";
-    public static final String SECRET = "";
-    public static final String IMEI = "";
+    public static final String APPKEY = "10014";
+    public static final String SECRET = "2c5058d97630269bf0867035764f81db";
+    public static final String IMEI = "689466010023530";
 
     /**
      * 事务序列号后缀
