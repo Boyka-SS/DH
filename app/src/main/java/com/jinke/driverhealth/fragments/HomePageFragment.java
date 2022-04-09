@@ -69,6 +69,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -503,7 +505,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void initView(View view) {
+    private void initView(@NotNull View view) {
         mAlcoholLinearLayout = view.findViewById(R.id.alcohol_data_get);
         mAlcoholConcentration = view.findViewById(R.id.alcohol_concentration_txt);
 
@@ -567,7 +569,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@NotNull View v) {
         switch (v.getId()) {
             case R.id.home_page_history_data:
                 startActivity(new Intent(getActivity(), CenterActivity.class));
@@ -578,7 +580,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void initChart(List<Temperature.DataDTO.ResultDTO> result) {
+    private void initChart(@NotNull List<Temperature.DataDTO.ResultDTO> result) {
         //prepare data
         List<Entry> tempEntries = new ArrayList<>();//心率
         List<String> date = new ArrayList<>();//日期
@@ -671,7 +673,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
      * @param color   折线颜色
      */
 
-    private void renderLine(LineDataSet dataSet, String color) {
+    private void renderLine(@NotNull LineDataSet dataSet, String color) {
         dataSet.setDrawCircleHole(false);
         dataSet.setLineWidth(2f);
 //        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);//设置线数据依赖于左侧y轴
