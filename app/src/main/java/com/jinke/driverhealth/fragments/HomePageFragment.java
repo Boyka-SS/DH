@@ -397,7 +397,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
         } else {
             isTempNormal = false;
-            mTempStatus.setTextColor(Color.parseColor("#E9832D"));
+            mTempStatus.setTextColor(Color.parseColor("#DC143C"));
         }
         if (!isTempNormal) {
             mTempStatus.setText("体温异常");
@@ -433,7 +433,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         if (heartRate >= 60 && heartRate <= 100) {
         } else {
             isHrNormal = false;
-            mRecentHrData.setTextColor(Color.parseColor("#E9832D"));
+            mRecentHrData.setTextColor(Color.parseColor("#DC143C"));
         }
         mRecentHrData.setText(singleHr.getData().getHeart_rate() + "");
 
@@ -457,12 +457,12 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         if (maxRate <= 140 && maxRate >= 90) {
         } else {
             isBpNormal = false;
-            mRecentBpMaxData.setTextColor(Color.parseColor("#E9832D"));
+            mRecentBpMaxData.setTextColor(Color.parseColor("#DC143C"));
         }
         if (minRate <= 90 && minRate >= 60) {
         } else {
             isBpNormal = false;
-            mRecentBpMinData.setTextColor(Color.parseColor("#E9832D"));
+            mRecentBpMinData.setTextColor(Color.parseColor("#DC143C"));
         }
 
         mRecentBpMaxData.setText(maxRate + "");

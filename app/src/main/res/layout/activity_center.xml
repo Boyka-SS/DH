@@ -37,7 +37,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/exception_hr" />
+                    android:src="@mipmap/hr_color" />
             </LinearLayout>
 
 
@@ -99,7 +99,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/exception_bp" />
+                    android:src="@mipmap/bp_color" />
             </LinearLayout>
 
             <LinearLayout
@@ -161,7 +161,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/exception_temp" />
+                    android:src="@mipmap/temp_color" />
             </LinearLayout>
 
 
@@ -223,7 +223,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/pijiu" />
+                    android:src="@mipmap/beers" />
             </LinearLayout>
 
 

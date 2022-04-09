@@ -127,7 +127,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 indicator.setRoundRadius(lineHeight / 2);
                 indicator.setYOffset(borderWidth);
-                indicator.setColors(Color.parseColor("#1E90FF"));
+                indicator.setColors(Color.parseColor("#FE8A53"));
                 return indicator;
             }
         });

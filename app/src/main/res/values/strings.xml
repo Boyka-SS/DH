@@ -1,6 +1,7 @@
 <resources>
     <!--App name-->
-    <string name="app_name">智小安</string>
+<!--    <string name="app_name">智小安</string>-->
+    <string name="app_name">智辅安行</string>
     <!--bottom navigation bar name-->
     <string name="fragment_me">个人中心</string>
     <string name="fragment_health_data">健康数据</string>

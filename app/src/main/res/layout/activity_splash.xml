@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E5F7FF"
+    android:background="#FFFFFF"
     android:gravity="center"
     android:orientation="vertical">
-
+<!--智小安-->
+<!--    <ImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:src="@mipmap/start" />    -->
+<!-- 智辅安行  -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/start" />
+        android:src="@mipmap/app_computer_splash" />
 
-    <!--    <ImageView-->
-    <!--        android:layout_width="@dimen/dp_220"-->
-    <!--        android:layout_height="@dimen/dp_220"-->
-    <!--        android:src="@mipmap/yishuti" />-->
 
 
 </LinearLayout>
