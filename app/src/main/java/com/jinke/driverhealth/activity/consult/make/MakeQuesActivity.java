@@ -15,7 +15,7 @@ import com.jinke.driverhealth.data.db.dao.QuestionDao;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.views.TitleLayout;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MakeQuesActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,7 +65,10 @@ public class MakeQuesActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.question_submit:
                 storageQuesData();
-                Toasty.success(MakeQuesActivity.this, "提交成功", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(MakeQuesActivity.this)
+                        .setTitleText("提交成功")
+                        .show();
+
                 finish();
                 break;
             default:

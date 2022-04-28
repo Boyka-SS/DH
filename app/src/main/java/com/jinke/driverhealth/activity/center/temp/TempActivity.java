@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.TempCenterAdapter;
-import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Temperature;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 import com.jinke.driverhealth.views.TitleLayout;

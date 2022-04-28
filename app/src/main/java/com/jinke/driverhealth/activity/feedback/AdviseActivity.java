@@ -15,7 +15,7 @@ import com.jinke.driverhealth.data.db.dao.AdviseDao;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.views.TitleLayout;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AdviseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,7 +61,9 @@ public class AdviseActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.advise_submit:
                 storageAdviseData();
-                Toasty.success(AdviseActivity.this, "提交成功", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(AdviseActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setContentText("提交成功")
+                        .show();
                 finish();
                 break;
             default:

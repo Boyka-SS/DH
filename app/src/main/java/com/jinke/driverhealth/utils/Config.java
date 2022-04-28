@@ -32,6 +32,7 @@ public class Config {
      */
     public static final String BASE_URL = "https://openapi.xu5g.com/";
 
+
     /**
      * APPKEY+SECRET：兔盯云手表秘钥
      * <p>

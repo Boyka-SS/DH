@@ -16,6 +16,8 @@ import com.jinke.driverhealth.adapters.MyFragmentAdapter;
 import com.jinke.driverhealth.fragments.DataFragment;
 import com.jinke.driverhealth.fragments.HomePageFragment;
 import com.jinke.driverhealth.fragments.MineFragment;
+import com.jinke.driverhealth.fragments.NavigationFragment;
+import com.jinke.driverhealth.fragments.ScannerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     private ViewPager2 viewPager;
-    private LinearLayout tab1, tab2, tab3;
-    private ImageView tab1_iv, tab2_iv, tab3_iv, current_iv;
-    private TextView tab1_tv, tab2_tv, tab3_tv, current_tv;
+    private LinearLayout tab1, tab2, tab3,tab4,tab5;
+    private ImageView tab1_iv, tab2_iv, tab3_iv,tab4_iv,tab5_iv, current_iv;
+    private TextView tab1_tv, tab2_tv, tab3_tv,tab4_tv,tab5_tv, current_tv;
 
 
     //声明AMapLocationClient类对象
@@ -42,22 +44,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initPager();
         initView();
 
-
-
     }
 
     private void initView() {
         tab1 = findViewById(R.id.tab1);
         tab2 = findViewById(R.id.tab2);
         tab3 = findViewById(R.id.tab3);
+        tab4 = findViewById(R.id.tab4);
+        tab5 = findViewById(R.id.tab5);
 
         tab1_iv = findViewById(R.id.tab1_iv);
         tab2_iv = findViewById(R.id.tab2_iv);
         tab3_iv = findViewById(R.id.tab3_iv);
+        tab4_iv = findViewById(R.id.tab4_iv);
+        tab5_iv = findViewById(R.id.tab5_iv);
 
         tab1_tv = findViewById(R.id.tab1_tv);
         tab2_tv = findViewById(R.id.tab2_tv);
         tab3_tv = findViewById(R.id.tab3_tv);
+        tab4_tv = findViewById(R.id.tab4_tv);
+        tab5_tv = findViewById(R.id.tab5_tv);
 
 
         tab1_iv.setSelected(true);
@@ -68,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab1.setOnClickListener(this);
         tab2.setOnClickListener(this);
         tab3.setOnClickListener(this);
+        tab4.setOnClickListener(this);
+        tab5.setOnClickListener(this);
 
     }
 
@@ -78,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<Fragment> list = new ArrayList<>();
         list.add(new HomePageFragment());
         list.add(new DataFragment());
+        list.add(new NavigationFragment());
+        list.add(new ScannerFragment());
         list.add(new MineFragment());
 
         MyFragmentAdapter myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), getLifecycle(), list);
@@ -95,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void pageChage(int position) {
+
         current_iv.setSelected(false);
         current_tv.setSelected(false);
         switch (position) {
@@ -116,6 +127,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tab3_tv.setSelected(true);
                 current_tv = tab3_tv;
                 break;
+            case 3:
+                tab4_iv.setSelected(true);
+                current_iv = tab4_iv;
+                tab4_tv.setSelected(true);
+                current_tv = tab4_tv;
+                break;
+            case 4:
+                tab5_iv.setSelected(true);
+                current_iv = tab5_iv;
+                tab5_tv.setSelected(true);
+                current_tv = tab5_tv;
+                break;
             default:
                 break;
         }
@@ -128,13 +151,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.tab1:
                 //smoothScroll:为false是表示不平滑滚动
-                viewPager.setCurrentItem(0, true);
+                viewPager.setCurrentItem(0, false);
                 break;
             case R.id.tab2:
-                viewPager.setCurrentItem(1, true);
+                viewPager.setCurrentItem(1, false);
                 break;
             case R.id.tab3:
-                viewPager.setCurrentItem(2, true);
+                viewPager.setCurrentItem(2, false);
+                break;
+
+            case R.id.tab4:
+                viewPager.setCurrentItem(3, false);
+                break;
+            case R.id.tab5:
+                viewPager.setCurrentItem(4, false);
                 break;
             default:
                 break;

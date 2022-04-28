@@ -66,10 +66,58 @@
             android:id="@+id/tab3_iv"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:background="@drawable/me_selector" />
+            android:background="@drawable/navigation" />
 
         <TextView
             android:id="@+id/tab3_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/navigation"
+            android:textColor="@drawable/text_selector"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tab4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/tab4_iv"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@drawable/scanner_selector" />
+
+        <TextView
+            android:id="@+id/tab4_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/behavior_monitoring"
+            android:textColor="@drawable/text_selector"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tab5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/tab5_iv"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@drawable/me_selector" />
+
+        <TextView
+            android:id="@+id/tab5_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"

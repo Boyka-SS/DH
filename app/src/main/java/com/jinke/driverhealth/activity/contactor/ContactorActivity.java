@@ -39,7 +39,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ContactorActivity extends AppCompatActivity {
     private static final String TAG = "ContactorActivity";
@@ -203,8 +203,9 @@ public class ContactorActivity extends AppCompatActivity {
                             mContactorViewModel.insertFirstManToContact(contactor, new OpCallback() {
                                 @Override
                                 public void success() {
-                                    Toasty.success(ContactorActivity.this,"设置成功",Toasty.LENGTH_SHORT).show();
-
+                                    new SweetAlertDialog(ContactorActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                            .setContentText("设置成功")
+                                            .show();
                                 }
 
                                 @Override
@@ -219,7 +220,10 @@ public class ContactorActivity extends AppCompatActivity {
                                 @Override
                                 public void success() {
                                     mContactorAdapter.removeData(position);
-                                    Toasty.success(ContactorActivity.this, "删除成功",Toasty.LENGTH_SHORT).show();
+                                    new SweetAlertDialog(ContactorActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                            .setContentText("删除成功")
+                                            .show();
+
                                 }
 
                                 @Override

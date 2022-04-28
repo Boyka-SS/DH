@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.data.network.beans.BloodPressure;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
-import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.data.network.tudingyun.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Temperature;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 

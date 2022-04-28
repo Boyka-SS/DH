@@ -3,8 +3,8 @@ package com.jinke.driverhealth;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.jinke.driverhealth.data.network.TokenNetwork;
-import com.jinke.driverhealth.data.network.beans.Token;
+import com.jinke.driverhealth.data.network.tudingyun.TokenNetwork;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Token;
 
 import retrofit2.Call;
 import retrofit2.Callback;

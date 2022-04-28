@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.views.SrcScrollFrameLayout;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -45,16 +45,27 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mIsSupport.isChecked()) {
                     if ("admin".equals(userAccount.getText().toString()) && "123456".equals(userPass.getText().toString())) {
-                        Toasty.success(LoginActivity.this, "登陆成功", Toasty.LENGTH_SHORT).show();
+//                        Toasty.success(LoginActivity.this, "登陆成功", Toasty.LENGTH_SHORT).show();
+                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setContentText("登陆成功")
+                                .show();
                         Intent intent = new Intent();
                         intent.putExtra("username", "admin");
                         setResult(1, intent);
                         finish();
                     } else {
-                        Toasty.error(LoginActivity.this, "账号或密码错误，请重试！", Toasty.LENGTH_SHORT).show();
+//                        Toasty.error(LoginActivity.this, "账号或密码错误，请重试！", Toasty.LENGTH_SHORT).show();
+                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+
+                                .setContentText( "账号或密码错误，请重试！")
+                                .show();
                     }
                 } else {
-                    Toasty.error(LoginActivity.this, "请勾选下方政策！", Toasty.LENGTH_SHORT).show();
+//                    Toasty.error(LoginActivity.this, "请勾选下方政策！", Toasty.LENGTH_SHORT).show();
+                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+
+                            .setContentText("请勾选下方政策！")
+                            .show();
                 }
             }
         });

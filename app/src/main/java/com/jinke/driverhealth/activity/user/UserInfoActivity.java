@@ -14,7 +14,7 @@ import com.jinke.driverhealth.data.db.beans.UserInfo;
 import com.jinke.driverhealth.data.db.dao.UserInfoDao;
 import com.jinke.driverhealth.views.TitleLayout;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -60,7 +60,10 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
                 }).start();
 
-                Toasty.success(UserInfoActivity.this, "添加成功", Toasty.LENGTH_SHORT).show();
+//                Toasty.success(UserInfoActivity.this, "添加成功", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(UserInfoActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setContentText("添加成功")
+                        .show();
                 finish();
             }
         });
