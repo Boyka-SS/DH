@@ -47,6 +47,10 @@ import java.util.concurrent.Executors;
  * </ul>
  */
 
+/**
+ * fanlihao
+ * 2022-4-30
+ */
 
 public class ScannerFragment extends Fragment {
     private static final String TAG = "ScannerFragment";
@@ -144,6 +148,12 @@ public class ScannerFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -166,8 +176,7 @@ public class ScannerFragment extends Fragment {
             SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
             File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date()) + ".jpg");
 
-            ImageCapture.OutputFileOptions outputFileOptions =
-                    new ImageCapture.OutputFileOptions.Builder(file).build();
+            ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
 
             mImageCapture.takePicture(
                     outputFileOptions,
