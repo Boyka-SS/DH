@@ -1,5 +1,6 @@
-package com.jinke.driverhealth.data.network.tudingyun;
+package com.jinke.driverhealth.data.network.tudingyun.worker;
 
+import com.jinke.driverhealth.data.network.ServiceCreator;
 import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
 import com.jinke.driverhealth.data.network.tudingyun.beans.SingleHr;
 import com.jinke.driverhealth.data.network.tudingyun.api.HRService;
@@ -15,7 +16,7 @@ import retrofit2.Callback;
  * @date: 2022/2/8
  */
 public class HRNetwork {
-    private ServiceCreator serviceCreator = new ServiceCreator();
+    private ServiceCreator serviceCreator = new ServiceCreator(Config.BASE_URL);
     private HRService mHRService = serviceCreator.create(HRService.class);
 
     /**

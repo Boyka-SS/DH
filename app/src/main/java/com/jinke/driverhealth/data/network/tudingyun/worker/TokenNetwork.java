@@ -1,7 +1,8 @@
-package com.jinke.driverhealth.data.network.tudingyun;
+package com.jinke.driverhealth.data.network.tudingyun.worker;
 
+import com.jinke.driverhealth.data.network.ServiceCreator;
 import com.jinke.driverhealth.data.network.tudingyun.beans.Token;
-import com.jinke.driverhealth.data.network.tudingyun.api.TokenService;
+import com.jinke.driverhealth.data.network.api.TokenService;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.EncryptUtil;
 
@@ -17,7 +18,7 @@ import retrofit2.Callback;
 public class TokenNetwork {
 
 
-    private ServiceCreator serviceCreator = new ServiceCreator();
+    private ServiceCreator serviceCreator = new ServiceCreator(Config.BASE_URL);
 
     private TokenService mTokenService = serviceCreator.create(TokenService.class);
 

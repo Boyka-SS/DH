@@ -1,5 +1,6 @@
-package com.jinke.driverhealth.data.network.tudingyun;
+package com.jinke.driverhealth.data.network.tudingyun.worker;
 
+import com.jinke.driverhealth.data.network.ServiceCreator;
 import com.jinke.driverhealth.data.network.tudingyun.beans.BloodPressure;
 import com.jinke.driverhealth.data.network.tudingyun.beans.SingleBp;
 import com.jinke.driverhealth.data.network.tudingyun.api.BPService;
@@ -17,7 +18,7 @@ import retrofit2.Callback;
 public class BPNetwork {
 
 
-    private ServiceCreator serviceCreator = new ServiceCreator();
+    private ServiceCreator serviceCreator = new ServiceCreator(Config.BASE_URL);
     private BPService mBPService = serviceCreator.create(BPService.class);
 
     /**

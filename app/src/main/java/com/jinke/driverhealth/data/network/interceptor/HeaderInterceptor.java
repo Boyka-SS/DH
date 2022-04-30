@@ -1,4 +1,4 @@
-package com.jinke.driverhealth.data.network.tudingyun.interceptor;
+package com.jinke.driverhealth.data.network.interceptor;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,7 +65,7 @@ public class ScannerFragment extends Fragment {
     private ImageCapture mImageCapture;
     private Button mStart, mEnd;
     private View mView;
-
+    private TextView mNoSmoke, mNoPhone, mNoBuckUp, mNoSteerWheel, mNoWarning, mNoMask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,9 +73,8 @@ public class ScannerFragment extends Fragment {
 
         mView = inflater.inflate(R.layout.fragment_scanner, container, false);
 
-        mPreviewView = mView.findViewById(R.id.previewView);
-        mStart = mView.findViewById(R.id.start);
-        mEnd = mView.findViewById(R.id.end);
+        initView(mView);
+
 
         startCamera(mView);
         //开始监测
@@ -94,6 +94,19 @@ public class ScannerFragment extends Fragment {
 
 
         return mView;
+    }
+
+    private void initView(View view) {
+        mPreviewView = view.findViewById(R.id.previewView);
+        mStart = view.findViewById(R.id.start);
+        mEnd = view.findViewById(R.id.end);
+
+        mNoSmoke = view.findViewById(R.id.no_smoke);
+        mNoPhone = view.findViewById(R.id.makephone);
+        mNoBuckUp = view.findViewById(R.id.buckup);
+        mNoSteerWheel = view.findViewById(R.id.steeringwheel);
+        mNoWarning = view.findViewById(R.id.warning);
+        mNoMask = view.findViewById(R.id.mask);
     }
 
     private void startCamera(View view) {
