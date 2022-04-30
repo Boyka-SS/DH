@@ -160,8 +160,10 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 initData();
-//                Toasty.success(getActivity(), "加载成功", Toasty.LENGTH_SHORT).show();
+
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setTitleText("加载成功")
                         .show();
                 refreshlayout.finishRefresh(1000);
@@ -187,6 +189,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                         .setTitleText("检测数据异常")
                         .setContentText("是否拨打第一联系人电话，并发送位置")
                         .setConfirmText("是")
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -205,11 +208,13 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             } else {
 //                Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
                 new SweetAlertDialog(getActivity())
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setTitleText("未设置第一联系人，默认拨打120")
                         .show();
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("检测数据异常")
                         .setContentText("是否拨打120，并编辑短信")
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setConfirmText("是")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override

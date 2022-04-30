@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab5_tv = findViewById(R.id.tab5_tv);
 
 
-        tab1_iv.setSelected(true);
-        current_iv = tab1_iv;
-        tab1_tv.setSelected(true);
-        current_tv = tab1_tv;
+        tab4_iv.setSelected(true);
+        current_iv = tab4_iv;
+        tab4_tv.setSelected(true);
+        current_tv = tab4_tv;
 
         tab1.setOnClickListener(this);
         tab2.setOnClickListener(this);
