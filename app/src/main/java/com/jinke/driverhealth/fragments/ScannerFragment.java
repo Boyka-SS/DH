@@ -2,6 +2,11 @@ package com.jinke.driverhealth.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +29,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.jinke.driverhealth.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * <ul>
@@ -39,36 +49,39 @@ import java.util.concurrent.ExecutionException;
 
 
 public class ScannerFragment extends Fragment {
+    private static final String TAG = "ScannerFragment";
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private PreviewView mPreviewView;
 
-
+    private Executor executor = Executors.newSingleThreadExecutor();
     private Camera mCamera;
     private ProcessCameraProvider mCameraProvider;
     private ImageCapture mImageCapture;
+    private Button mStart, mEnd;
+    private View mView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_scanner, container, false);
+        mView = inflater.inflate(R.layout.fragment_scanner, container, false);
 
-        mPreviewView = view.findViewById(R.id.previewView);
-        Button start = view.findViewById(R.id.start);
-        Button end = view.findViewById(R.id.end);
+        mPreviewView = mView.findViewById(R.id.previewView);
+        mStart = mView.findViewById(R.id.start);
+        mEnd = mView.findViewById(R.id.end);
 
-
+        startCamera(mView);
         //开始监测
-        start.setOnClickListener(new View.OnClickListener() {
+        mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startCamera(view);
+                countDownTimerToTakePhoto.start();
             }
         });
         //结束监测
-        end.setOnClickListener(new View.OnClickListener() {
+        mEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -76,7 +89,7 @@ public class ScannerFragment extends Fragment {
         });
 
 
-        return view;
+        return mView;
     }
 
     private void startCamera(View view) {
@@ -86,24 +99,8 @@ public class ScannerFragment extends Fragment {
         cameraProviderFuture.addListener(() -> {
             try {
                 mCameraProvider = cameraProviderFuture.get();
-
                 bindPreview(mCameraProvider, view);
-                ImageCapture.OutputFileOptions outputFileOptions =
-                        new ImageCapture.OutputFileOptions.Builder(new File("/")).build();
 
-                mImageCapture.takePicture(
-                        outputFileOptions,
-                        ContextCompat.getMainExecutor(getActivity()) ,
-                        new ImageCapture.OnImageSavedCallback() {
-                            @Override
-                            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                                Toast.makeText(getActivity(),"获取照片失败",Toast.LENGTH_SHORT).show();
-                            }
-                            @Override
-                            public void onError(@NonNull ImageCaptureException exception) {
-                                Toast.makeText(getActivity(),"获取照片失败",Toast.LENGTH_SHORT).show();
-                            }
-                        });
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -117,6 +114,7 @@ public class ScannerFragment extends Fragment {
     private void bindPreview(ProcessCameraProvider cameraProvider, View view) {
         Preview preview = new Preview.Builder()
                 .build();
+
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                 .build();
@@ -128,8 +126,21 @@ public class ScannerFragment extends Fragment {
                 .build();
 
 
-        mCamera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, mImageCapture, preview);
+        mCamera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, mImageCapture);
 
+
+    }
+
+    private String getBatchDirectoryName() {
+
+        String app_folder_path = "";
+        app_folder_path = Environment.getExternalStorageDirectory().toString() + "/images";
+        File dir = new File(app_folder_path);
+        if (!dir.exists() && !dir.mkdirs()) {
+
+        }
+
+        return app_folder_path;
     }
 
     @Override
@@ -137,4 +148,48 @@ public class ScannerFragment extends Fragment {
         super.onDestroy();
 
     }
+
+    /**
+     * CountDownTimer 实现倒计时
+     */
+    private CountDownTimer countDownTimerToTakePhoto = new CountDownTimer(6000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            String value = String.valueOf((int) (millisUntilFinished / 1000 - 1));
+            mStart.setText("开始监测（" + value + "）s");
+        }
+
+        @Override
+        public void onFinish() {
+            mStart.setText("开始监测");
+
+            SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+            File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date()) + ".jpg");
+
+            ImageCapture.OutputFileOptions outputFileOptions =
+                    new ImageCapture.OutputFileOptions.Builder(file).build();
+
+            mImageCapture.takePicture(
+                    outputFileOptions,
+                    executor,
+                    new ImageCapture.OnImageSavedCallback() {
+                        @Override
+                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            Log.d("path-->", String.valueOf(outputFileResults.getSavedUri()));
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //TODO:调用百度AI
+                                    Toast.makeText(getActivity(), "图片保存成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            exception.printStackTrace();
+                        }
+                    });
+        }
+    };
 }
