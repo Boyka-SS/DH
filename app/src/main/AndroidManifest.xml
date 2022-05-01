@@ -106,7 +106,9 @@
             android:required="false" />
 
         <activity android:name=".activity.alcohol.AlcoholActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:hardwareAccelerated="true"></activity>
     </application>
 
 </manifest>

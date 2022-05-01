@@ -51,6 +51,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,6 +91,7 @@ public class ScannerFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate 7");
         super.onCreate(savedInstanceState);
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
@@ -99,7 +101,7 @@ public class ScannerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.d(TAG, "onCreateView 8");
         mView = inflater.inflate(R.layout.fragment_scanner, container, false);
 
         initView(mView);
@@ -140,12 +142,13 @@ public class ScannerFragment extends Fragment {
     }
 
     private void startCamera(View view) {
-
+        Log.d(TAG, "1");
         cameraProviderFuture = ProcessCameraProvider.getInstance(getActivity());
 
         cameraProviderFuture.addListener(() -> {
             try {
                 mCameraProvider = cameraProviderFuture.get();
+                Log.d(TAG, "2");
                 bindPreview(mCameraProvider, view);
 
             } catch (ExecutionException e) {
@@ -157,9 +160,16 @@ public class ScannerFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume 9");
+        startCamera(mView);
+    }
+
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, View view) {
-
+        Log.d(TAG, "3");
         Preview preview = new Preview.Builder()
                 .build();
 
@@ -168,15 +178,13 @@ public class ScannerFragment extends Fragment {
                 .build();
 
         preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
-
+        Log.d(TAG, "abc" + String.valueOf(mPreviewView.getSurfaceProvider() == null));
         mImageCapture = new ImageCapture.Builder()
                 .setTargetRotation(view.getDisplay().getRotation())
                 .build();
 
         cameraProvider.unbindAll();
         mCamera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, mImageCapture);
-
-
     }
 
     private boolean allPermissionsGranted() {
@@ -194,12 +202,14 @@ public class ScannerFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
+        mCameraProvider.unbindAll();
+        Log.d(TAG, "onPause 6");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        Log.d(TAG, "destory 5");
     }
 
     /**
@@ -272,46 +282,60 @@ public class ScannerFragment extends Fragment {
     }
 
     //根据返回的结果，更新UI
-    private void updateUI(BehaviorMonitorData data) {
+    private void updateUI(@NonNull BehaviorMonitorData data) {
         if (data.getDriver_num() == 0) {
             Toast.makeText(getActivity(), "未检测到驾驶员", Toast.LENGTH_SHORT).show();
         } else {
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO attributes = data.getPerson_info().get(0).getAttributes();
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.SmokeDTO smoke = attributes.getSmoke();
-            if (smoke.getScore() > smoke.getThreshold()) {
-                mNoSmoke.setText("检测异常");
+            boolean isNormal = true;
+            if (smoke.getScore() > 0.4) {
+                mNoSmoke.setText("抽烟");
                 mNoSmoke.setTextColor(Color.parseColor("#DC143C"));
+                isNormal = false;
             }
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.CellphoneDTO cellphone = attributes.getCellphone();
-            if (cellphone.getScore() > cellphone.getThreshold()) {
-                mNoPhone.setText("检测异常");
+            if (cellphone.getScore() > 0.4) {
+                mNoPhone.setText("玩手机");
                 mNoPhone.setTextColor(Color.parseColor("#DC143C"));
+                isNormal = false;
             }
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NotBucklingUpDTO bucklUp = attributes.getNot_buckling_up();
-            if (bucklUp.getScore() > bucklUp.getThreshold()) {
-                mNoBuckUp.setText("检测异常");
+            if (bucklUp.getScore() > 0.4) {
+                mNoBuckUp.setText("未系安全带");
                 mNoBuckUp.setTextColor(Color.parseColor("#DC143C"));
+                isNormal = false;
             }
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.BothHandsLeavingWheelDTO handsLeaveWheel = attributes.getBoth_hands_leaving_wheel();
-            if (handsLeaveWheel.getScore() > handsLeaveWheel.getThreshold()) {
-                mNoSteerWheel.setText("检测异常");
+            if (handsLeaveWheel.getScore() > 0.4) {
+                mNoSteerWheel.setText("方向盘双手异常");
                 mNoSteerWheel.setTextColor(Color.parseColor("#DC143C"));
+                isNormal = false;
             }
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NotFacingFrontDTO faceFront = attributes.getNot_facing_front();
-            if (faceFront.getScore() > faceFront.getThreshold()) {
-                mNoWarning.setText("检测异常");
+            if (faceFront.getScore() > 0.4) {
+                mNoWarning.setText("请目视前方");
+                isNormal = false;
                 mNoWarning.setTextColor(Color.parseColor("#DC143C"));
             }
             BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NoFaceMaskDTO faceMask = attributes.getNo_face_mask();
-            if (faceMask.getScore() > faceMask.getThreshold()) {
-                mNoMask.setText("检测异常");
+            if (faceMask.getScore() > 0.4) {
+                mNoMask.setText("未检测到口罩");
+                isNormal = false;
                 mNoMask.setTextColor(Color.parseColor("#DC143C"));
+            }
+
+            if (!isNormal) {
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("检测异常，请及时调整")
+                        .setConfirmText("好的")
+                        .show();
             }
         }
 
     }
 
-    public String getBatchDirectoryName(Context context) {
+    public String getBatchDirectoryName(@NonNull Context context) {
 
         String app_folder_path = "";
         app_folder_path =
@@ -326,6 +350,7 @@ public class ScannerFragment extends Fragment {
     /**
      * 将图片转换成Base64编码的字符串
      */
+    @Nullable
     public static String imageToBase64(String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
