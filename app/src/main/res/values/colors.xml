@@ -22,7 +22,8 @@
     <color name="viewpager2_divider_bottom_navigation_bar">#C0C0C0</color>
     <!--主题颜色-->
     <color name="main_theme">#1E90FF</color>
-    <!--    <color name="main_theme">#EDEDED</color>-->
+
+
 
 
     <!--默认字体颜色-->

@@ -320,7 +320,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                             //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
 //                            Toasty.error(context, "错误，错误码" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
                             new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-
                                     .setContentText("错误，错误码" + aMapLocation.getErrorInfo())
                                     .show();
                             Log.e(TAG, "location Error, ErrCode:"
