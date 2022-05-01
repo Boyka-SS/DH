@@ -105,7 +105,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //cardview
     implementation 'androidx.cardview:cardview:1.0.0'
-
+    //citypicker
+    implementation 'com.github.crazyandcoder:citypicker:6.0.2'
     //Sweet Alert Dialog
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
     //可以滑动删除的 recyclerview

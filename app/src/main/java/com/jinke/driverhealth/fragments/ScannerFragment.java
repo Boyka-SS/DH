@@ -215,8 +215,7 @@ public class ScannerFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
-        mCameraProvider.unbindAll();
+//        mCameraProvider.unbindAll();
         Log.d(TAG, "onPause 6");
     }
 

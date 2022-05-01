@@ -27,9 +27,9 @@
 
     <uses-feature android:name="android.hardware.location.gps" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -58,13 +58,9 @@
         android:roundIcon="@mipmap/app01"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
-        tools:replace="android:icon">
-        <activity
-            android:name=".activity.navigation.NavActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.navigation.PolicyActivity"
-            android:exported="false" />
+        tools:replace="android:theme">
+        <activity android:name=".activity.navigation.NavActivity" />
+        <activity android:name=".activity.navigation.PolicyActivity" />
         <activity
             android:name=".activity.report.WebActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
