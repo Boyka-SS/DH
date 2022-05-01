@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -37,6 +38,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.data.network.baidu.beans.BehaviorMonitorData;
 import com.jinke.driverhealth.data.network.baidu.worker.BehaviorMonitorWork;
+import com.jinke.driverhealth.utils.CalendarUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,6 +85,7 @@ public class ScannerFragment extends Fragment {
     private Button mStart, mEnd;
     private View mView;
     private TextView mNoSmoke, mNoPhone, mNoBuckUp, mNoSteerWheel, mNoWarning, mNoMask;
+    private TextView mMonitorTime;
 
 
     @Override
@@ -113,7 +116,8 @@ public class ScannerFragment extends Fragment {
         mEnd.setOnClickListener(v -> {
 
         });
-
+        String nowFormatCalendar = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm:ss");
+        mMonitorTime.setText(nowFormatCalendar);
 
         return mView;
     }
@@ -129,6 +133,10 @@ public class ScannerFragment extends Fragment {
         mNoSteerWheel = view.findViewById(R.id.steeringwheel);
         mNoWarning = view.findViewById(R.id.warning);
         mNoMask = view.findViewById(R.id.mask);
+
+        mMonitorTime = view.findViewById(R.id.monitor_time);
+
+
     }
 
     private void startCamera(View view) {
@@ -151,6 +159,7 @@ public class ScannerFragment extends Fragment {
 
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, View view) {
+
         Preview preview = new Preview.Builder()
                 .build();
 
@@ -164,7 +173,7 @@ public class ScannerFragment extends Fragment {
                 .setTargetRotation(view.getDisplay().getRotation())
                 .build();
 
-
+        cameraProvider.unbindAll();
         mCamera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, mImageCapture);
 
 
@@ -238,7 +247,7 @@ public class ScannerFragment extends Fragment {
     private void searchByBaiduAI(ImageCapture.OutputFileResults outputFileResults) {
         try {
             //本地文件路径
-            Log.d(TAG,String.valueOf(outputFileResults.getSavedUri()));
+            Log.d(TAG, String.valueOf(outputFileResults.getSavedUri()));
             String filePath = String.valueOf(outputFileResults.getSavedUri()).substring(7);
             String param = imageToBase64(filePath);
 
@@ -247,19 +256,59 @@ public class ScannerFragment extends Fragment {
                 @Override
                 public void onResponse(Call<BehaviorMonitorData> call, Response<BehaviorMonitorData> response) {
                     if (response.isSuccessful()) {
-                        Log.d(TAG, "12345");
+                        updateUI(response.body());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BehaviorMonitorData> call, Throwable t) {
-
+                    Toast.makeText(getActivity(), "Sorry，请求百度AI有误", Toast.LENGTH_SHORT).show();
                 }
             });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //根据返回的结果，更新UI
+    private void updateUI(BehaviorMonitorData data) {
+        if (data.getDriver_num() == 0) {
+            Toast.makeText(getActivity(), "未检测到驾驶员", Toast.LENGTH_SHORT).show();
+        } else {
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO attributes = data.getPerson_info().get(0).getAttributes();
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.SmokeDTO smoke = attributes.getSmoke();
+            if (smoke.getScore() > smoke.getThreshold()) {
+                mNoSmoke.setText("检测异常");
+                mNoSmoke.setTextColor(Color.parseColor("#DC143C"));
+            }
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.CellphoneDTO cellphone = attributes.getCellphone();
+            if (cellphone.getScore() > cellphone.getThreshold()) {
+                mNoPhone.setText("检测异常");
+                mNoPhone.setTextColor(Color.parseColor("#DC143C"));
+            }
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NotBucklingUpDTO bucklUp = attributes.getNot_buckling_up();
+            if (bucklUp.getScore() > bucklUp.getThreshold()) {
+                mNoBuckUp.setText("检测异常");
+                mNoBuckUp.setTextColor(Color.parseColor("#DC143C"));
+            }
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.BothHandsLeavingWheelDTO handsLeaveWheel = attributes.getBoth_hands_leaving_wheel();
+            if (handsLeaveWheel.getScore() > handsLeaveWheel.getThreshold()) {
+                mNoSteerWheel.setText("检测异常");
+                mNoSteerWheel.setTextColor(Color.parseColor("#DC143C"));
+            }
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NotFacingFrontDTO faceFront = attributes.getNot_facing_front();
+            if (faceFront.getScore() > faceFront.getThreshold()) {
+                mNoWarning.setText("检测异常");
+                mNoWarning.setTextColor(Color.parseColor("#DC143C"));
+            }
+            BehaviorMonitorData.PersonInfoDTO.AttributesDTO.NoFaceMaskDTO faceMask = attributes.getNo_face_mask();
+            if (faceMask.getScore() > faceMask.getThreshold()) {
+                mNoMask.setText("检测异常");
+                mNoMask.setTextColor(Color.parseColor("#DC143C"));
+            }
+        }
+
     }
 
     public String getBatchDirectoryName(Context context) {
@@ -304,7 +353,8 @@ public class ScannerFragment extends Fragment {
             }
 
         }
-        //"data:image/jpeg;base64,"+
         return result;
     }
+
+
 }
