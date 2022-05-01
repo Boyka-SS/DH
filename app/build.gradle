@@ -88,19 +88,13 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.14.0'
     //magic-indicator
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0' // for androidx
-    // PictureSelector basic (Necessary)
-    implementation 'io.github.lucksiege:pictureselector:v3.0.9'
-    // image compress library (Not necessary)
-    implementation 'io.github.lucksiege:compress:v3.0.9'
-    // simple camerax library (Not necessary)
-    implementation 'io.github.lucksiege:camerax:v3.0.9'
 
+    //cameraX
     def camerax_version = "1.1.0-beta01"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-video:${camerax_version}"
-
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
@@ -119,6 +113,8 @@ dependencies {
 
     //gaode map
     implementation 'com.amap.api:location:latest.integration'
+    //navigation
+    implementation 'com.amap.api:navi-3dmap:latest.integration'
 
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     //Activity Result API
