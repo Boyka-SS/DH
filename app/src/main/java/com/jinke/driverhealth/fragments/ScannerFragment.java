@@ -1,11 +1,16 @@
 package com.jinke.driverhealth.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -22,20 +28,30 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.jinke.driverhealth.R;
+import com.jinke.driverhealth.data.network.baidu.beans.BehaviorMonitorData;
+import com.jinke.driverhealth.data.network.baidu.worker.BehaviorMonitorWork;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * <ul>
@@ -56,9 +72,10 @@ import java.util.concurrent.Executors;
 public class ScannerFragment extends Fragment {
     private static final String TAG = "ScannerFragment";
 
+    private int REQUEST_CODE_PERMISSIONS = 10;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private PreviewView mPreviewView;
-
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     private Executor executor = Executors.newSingleThreadExecutor();
     private Camera mCamera;
     private ProcessCameraProvider mCameraProvider;
@@ -67,16 +84,24 @@ public class ScannerFragment extends Fragment {
     private View mView;
     private TextView mNoSmoke, mNoPhone, mNoBuckUp, mNoSteerWheel, mNoWarning, mNoMask;
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_scanner, container, false);
 
         initView(mView);
 
-
-        startCamera(mView);
+        startCamera(mView);//start camera if permission has been granted by user
         //开始监测
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,18 +110,15 @@ public class ScannerFragment extends Fragment {
             }
         });
         //结束监测
-        mEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mEnd.setOnClickListener(v -> {
 
-            }
         });
 
 
         return mView;
     }
 
-    private void initView(View view) {
+    private void initView(@NonNull View view) {
         mPreviewView = view.findViewById(R.id.previewView);
         mStart = view.findViewById(R.id.start);
         mEnd = view.findViewById(R.id.end);
@@ -148,17 +170,16 @@ public class ScannerFragment extends Fragment {
 
     }
 
-    private String getBatchDirectoryName() {
-
-        String app_folder_path = "";
-        app_folder_path = Environment.getExternalStorageDirectory().toString() + "/images";
-        File dir = new File(app_folder_path);
-        if (!dir.exists() && !dir.mkdirs()) {
-
+    private boolean allPermissionsGranted() {
+        //check if req permissions have been granted
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
         }
-
-        return app_folder_path;
+        return true;
     }
+
 
     @Override
     public void onPause() {
@@ -175,19 +196,18 @@ public class ScannerFragment extends Fragment {
     /**
      * CountDownTimer 实现倒计时
      */
-    private CountDownTimer countDownTimerToTakePhoto = new CountDownTimer(6000, 1000) {
+    private CountDownTimer countDownTimerToTakePhoto = new CountDownTimer(5000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
-            String value = String.valueOf((int) (millisUntilFinished / 1000 - 1));
+            String value = String.valueOf((int) (millisUntilFinished / 1000));
             mStart.setText("开始监测（" + value + "）s");
         }
 
         @Override
         public void onFinish() {
             mStart.setText("开始监测");
-
             SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-            File file = new File(getBatchDirectoryName(), mDateFormat.format(new Date()) + ".jpg");
+            File file = new File(getBatchDirectoryName(getActivity()), mDateFormat.format(new Date()) + ".jpg");
 
             ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
 
@@ -201,8 +221,8 @@ public class ScannerFragment extends Fragment {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //TODO:调用百度AI
                                     Toast.makeText(getActivity(), "图片保存成功", Toast.LENGTH_SHORT).show();
+                                    searchByBaiduAI(outputFileResults);
                                 }
                             });
                         }
@@ -214,4 +234,77 @@ public class ScannerFragment extends Fragment {
                     });
         }
     };
+
+    private void searchByBaiduAI(ImageCapture.OutputFileResults outputFileResults) {
+        try {
+            //本地文件路径
+            Log.d(TAG,String.valueOf(outputFileResults.getSavedUri()));
+            String filePath = String.valueOf(outputFileResults.getSavedUri()).substring(7);
+            String param = imageToBase64(filePath);
+
+            String token = getActivity().getSharedPreferences("data", MODE_PRIVATE).getString("bmtoken", "");
+            new BehaviorMonitorWork().requestBehaviorMonitorData(token, param, new Callback<BehaviorMonitorData>() {
+                @Override
+                public void onResponse(Call<BehaviorMonitorData> call, Response<BehaviorMonitorData> response) {
+                    if (response.isSuccessful()) {
+                        Log.d(TAG, "12345");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BehaviorMonitorData> call, Throwable t) {
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getBatchDirectoryName(Context context) {
+
+        String app_folder_path = "";
+        app_folder_path =
+                context.getFilesDir().getAbsolutePath() + "/images";
+        File dir = new File(app_folder_path);
+        if (!dir.exists() && !dir.mkdirs()) {
+
+        }
+        return app_folder_path;
+    }
+
+    /**
+     * 将图片转换成Base64编码的字符串
+     */
+    public static String imageToBase64(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        InputStream is = null;
+        byte[] data = null;
+        String result = null;
+        try {
+            is = new FileInputStream(path);
+            //创建一个字符流大小的数组。
+            data = new byte[is.available()];
+            //写入数组
+            is.read(data);
+            //用默认的编码格式进行编码
+            result = Base64.encodeToString(data, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        //"data:image/jpeg;base64,"+
+        return result;
+    }
 }

@@ -24,7 +24,7 @@ public class BehaviorMonitorWork {
     }
 
 
-    public void requestBehaviorMonitorData(Callback<BehaviorMonitorData> callback,String token,String imageUrl) {
+    public void requestBehaviorMonitorData(String token,String imageUrl,Callback<BehaviorMonitorData> callback) {
         Map<String, String> tokenQueryParams = new HashMap<>();
         tokenQueryParams.put("access_token",token);
         mBehaviorMonitorService.getBMData(tokenQueryParams,imageUrl).enqueue(callback);
