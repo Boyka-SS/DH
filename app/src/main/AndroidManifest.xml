@@ -59,11 +59,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:icon">
-
-
+        <activity
+            android:name=".activity.navigation.NavActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.navigation.PolicyActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.report.WebActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">

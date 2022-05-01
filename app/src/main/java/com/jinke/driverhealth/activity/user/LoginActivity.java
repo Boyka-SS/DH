@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,11 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                         setResult(1, intent);
                         finish();
                     } else {
-//                        Toasty.error(LoginActivity.this, "账号或密码错误，请重试！", Toasty.LENGTH_SHORT).show();
-                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
-
-                                .setContentText( "账号或密码错误，请重试！")
-                                .show();
+                        Toast.makeText(LoginActivity.this,"账号或密码有错，请重新输入",Toast.LENGTH_SHORT).show();
                     }
                 } else {
 //                    Toasty.error(LoginActivity.this, "请勾选下方政策！", Toasty.LENGTH_SHORT).show();
