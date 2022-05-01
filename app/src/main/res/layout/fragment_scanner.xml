@@ -74,7 +74,7 @@
                 android:layout_marginTop="60dp"
                 android:gravity="end|center_vertical"
                 android:paddingEnd="@dimen/dp_25"
-                android:text="Tips：每0.5h进行一次检测"
+                android:text="Tips：每10min进行一次检测"
                 android:textColor="#778899"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
                 app:layout_constraintTop_toTopOf="@+id/start"

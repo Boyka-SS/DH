@@ -47,6 +47,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -87,6 +89,7 @@ public class ScannerFragment extends Fragment {
     private View mView;
     private TextView mNoSmoke, mNoPhone, mNoBuckUp, mNoSteerWheel, mNoWarning, mNoMask;
     private TextView mMonitorTime;
+    private Timer mTimer;
 
 
     @Override
@@ -104,19 +107,30 @@ public class ScannerFragment extends Fragment {
         Log.d(TAG, "onCreateView 8");
         mView = inflater.inflate(R.layout.fragment_scanner, container, false);
 
+
         initView(mView);
 
-        startCamera(mView);//start camera if permission has been granted by user
+        startCamera(mView);
         //开始监测
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                countDownTimerToTakePhoto.start();
+//                countDownTimerToTakePhoto.start();
+
+                //每10min检测一次
+                mTimer = new Timer();
+                mTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        countDownTimerToTakePhoto.start();
+                    }
+                }, 0, 600 * 1000);
             }
         });
         //结束监测
         mEnd.setOnClickListener(v -> {
-
+            mTimer.cancel();
+            Toast.makeText(getActivity(), "成功结束", Toast.LENGTH_SHORT).show();
         });
         String nowFormatCalendar = CalendarUtil.getNowFormatCalendar("yyyy-MM-dd HH:mm:ss");
         mMonitorTime.setText(nowFormatCalendar);
