@@ -49,8 +49,8 @@ public class ReportActivity extends AppCompatActivity {
         initFragments();
         initMagicIndicator1();
 
-        mFragmentContainerHelper.handlePageSelected(1, false);
-        switchPages(1);
+        mFragmentContainerHelper.handlePageSelected(0, false);
+        switchPages(0);
     }
 
     private void switchPages(int index) {
