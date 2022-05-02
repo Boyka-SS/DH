@@ -3,9 +3,11 @@ package com.jinke.driverhealth.activity.navigation;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.PolicyPagerAdapter;
+import com.jinke.driverhealth.data.network.juhe.beans.RiskRegion;
+import com.jinke.driverhealth.data.network.juhe.worker.RiskRegionNetwork;
 import com.jinke.driverhealth.fragments.traveltips.CoachTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.PlaneTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.TrainTipsFragment;
@@ -38,7 +42,12 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PolicyActivity extends AppCompatActivity {
 
@@ -46,14 +55,16 @@ public class PolicyActivity extends AppCompatActivity {
     private static final String TAG = "PolicyActivity";
 
     private TextView mOrigin, mDestination;
+    private TextView mOriginPolicy, mOriginPolicyContent, mOriginRiskRank;
+    private TextView mDestinationPolicy, mDestinationPolicyContent, mDestinationRiskRank;
     private ImageView mExchange;
 
     private CityPickerView mPicker = new CityPickerView();
     //出行贴士
-    private static final String[] CHANNELS = new String[]{ "汽车","飞机","火车"};
+    private static final String[] CHANNELS = new String[]{"汽车", "飞机", "火车"};
     private List<String> mDataList = Arrays.asList(CHANNELS);
     private PolicyPagerAdapter mPolicyPageAdapter = new PolicyPagerAdapter(mDataList);
-    private List<Fragment> mFragments = new ArrayList<Fragment>();
+    private List<Fragment> mFragments = new ArrayList<>();
     private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
 
     //添加默认的配置，不需要自己定义，当然也可以自定义相关熟悉，详细属性请看demo
@@ -64,6 +75,9 @@ public class PolicyActivity extends AppCompatActivity {
             .confirTextColor("#1E90FF")
             .cancelTextColor("#999999")
             .build();
+
+    private String mOriginToCityId, mDestinationToCityId;
+    private int mOriginCityId, mDestinationCityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +96,126 @@ public class PolicyActivity extends AppCompatActivity {
 
         mFragmentContainerHelper.handlePageSelected(0, false);
         switchPages(0);
+
+
+    }
+
+
+    private void initData() {
+
+        //监测出发地和目的地 疫情风险等级
+        new RiskRegionNetwork().requestRiskRegionData("aaaa7ad916e17847fb9b55f0295f3163", new Callback<RiskRegion>() {
+            @Override
+            public void onResponse(Call<RiskRegion> call, Response<RiskRegion> response) {
+                Log.d(TAG, "response.message --> " + response.message());
+                Log.d(TAG, " response.code --> " + response.code());
+                Log.d(TAG, " response.code --> " + response.errorBody());
+                if (response.isSuccessful()) {
+                    RiskRegion body = response.body();
+                    updateRegionRiskRankUI(body);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RiskRegion> call, Throwable t) {
+                Toast.makeText(PolicyActivity.this, "检测地区是否为风险地区失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //监测出发地和目的地 疫情风险等级
+    private void updateRegionRiskRankUI(RiskRegion body) {
+        int originFlag = 0, destinationFlag = 0;
+        List<RiskRegion.ResultDTO.HighListDTO> high_list = body.getResult().getHigh_list();
+        Iterator<RiskRegion.ResultDTO.HighListDTO> iterator = high_list.iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next().getArea_name().contains(mOriginToCityId)) {
+                //出发地为高风险地区
+                originFlag = 1;
+                break;
+            }
+        }
+        while (iterator.hasNext()) {
+            if (iterator.next().getArea_name().contains(mDestinationToCityId)) {
+                //目的地为高风险地区
+                destinationFlag = 1;
+                break;
+            }
+        }
+        if (originFlag == 1) {
+        } else if (destinationFlag == 1) {
+        } else {
+            List<RiskRegion.ResultDTO.MiddleListDTO> middle_list = body.getResult().getMiddle_list();
+            Iterator<RiskRegion.ResultDTO.MiddleListDTO> it = middle_list.iterator();
+            while (it.hasNext()) {
+                if (it.next().getArea_name().contains(mOriginToCityId)) {
+                    //出发地为中风险地区
+                    originFlag = 2;
+                    break;
+                }
+            }
+            while (it.hasNext()) {
+                if (it.next().getArea_name().contains(mDestinationToCityId)) {
+                    //目的地为中风险地区
+                    destinationFlag = 2;
+                    break;
+                }
+            }
+        }
+
+
+        //出发地
+        switch (originFlag) {
+            case 0:
+                //低分险
+                mOriginRiskRank.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                //高风险
+                mOriginRiskRank.setVisibility(View.VISIBLE);
+                mOriginRiskRank.setText("高风险");
+                mOriginRiskRank.setTextColor(Color.parseColor("#DC143C"));
+                mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
+                //TODO
+                break;
+            case 2:
+                //中风险
+                mOriginRiskRank.setVisibility(View.VISIBLE);
+                mOriginRiskRank.setText("中风险");
+                mOriginRiskRank.setTextColor(Color.parseColor("#FFD700"));
+                mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
+                //TODO
+                break;
+            default:
+                break;
+
+        }
+        //目的地
+        switch (destinationFlag) {
+            case 0:
+                //低分险
+                mDestinationRiskRank.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                //高风险
+                mDestinationRiskRank.setVisibility(View.VISIBLE);
+                mDestinationRiskRank.setText("高风险");
+                mDestinationRiskRank.setTextColor(Color.parseColor("#DC143C"));
+                mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
+                //TODO
+                break;
+            case 2:
+                //中风险
+                mDestinationRiskRank.setVisibility(View.VISIBLE);
+                mDestinationRiskRank.setText("中风险");
+                mDestinationRiskRank.setTextColor(Color.parseColor("#FFD700"));
+                mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
+                //TODO
+                break;
+            default:
+                break;
+        }
     }
 
     private void switchPages(int index) {
@@ -128,10 +262,13 @@ public class PolicyActivity extends AppCompatActivity {
                     public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
                         if (province.getName().equals("北京市") || province.getName().equals("上海市") || province.getName().equals("天津市")) {
                             mOrigin.setText(province.getName());
+
+                            mOriginPolicy.setText(province.getName());
                         } else {
                             mOrigin.setText(city.getName());
+                            mOriginPolicy.setText(city.getName());
                         }
-
+                        mOriginToCityId = mOrigin.getText().toString();
                     }
 
                     @Override
@@ -148,7 +285,6 @@ public class PolicyActivity extends AppCompatActivity {
         mDestination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mPicker.setConfig(cityConfig);
                 //监听选择点击事件及返回结果
                 mPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
@@ -156,8 +292,15 @@ public class PolicyActivity extends AppCompatActivity {
                     public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
                         if (province.getName().equals("北京市") || province.getName().equals("上海市") || province.getName().equals("天津市")) {
                             mDestination.setText(province.getName());
+                            mDestinationPolicy.setText(province.getName());
                         } else {
                             mDestination.setText(city.getName());
+                            mDestinationPolicy.setText(city.getName());
+                        }
+                        mDestinationToCityId = mDestination.getText().toString();
+
+                        if (!mOrigin.getText().toString().equals("出发地") && !mDestination.getText().toString().equals("目的地")) {
+                            initData();
                         }
                     }
 
@@ -186,6 +329,16 @@ public class PolicyActivity extends AppCompatActivity {
         mOrigin = findViewById(R.id.origin);
         mDestination = findViewById(R.id.destination);
         mExchange = findViewById(R.id.origin_exchange_destination);
+
+        mOriginPolicy = findViewById(R.id.origin_region);
+        mOriginPolicyContent = findViewById(R.id.origin_policy_content);
+        mOriginRiskRank = findViewById(R.id.origin_risk_region);
+
+        mDestinationPolicy = findViewById(R.id.destination_region);
+        mDestinationPolicyContent = findViewById(R.id.destination_policy_content);
+        mDestinationRiskRank = findViewById(R.id.destination_risk_region);
+
+
     }
 
     private void initMagicIndicator() {

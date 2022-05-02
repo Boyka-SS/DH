@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include layout="@layout/title_bar" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_230">
@@ -175,17 +177,17 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/origin_risk_regison"
+                                android:id="@+id/origin_risk_region"
                                 android:layout_width="@dimen/dp_60"
                                 android:layout_height="@dimen/dp_20"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="@dimen/dp_12"
                                 android:background="@drawable/border_low_risk"
                                 android:gravity="center"
-                                android:text="全部低风险"
-
+                                android:text="高风险"
                                 android:textColor="@color/light_green"
-                                android:textSize="@dimen/dp_10" />
+                                android:textSize="@dimen/dp_10"
+                                android:visibility="invisible" />
 
 
                         </LinearLayout>
@@ -257,17 +259,17 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/destination_risk_regison"
+                                android:id="@+id/destination_risk_region"
                                 android:layout_width="@dimen/dp_60"
                                 android:layout_height="@dimen/dp_20"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="@dimen/dp_12"
                                 android:background="@drawable/border_low_risk"
                                 android:gravity="center"
-                                android:text="全部低风险"
-
+                                android:text="低风险"
                                 android:textColor="@color/light_green"
-                                android:textSize="@dimen/dp_10" />
+                                android:textSize="@dimen/dp_10"
+                                android:visibility="invisible" />
 
 
                         </LinearLayout>
@@ -287,12 +289,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginBottom="@dimen/dp_15"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_320"
             android:layout_marginStart="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
             android:background="@drawable/round_linearlayout"
             android:orientation="vertical"
             android:paddingStart="@dimen/dp_10"
@@ -325,10 +327,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
+                android:layout_weight="1"
                 android:orientation="horizontal">
+
                 <net.lucode.hackware.magicindicator.MagicIndicator
                     android:id="@+id/magic_indicator4"
                     android:layout_width="match_parent"

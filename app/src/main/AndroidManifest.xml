@@ -58,14 +58,11 @@
         android:roundIcon="@mipmap/app01"
         android:supportsRtl="true"
         android:theme="@style/Theme.DriverHealth"
+        android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity android:name=".activity.navigation.NavActivity" />
-        <activity android:name=".activity.navigation.PolicyActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".activity.navigation.PolicyActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.report.WebActivity"
@@ -73,7 +70,11 @@
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activity.us.waring.WaringTipsActivity" />
         <activity android:name=".activity.us.contactus.ContactUsActivity" />
