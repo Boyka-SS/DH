@@ -60,18 +60,20 @@
         android:theme="@style/Theme.DriverHealth"
         tools:replace="android:theme">
         <activity android:name=".activity.navigation.NavActivity" />
-        <activity android:name=".activity.navigation.PolicyActivity" />
+        <activity android:name=".activity.navigation.PolicyActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.report.WebActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.us.waring.WaringTipsActivity" />
         <activity android:name=".activity.us.contactus.ContactUsActivity" />
