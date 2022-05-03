@@ -16,16 +16,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.PolicyPagerAdapter;
 import com.jinke.driverhealth.data.network.juhe.beans.CityId;
+import com.jinke.driverhealth.data.network.juhe.beans.PolicyContent;
 import com.jinke.driverhealth.data.network.juhe.beans.RiskRegion;
+import com.jinke.driverhealth.data.network.juhe.worker.PolicyContentNetWork;
 import com.jinke.driverhealth.data.network.juhe.worker.RiskRegionNetwork;
 import com.jinke.driverhealth.fragments.traveltips.CoachTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.PlaneTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.TrainTipsFragment;
+import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.views.TitleLayout;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
@@ -61,11 +63,11 @@ public class PolicyActivity extends AppCompatActivity {
 
     private TextView mOrigin, mDestination;
     private TextView mOriginPolicy, mOriginPolicyContent, mOriginRiskRank;
-    private TextView mDestinationPolicy, mDestinationRiskRank;
+    private TextView mDestinationPolicy, mDestinationPolicyContent, mDestinationRiskRank;
     private ImageView mExchange;
-    private RecyclerView mDestinationPolicyContent;
 
     private CityPickerView mPicker = new CityPickerView();
+
     //出行贴士
     private static final String[] CHANNELS = new String[]{"汽车", "飞机", "火车"};
     private List<String> mDataList = Arrays.asList(CHANNELS);
@@ -91,11 +93,8 @@ public class PolicyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_policy);
-        Window window = getWindow();
-/*如果之前是办透明模式，要加这一句需要取消半透明的Flag
-window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        window.setStatusBarColor(Color.TRANSPARENT);
+
+
         hideActionBar("地区疫情防控政策");
         //预先加载仿iOS滚轮实现的全部数据
         mPicker.init(this);
@@ -105,18 +104,12 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
 
         initFragments();
         initMagicIndicator();
-
         mFragmentContainerHelper.handlePageSelected(0, false);
         switchPages(0);
 
 
     }
 
-    private void setCityId(CityId cityIdList) {
-        if (cityIdList != null) {
-            Log.d(TAG, "mCityIdList --> " + cityIdList.getLabel());
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -145,10 +138,10 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
 
     private void initData() {
         //监测出发地和目的地 疫情风险等级
-        new RiskRegionNetwork().requestRiskRegionData("aaaa7ad916e17847fb9b55f0295f3163", new Callback<RiskRegion>() {
+        new RiskRegionNetwork().requestRiskRegionData(Config.JUHE_KEY_FAN, new Callback<RiskRegion>() {
             @Override
             public void onResponse(Call<RiskRegion> call, Response<RiskRegion> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.code() == 0) {
                     RiskRegion body = response.body();
                     updateRegionRiskRankUI(body);
                 }
@@ -159,10 +152,32 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
                 Toast.makeText(PolicyActivity.this, "检测地区是否为风险地区失败", Toast.LENGTH_SHORT).show();
             }
         });
+        //获取隔离政策
+        new PolicyContentNetWork().requestRiskRegionData(Config.JUHE_KEY_FAN, "", "", new Callback<PolicyContent>() {
+            @Override
+            public void onResponse(Call<PolicyContent> call, Response<PolicyContent> response) {
+                if (response.isSuccessful() && response.code() == 0) {
+                    PolicyContent policyContent = response.body();
+
+                    PolicyContent.ResultDTO.FromInfoDTO fromInfo = policyContent.getResult().getFrom_info();
+                    String fromOutDesc = fromInfo.getOut_desc();
+                    mOriginPolicyContent.setText(fromOutDesc);
+                    PolicyContent.ResultDTO.ToInfoDTO toInfo = policyContent.getResult().getTo_info();
+                    String toLowInDesc = toInfo.getLow_in_desc();
+                    mDestinationPolicyContent.setText(toLowInDesc);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PolicyContent> call, Throwable t) {
+                Toast.makeText(PolicyActivity.this, "请求隔离政策失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //监测出发地和目的地 疫情风险等级
     private void updateRegionRiskRankUI(RiskRegion body) {
+
         int originFlag = 0, destinationFlag = 0;
         List<RiskRegion.ResultDTO.HighListDTO> high_list = body.getResult().getHigh_list();
         Iterator<RiskRegion.ResultDTO.HighListDTO> iterator = high_list.iterator();
@@ -335,6 +350,7 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
                         if (!mOrigin.getText().toString().equals("出发地") && !mDestination.getText().toString().equals("目的地")) {
                             initData();
                         }
+
                     }
 
                     @Override
@@ -342,9 +358,9 @@ window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
                         ToastUtils.showLongToast(context, "已取消");
                     }
                 });
-
                 //显示
                 mPicker.showCityPicker();
+
             }
         });
 

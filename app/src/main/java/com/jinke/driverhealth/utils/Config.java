@@ -71,4 +71,9 @@ public class Config {
     }
 
 
+    /**
+     * 聚合疫情 政策+风险等级
+     */
+    public static final String JUHE_KEY_FAN = "aaaa7ad916e17847fb9b55f0295f3163";
+    public static final String JUHE_KEY_LIU = "";
 }

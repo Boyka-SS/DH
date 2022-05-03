@@ -107,18 +107,18 @@
             android:paddingBottom="@dimen/dp_5">
 
             <ImageView
-                android:layout_marginLeft="@dimen/dp_10"
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="@dimen/dp_20"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
                 android:src="@mipmap/notice" />
 
             <com.sunfusheng.marqueeview.MarqueeView
                 android:id="@+id/marqueeView"
-                android:layout_marginLeft="@dimen/dp_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_5"
                 app:mvAnimDuration="1000"
                 app:mvDirection="right_to_left"
                 app:mvInterval="3000"
@@ -225,13 +225,13 @@
 
                         <TextView
                             android:id="@+id/origin_policy_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/origin_region_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:text=""
+                            android:text="持48小时核酸检测阴性证明和行程码、健康码等在离宁前及返宁后均向所在社区（村）报备或所在单位报批。"
                             android:textColor="#999"
                             android:textSize="16sp" />
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -305,11 +305,12 @@
 
                         </LinearLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
+                        <TextView
                             android:id="@+id/destination_policy_content"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
+                            android:text="进行测温，查验健康码、行程码和48小时内核酸检测阴性报告，做好个人信息登记，现场抗原检测+核酸检测采样后，实行“14+7”健康管理措施（14天集中隔离医学观察+7天跟踪健康监测）。"
                             android:textColor="#999"
                             android:textSize="16sp" />
                     </LinearLayout>
