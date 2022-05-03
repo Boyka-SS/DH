@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.PolicyPagerAdapter;
@@ -31,6 +34,7 @@ import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citylist.Toast.ToastUtils;
 import com.lljjcoder.style.citypickerview.CityPickerView;
+import com.sunfusheng.marqueeview.MarqueeView;
 
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -57,8 +61,9 @@ public class PolicyActivity extends AppCompatActivity {
 
     private TextView mOrigin, mDestination;
     private TextView mOriginPolicy, mOriginPolicyContent, mOriginRiskRank;
-    private TextView mDestinationPolicy, mDestinationPolicyContent, mDestinationRiskRank;
+    private TextView mDestinationPolicy, mDestinationRiskRank;
     private ImageView mExchange;
+    private RecyclerView mDestinationPolicyContent;
 
     private CityPickerView mPicker = new CityPickerView();
     //出行贴士
@@ -86,7 +91,11 @@ public class PolicyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_policy);
-
+        Window window = getWindow();
+/*如果之前是办透明模式，要加这一句需要取消半透明的Flag
+window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        window.setStatusBarColor(Color.TRANSPARENT);
         hideActionBar("地区疫情防控政策");
         //预先加载仿iOS滚轮实现的全部数据
         mPicker.init(this);
@@ -363,6 +372,12 @@ public class PolicyActivity extends AppCompatActivity {
         mDestinationRiskRank = findViewById(R.id.destination_risk_region);
 
 
+        MarqueeView marqueeView = (MarqueeView) findViewById(R.id.marqueeView);
+        List<String> messages = new ArrayList<>();
+        messages.add("1. 疫情期间，如非必要请勿远行");
+        messages.add("2. 请持有健康码绿码和48h内的核酸检测证明出行");
+        messages.add("3. 出行前请检查地区疫情防控政策");
+        marqueeView.startWithList(messages);
     }
 
     private void initMagicIndicator() {
@@ -409,11 +424,18 @@ public class PolicyActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             supportActionBar.hide();
         }
-        new TitleLayout(this).setTitleText(title).setLeftIcoListening(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        //隐藏状态栏
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        new TitleLayout(this)
+                .setTitleText(title)
+                .setTitleBackgroundColor("#0855C3")
+                .setLeftIcoListening(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
     }
 }

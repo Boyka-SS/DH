@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -95,6 +96,36 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:background="@drawable/round_linearlayout_ffbe"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5">
+
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_20"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/notice" />
+
+            <com.sunfusheng.marqueeview.MarqueeView
+                android:id="@+id/marqueeView"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                app:mvAnimDuration="1000"
+                app:mvDirection="right_to_left"
+                app:mvInterval="3000"
+                app:mvSingleLine="true"
+                app:mvTextColor="#FF8C00"
+                app:mvTextSize="14sp" />
+        </LinearLayout>
 
 
         <LinearLayout
@@ -198,7 +229,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/origin_region_info"
                             android:layout_marginTop="5dp"
-                            android:text="快件在 深圳 ,准备送往下一站 深圳集散中心 [深圳市]"
+                            android:text=""
                             android:textColor="#999"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -274,13 +305,11 @@
 
                         </LinearLayout>
 
-                        <TextView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/destination_policy_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/origin_region_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:text="快件在 深圳 ,准备送往下一站 深圳集散中心 [深圳市]"
                             android:textColor="#999"
                             android:textSize="16sp" />
                     </LinearLayout>

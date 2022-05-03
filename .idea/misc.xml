@@ -11,6 +11,7 @@
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/policy_transport.xml" value="0.2125" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/radius.xml" value="0.234" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/round_linearlayout.xml" value="0.26" />
+        <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/round_linearlayout_ffbe.xml" value="0.2585" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/round_linearlayout_graybg.xml" value="0.2385" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/round_rectangular.xml" value="0.239" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/scanner_selector.xml" value="0.2405" />
@@ -32,6 +33,7 @@
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/fragment_scanner.xml" value="0.28846153846153844" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/fragment_train_tips.xml" value="0.2263888888888889" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/item_policy.xml" value="0.4" />
+        <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/title_bar.xml" value="0.21422101449275363" />
       </map>
     </option>
   </component>
