@@ -8,16 +8,17 @@ import java.util.List;
  */
 public class CityId {
 
-    private String value;
-    private String label;
-    private List<ChildrenDTO> children;
 
-    public String getValue() {
-        return value;
+    private List<ChildrenDTO> children;
+    private String label;
+    private String value;
+
+    public List<ChildrenDTO> getChildren() {
+        return children;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setChildren(List<ChildrenDTO> children) {
+        this.children = children;
     }
 
     public String getLabel() {
@@ -28,25 +29,17 @@ public class CityId {
         this.label = label;
     }
 
-    public List<ChildrenDTO> getChildren() {
-        return children;
+    public String getValue() {
+        return value;
     }
 
-    public void setChildren(List<ChildrenDTO> children) {
-        this.children = children;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public static class ChildrenDTO {
-        private String value;
         private String label;
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
+        private String value;
 
         public String getLabel() {
             return label;
@@ -54,6 +47,14 @@ public class CityId {
 
         public void setLabel(String label) {
             this.label = label;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 }

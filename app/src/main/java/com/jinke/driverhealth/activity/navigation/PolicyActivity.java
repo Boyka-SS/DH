@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.PolicyPagerAdapter;
+import com.jinke.driverhealth.data.network.juhe.beans.CityId;
 import com.jinke.driverhealth.data.network.juhe.beans.RiskRegion;
 import com.jinke.driverhealth.data.network.juhe.worker.RiskRegionNetwork;
 import com.jinke.driverhealth.fragments.traveltips.CoachTipsFragment;
@@ -78,6 +79,8 @@ public class PolicyActivity extends AppCompatActivity {
 
     private String mOriginToCityId, mDestinationToCityId;
     private int mOriginCityId, mDestinationCityId;
+    private CityId mCityIdList;
+    private String mOriginProvinceName, mDestinationProvinceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +103,42 @@ public class PolicyActivity extends AppCompatActivity {
 
     }
 
+    private void setCityId(CityId cityIdList) {
+        if (cityIdList != null) {
+            Log.d(TAG, "mCityIdList --> " + cityIdList.getLabel());
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+        //请求城市ID
+       /* new CityIdNetwork()
+                .requestCityIdData(new Callback<CityId>() {
+                    @Override
+                    public void onResponse(Call<CityId> call, Response<CityId> response) {
+                        Log.d(TAG, "start https");
+                        if (response.isSuccessful()) {
+                            mCityIdList = response.body();
+                            Log.d(TAG, "https response successful");
+//                            setCityId(mCityIdList);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CityId> call, Throwable t) {
+                        Toast.makeText(PolicyActivity.this, "请求城市ID失败", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+    }
 
     private void initData() {
-
         //监测出发地和目的地 疫情风险等级
         new RiskRegionNetwork().requestRiskRegionData("aaaa7ad916e17847fb9b55f0295f3163", new Callback<RiskRegion>() {
             @Override
             public void onResponse(Call<RiskRegion> call, Response<RiskRegion> response) {
-                Log.d(TAG, "response.message --> " + response.message());
-                Log.d(TAG, " response.code --> " + response.code());
-                Log.d(TAG, " response.code --> " + response.errorBody());
                 if (response.isSuccessful()) {
                     RiskRegion body = response.body();
                     updateRegionRiskRankUI(body);
@@ -164,7 +193,6 @@ public class PolicyActivity extends AppCompatActivity {
             }
         }
 
-
         //出发地
         switch (originFlag) {
             case 0:
@@ -177,7 +205,6 @@ public class PolicyActivity extends AppCompatActivity {
                 mOriginRiskRank.setText("高风险");
                 mOriginRiskRank.setTextColor(Color.parseColor("#DC143C"));
                 mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
-                //TODO
                 break;
             case 2:
                 //中风险
@@ -185,7 +212,6 @@ public class PolicyActivity extends AppCompatActivity {
                 mOriginRiskRank.setText("中风险");
                 mOriginRiskRank.setTextColor(Color.parseColor("#FFD700"));
                 mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
-                //TODO
                 break;
             default:
                 break;
@@ -203,7 +229,6 @@ public class PolicyActivity extends AppCompatActivity {
                 mDestinationRiskRank.setText("高风险");
                 mDestinationRiskRank.setTextColor(Color.parseColor("#DC143C"));
                 mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
-                //TODO
                 break;
             case 2:
                 //中风险
@@ -211,7 +236,6 @@ public class PolicyActivity extends AppCompatActivity {
                 mDestinationRiskRank.setText("中风险");
                 mDestinationRiskRank.setTextColor(Color.parseColor("#FFD700"));
                 mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
-                //TODO
                 break;
             default:
                 break;
@@ -254,7 +278,6 @@ public class PolicyActivity extends AppCompatActivity {
         mOrigin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mPicker.setConfig(cityConfig);
                 //监听选择点击事件及返回结果
                 mPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
@@ -262,13 +285,13 @@ public class PolicyActivity extends AppCompatActivity {
                     public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
                         if (province.getName().equals("北京市") || province.getName().equals("上海市") || province.getName().equals("天津市")) {
                             mOrigin.setText(province.getName());
-
                             mOriginPolicy.setText(province.getName());
                         } else {
                             mOrigin.setText(city.getName());
                             mOriginPolicy.setText(city.getName());
                         }
                         mOriginToCityId = mOrigin.getText().toString();
+                        mOriginProvinceName = province.getName();
                     }
 
                     @Override
@@ -298,6 +321,7 @@ public class PolicyActivity extends AppCompatActivity {
                             mDestinationPolicy.setText(city.getName());
                         }
                         mDestinationToCityId = mDestination.getText().toString();
+                        mDestinationProvinceName = province.getName();
 
                         if (!mOrigin.getText().toString().equals("出发地") && !mDestination.getText().toString().equals("目的地")) {
                             initData();

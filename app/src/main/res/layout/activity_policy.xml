@@ -184,7 +184,7 @@
                                 android:layout_marginStart="@dimen/dp_12"
                                 android:background="@drawable/border_low_risk"
                                 android:gravity="center"
-                                android:text="高风险"
+                                android:text="低风险"
                                 android:textColor="@color/light_green"
                                 android:textSize="@dimen/dp_10"
                                 android:visibility="invisible" />
