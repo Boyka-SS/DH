@@ -9,8 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_220"
-        android:background="@drawable/round_linearlayout_graybg"
+        android:layout_height="@dimen/dp_250"
+
         android:orientation="vertical"
         android:paddingStart="@dimen/dp_15"
         android:paddingTop="@dimen/dp_15"
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:textSize="14sp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="1.准备好出行物品"
                 android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:textSize="14sp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="2. 对周围物品进行消毒"
                 android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_weight="4"
+                android:layout_weight="3"
                 android:text="用消毒纸巾对可能触碰到的位置进行擦拭消毒。避免用手接触口、鼻、眼，咳嗽或者打喷嚏时用纸巾或者手臂遮挡抠鼻。"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -75,17 +75,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:textSize="14sp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="3. 外面温度适合的话，尽量开窗通风"
                 android:textStyle="bold" />
 
             <TextView
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_weight="4"
+                android:layout_weight="3"
                 android:text="对于南方一些地区，比较温暖，可以选择开窗通风。对于北方的地区，可以在休息区的适合，开窗通风，增加车内空气流动。"
-                android:textSize="14sp" />
+              />
         </LinearLayout>
 
     </LinearLayout>

@@ -9,16 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import com.jinke.driverhealth.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CoachTipsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CoachTipsFragment extends Fragment {
-
-
-
-
 
 
 
