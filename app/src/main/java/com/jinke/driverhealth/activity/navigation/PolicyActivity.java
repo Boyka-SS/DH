@@ -3,7 +3,6 @@ package com.jinke.driverhealth.activity.navigation;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,9 +20,7 @@ import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.adapters.PolicyPagerAdapter;
 import com.jinke.driverhealth.data.network.juhe.beans.CityId;
 import com.jinke.driverhealth.data.network.juhe.beans.PolicyContent;
-import com.jinke.driverhealth.data.network.juhe.beans.RiskRegion;
 import com.jinke.driverhealth.data.network.juhe.worker.PolicyContentNetWork;
-import com.jinke.driverhealth.data.network.juhe.worker.RiskRegionNetwork;
 import com.jinke.driverhealth.fragments.traveltips.CoachTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.PlaneTipsFragment;
 import com.jinke.driverhealth.fragments.traveltips.TrainTipsFragment;
@@ -49,7 +46,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -87,7 +83,7 @@ public class PolicyActivity extends AppCompatActivity {
     private String mOriginToCityId, mDestinationToCityId;
     private int mOriginCityId, mDestinationCityId;
     private CityId mCityIdList;
-    private String mOriginProvinceName, mDestinationProvinceName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +96,7 @@ public class PolicyActivity extends AppCompatActivity {
         mPicker.init(this);
 
         initView();
+
         initEvent(this);
 
         initFragments();
@@ -107,64 +104,30 @@ public class PolicyActivity extends AppCompatActivity {
         mFragmentContainerHelper.handlePageSelected(0, false);
         switchPages(0);
 
-
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-        //请求城市ID
-       /* new CityIdNetwork()
-                .requestCityIdData(new Callback<CityId>() {
-                    @Override
-                    public void onResponse(Call<CityId> call, Response<CityId> response) {
-                        Log.d(TAG, "start https");
-                        if (response.isSuccessful()) {
-                            mCityIdList = response.body();
-                            Log.d(TAG, "https response successful");
-//                            setCityId(mCityIdList);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CityId> call, Throwable t) {
-                        Toast.makeText(PolicyActivity.this, "请求城市ID失败", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-    }
 
     private void initData() {
-        //监测出发地和目的地 疫情风险等级
-        new RiskRegionNetwork().requestRiskRegionData(Config.JUHE_KEY_FAN, new Callback<RiskRegion>() {
-            @Override
-            public void onResponse(Call<RiskRegion> call, Response<RiskRegion> response) {
-                if (response.isSuccessful() && response.code() == 0) {
-                    RiskRegion body = response.body();
-                    updateRegionRiskRankUI(body);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RiskRegion> call, Throwable t) {
-                Toast.makeText(PolicyActivity.this, "检测地区是否为风险地区失败", Toast.LENGTH_SHORT).show();
-            }
-        });
         //获取隔离政策
-        new PolicyContentNetWork().requestRiskRegionData(Config.JUHE_KEY_FAN, "", "", new Callback<PolicyContent>() {
+        new PolicyContentNetWork().requestRiskRegionData(Config.JUHE_KEY_FAN, "10187", "10193", new Callback<PolicyContent>() {
             @Override
             public void onResponse(Call<PolicyContent> call, Response<PolicyContent> response) {
                 if (response.isSuccessful() && response.code() == 0) {
                     PolicyContent policyContent = response.body();
-
+                    //出发地
                     PolicyContent.ResultDTO.FromInfoDTO fromInfo = policyContent.getResult().getFrom_info();
-                    String fromOutDesc = fromInfo.getOut_desc();
-                    mOriginPolicyContent.setText(fromOutDesc);
+                    String fromRiskLevel = fromInfo.getRisk_level();
+                    //useful
+//                   String fromOutDesc = fromInfo.getOut_desc();
+//                   mOriginPolicyContent.setText(fromOutDesc);
+                    //目的地
                     PolicyContent.ResultDTO.ToInfoDTO toInfo = policyContent.getResult().getTo_info();
-                    String toLowInDesc = toInfo.getLow_in_desc();
-                    mDestinationPolicyContent.setText(toLowInDesc);
+                    String toRiskLevel = toInfo.getRisk_level();
+                    //useful
+//                   String toLowInDesc = toInfo.getLow_in_desc();
+//                   mDestinationPolicyContent.setText(toLowInDesc);
+
+//                    updateRegionRiskRankUI(fromRiskLevel, toRiskLevel);
                 }
             }
 
@@ -176,95 +139,67 @@ public class PolicyActivity extends AppCompatActivity {
     }
 
     //监测出发地和目的地 疫情风险等级
-    private void updateRegionRiskRankUI(RiskRegion body) {
-
-        int originFlag = 0, destinationFlag = 0;
-        List<RiskRegion.ResultDTO.HighListDTO> high_list = body.getResult().getHigh_list();
-        Iterator<RiskRegion.ResultDTO.HighListDTO> iterator = high_list.iterator();
-
-        while (iterator.hasNext()) {
-            if (iterator.next().getArea_name().contains(mOriginToCityId)) {
-                //出发地为高风险地区
-                originFlag = 1;
-                break;
-            }
-        }
-        while (iterator.hasNext()) {
-            if (iterator.next().getArea_name().contains(mDestinationToCityId)) {
-                //目的地为高风险地区
-                destinationFlag = 1;
-                break;
-            }
-        }
-        if (originFlag == 1) {
-        } else if (destinationFlag == 1) {
-        } else {
-            List<RiskRegion.ResultDTO.MiddleListDTO> middle_list = body.getResult().getMiddle_list();
-            Iterator<RiskRegion.ResultDTO.MiddleListDTO> it = middle_list.iterator();
-            while (it.hasNext()) {
-                if (it.next().getArea_name().contains(mOriginToCityId)) {
-                    //出发地为中风险地区
-                    originFlag = 2;
-                    break;
-                }
-            }
-            while (it.hasNext()) {
-                if (it.next().getArea_name().contains(mDestinationToCityId)) {
-                    //目的地为中风险地区
-                    destinationFlag = 2;
-                    break;
-                }
-            }
-        }
+    private void updateRegionRiskRankUI(String fromRiskLevel, String toRiskLevel) {
 
         //出发地
-        switch (originFlag) {
-            case 0:
+        //持48小时核酸检测阴性证明和行程码、健康码等在离宁前及返宁后均向所在社区（村）报备或所在单位报批。
+        mOriginPolicyContent.setText("持48小时核酸检测阴性证明和行程码、健康码等在离宁前及返宁后均向所在社区（村）报备或所在单位报批");
+        switch (fromRiskLevel) {
+            case "0":
+                //暂无
+                break;
+            case "1":
                 //低分险
                 mOriginRiskRank.setVisibility(View.VISIBLE);
                 break;
-            case 1:
-                //高风险
-                mOriginRiskRank.setVisibility(View.VISIBLE);
-                mOriginRiskRank.setText("高风险");
-                mOriginRiskRank.setTextColor(Color.parseColor("#DC143C"));
-                mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
-                break;
-            case 2:
+            case "2":
                 //中风险
                 mOriginRiskRank.setVisibility(View.VISIBLE);
                 mOriginRiskRank.setText("中风险");
                 mOriginRiskRank.setTextColor(Color.parseColor("#FFD700"));
                 mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
                 break;
+            case "3":
+                //高风险
+                mOriginRiskRank.setVisibility(View.VISIBLE);
+                mOriginRiskRank.setText("高风险");
+                mOriginRiskRank.setTextColor(Color.parseColor("#DC143C"));
+                mOriginRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
+                break;
             default:
                 break;
 
         }
         //目的地
-        switch (destinationFlag) {
-            case 0:
+        // 进行测温，查验健康码、行程码和48小时内核酸检测阴性报告，做好个人信息登记，现场抗原检测+核酸检测采样后，实行“14+7”健康管理措施（14天集中隔离医学观察+7天跟踪健康监测）。
+        mDestinationPolicyContent.setText("测温，查验健康码、行程码和48小时内核酸检测阴性报告，做好个人信息登记，现场抗原检测+核酸检测采样后，实行“14+7”健康管理措施（14天集中隔离医学观察+7天跟踪健康监测）。");
+        switch (toRiskLevel) {
+            case "0":
+                //暂无
+                break;
+            case "1":
                 //低分险
                 mDestinationRiskRank.setVisibility(View.VISIBLE);
                 break;
-            case 1:
-                //高风险
-                mDestinationRiskRank.setVisibility(View.VISIBLE);
-                mDestinationRiskRank.setText("高风险");
-                mDestinationRiskRank.setTextColor(Color.parseColor("#DC143C"));
-                mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
-                break;
-            case 2:
+            case "2":
                 //中风险
                 mDestinationRiskRank.setVisibility(View.VISIBLE);
                 mDestinationRiskRank.setText("中风险");
                 mDestinationRiskRank.setTextColor(Color.parseColor("#FFD700"));
                 mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_middle_risk));
                 break;
+            case "3":
+                //高风险
+                mDestinationRiskRank.setVisibility(View.VISIBLE);
+                mDestinationRiskRank.setText("高风险");
+                mDestinationRiskRank.setTextColor(Color.parseColor("#DC143C"));
+                mDestinationRiskRank.setBackground(getResources().getDrawable(R.drawable.border_high_risk));
+                break;
             default:
                 break;
         }
     }
+
 
     private void switchPages(int index) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -315,7 +250,7 @@ public class PolicyActivity extends AppCompatActivity {
                             mOriginPolicy.setText(city.getName());
                         }
                         mOriginToCityId = mOrigin.getText().toString();
-                        mOriginProvinceName = province.getName();
+
                     }
 
                     @Override
@@ -345,10 +280,9 @@ public class PolicyActivity extends AppCompatActivity {
                             mDestinationPolicy.setText(city.getName());
                         }
                         mDestinationToCityId = mDestination.getText().toString();
-                        mDestinationProvinceName = province.getName();
-
                         if (!mOrigin.getText().toString().equals("出发地") && !mDestination.getText().toString().equals("目的地")) {
-                            initData();
+//                            initData();
+                            updateRegionRiskRankUI("1", "1");
                         }
 
                     }

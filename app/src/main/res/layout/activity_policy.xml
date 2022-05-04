@@ -228,7 +228,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:text="持48小时核酸检测阴性证明和行程码、健康码等在离宁前及返宁后均向所在社区（村）报备或所在单位报批。"
+                            android:text=""
                             android:textColor="#999"
                             android:textSize="16sp" />
 
@@ -310,7 +310,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:text="进行测温，查验健康码、行程码和48小时内核酸检测阴性报告，做好个人信息登记，现场抗原检测+核酸检测采样后，实行“14+7”健康管理措施（14天集中隔离医学观察+7天跟踪健康监测）。"
+                            android:text=""
                             android:textColor="#999"
                             android:textSize="16sp" />
                     </LinearLayout>
