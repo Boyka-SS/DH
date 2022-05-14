@@ -91,8 +91,8 @@ public class PolicyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        
+        setContentView(R.layout.activity_policy);
 
         hideActionBar("地区疫情防控政策");
         //预先加载仿iOS滚轮实现的全部数据

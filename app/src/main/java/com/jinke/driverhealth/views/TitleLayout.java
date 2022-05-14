@@ -75,12 +75,12 @@ public class TitleLayout {
      * 构造方法：用于获取对象
      */
     public TitleLayout(Activity context) {
-        titleView = context.findViewById(R.id.rl_title_bar);
-        rl_title_bar = (LinearLayout) titleView.findViewById(R.id.rl_title_bar);
+        titleView = context.findViewById(R.id.ll_title_bar);
+        rl_title_bar = (LinearLayout) context.findViewById(R.id.rl_title_bar);
         ll_title_bar = (LinearLayout) context.findViewById(R.id.ll_title_bar);
-        tv_title_middle = (TextView) titleView.findViewById(R.id.tv_title_middle);
-        iv_left_icon = (ImageView) titleView.findViewById(R.id.iv_left_icon);
-        iv_rightIco = (ImageView) titleView.findViewById(R.id.iv_rightIco);
+        tv_title_middle = (TextView) context.findViewById(R.id.tv_title_middle);
+        iv_left_icon = (ImageView) context.findViewById(R.id.iv_left_icon);
+        iv_rightIco = (ImageView) context.findViewById(R.id.iv_rightIco);
     }
 
 
