@@ -7,6 +7,7 @@
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/border_high_risk.xml" value="0.1835" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/border_low_risk.xml" value="0.216" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/border_middle_risk.xml" value="0.1835" />
+        <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/gradient_linearlayout.xml" value="0.148" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/navigation.xml" value="0.2405" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/policy_transport.xml" value="0.2125" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/drawable/radius.xml" value="0.234" />
@@ -24,6 +25,7 @@
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_nav.xml" value="0.21784420289855072" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_policy.xml" value="0.264" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_report.xml" value="0.19610507246376813" />
+        <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_splash.xml" value="0.2263888888888889" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_temp2.xml" value="0.22146739130434784" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/activity_waring_tips.xml" value="0.18704710144927536" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/bottom_tab.xml" value="0.21195652173913043" />
@@ -35,6 +37,7 @@
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/fragment_plane_tips.xml" value="0.2006340579710145" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/fragment_scanner.xml" value="0.28846153846153844" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/fragment_train_tips.xml" value="0.536" />
+        <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/home_page_fragment.xml" value="0.12268518518518519" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/item_policy.xml" value="0.4" />
         <entry key="..\:/developtool/android/DriverHealth2/app/src/main/res/layout/title_bar.xml" value="0.21422101449275363" />
       </map>
