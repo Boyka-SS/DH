@@ -1,5 +1,7 @@
 package com.jinke.driverhealth.fragments.dataitem;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,7 +27,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jinke.driverhealth.R;
 import com.jinke.driverhealth.activity.report.WebActivity;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.utils.CustomXAxisRenderer;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
@@ -33,9 +35,7 @@ import com.jinke.driverhealth.viewmodels.DataViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.dmoral.toasty.Toasty;
-
-import static android.content.Context.MODE_PRIVATE;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class HrFragment extends Fragment {
@@ -74,7 +74,11 @@ public class HrFragment extends Fragment {
                     List<HeartRate.DataDTO.ResultDTO> result = heartRate.getData().getResult();
                     initChart(result);
                 } else {
-                    Toasty.error(getActivity(), "无数据", Toasty.LENGTH_SHORT).show();
+//                    Toasty.error(getActivity(), "无数据", Toasty.LENGTH_SHORT).show();
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+
+                            .setContentText("无数据")
+                            .show();
                 }
             }
         });

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.data.network.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.tudingyun.beans.BloodPressure;
 
 import java.util.ArrayList;
 import java.util.List;

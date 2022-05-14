@@ -13,7 +13,7 @@ import com.jinke.driverhealth.activity.us.contactus.ContactUsActivity;
 import com.jinke.driverhealth.activity.us.waring.WaringTipsActivity;
 import com.jinke.driverhealth.views.TitleLayout;
 
-import es.dmoral.toasty.Toasty;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AboutUsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,7 +56,11 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.upgrade:
-                Toasty.info(AboutUsActivity.this, "当前已是最新版本", Toasty.LENGTH_LONG).show();
+//                Toasty.info(AboutUsActivity.this, "当前已是最新版本", Toasty.LENGTH_LONG).show();
+                new SweetAlertDialog(AboutUsActivity.this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+
+                        .setContentText("当前已是最新版本")
+                        .show();
                 break;
             case R.id.contact_us:
                 startActivity(new Intent(AboutUsActivity.this, ContactUsActivity.class));

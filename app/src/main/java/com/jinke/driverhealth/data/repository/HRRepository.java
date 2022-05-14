@@ -4,9 +4,9 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.jinke.driverhealth.data.network.beans.HeartRate;
-import com.jinke.driverhealth.data.network.beans.SingleHr;
-import com.jinke.driverhealth.data.network.HRNetwork;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.SingleHr;
+import com.jinke.driverhealth.data.network.tudingyun.worker.HRNetwork;
 
 import retrofit2.Call;
 import retrofit2.Callback;

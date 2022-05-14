@@ -1,14 +1,13 @@
 package com.jinke.driverhealth.data.network;
 
+import static android.util.Log.VERBOSE;
+
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
-import com.jinke.driverhealth.utils.Config;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.util.Log.VERBOSE;
 
 /**
  * @author: fanlihao
@@ -16,22 +15,26 @@ import static android.util.Log.VERBOSE;
  */
 public class ServiceCreator {
 
+    private String url;
+
+    public ServiceCreator(String url) {
+        this.url = url;
+    }
 
     public <T> T create(Class<T> serviceClass) {
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
         //添加打印拦截器
-
         okHttpClient
                 .addInterceptor(new LoggingInterceptor.Builder()
-                .setLevel(Level.BASIC)
-                .log(VERBOSE)
-                .request("Request")
-                .response("Reponse")
-                .build());
+                        .setLevel(Level.BASIC)
+                        .log(VERBOSE)
+                        .request("Request")
+                        .response("Reponse")
+                        .build());
 
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-                .baseUrl(Config.BASE_URL)
+                .baseUrl(url)
                 .client(okHttpClient.build())
                 .addConverterFactory(GsonConverterFactory.create());
 

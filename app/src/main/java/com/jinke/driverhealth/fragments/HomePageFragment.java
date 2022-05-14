@@ -1,6 +1,8 @@
 package com.jinke.driverhealth.fragments;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -53,10 +55,10 @@ import com.jinke.driverhealth.data.db.beans.Alcohol;
 import com.jinke.driverhealth.data.db.beans.Contactor;
 import com.jinke.driverhealth.data.db.dao.AlcoholDao;
 import com.jinke.driverhealth.data.db.dao.ContactorDao;
-import com.jinke.driverhealth.data.network.beans.SingleBp;
-import com.jinke.driverhealth.data.network.beans.SingleHr;
-import com.jinke.driverhealth.data.network.beans.SingleTemp;
-import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.data.network.tudingyun.beans.SingleBp;
+import com.jinke.driverhealth.data.network.tudingyun.beans.SingleHr;
+import com.jinke.driverhealth.data.network.tudingyun.beans.SingleTemp;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Temperature;
 import com.jinke.driverhealth.interfaces.ApplyPermissionCallback;
 import com.jinke.driverhealth.utils.CalendarUtil;
 import com.jinke.driverhealth.utils.Config;
@@ -76,9 +78,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import es.dmoral.toasty.Toasty;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author: fanlihao
@@ -161,7 +160,12 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 initData();
-                Toasty.success(getActivity(), "加载成功", Toasty.LENGTH_SHORT).show();
+
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
+                        .setTitleText("加载成功")
+                        .show();
                 refreshlayout.finishRefresh(1000);
             }
         });
@@ -185,6 +189,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                         .setTitleText("检测数据异常")
                         .setContentText("是否拨打第一联系人电话，并发送位置")
                         .setConfirmText("是")
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -201,10 +206,15 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                         })
                         .show();
             } else {
-                Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
+//                Toasty.info(getActivity(), "未设置第一联系人，默认拨打120", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(getActivity())
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
+                        .setTitleText("未设置第一联系人，默认拨打120")
+                        .show();
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("检测数据异常")
                         .setContentText("是否拨打120，并编辑短信")
+                        .setConfirmButtonBackgroundColor(Color.parseColor("#1E90FF"))
                         .setConfirmText("是")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -232,7 +242,11 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void success() {
-                Toasty.success(getActivity(), "授权成功", Toasty.LENGTH_SHORT).show();
+//                Toasty.success(getActivity(), "授权成功", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+
+                        .setContentText("授权成功")
+                        .show();
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + phone));
                 startActivity(intent);
@@ -242,7 +256,10 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             @Override
             public void fail() {
                 //TODO 拒绝授权
-                Toasty.info(getActivity(), "您拒绝了权限的申请", Toasty.LENGTH_SHORT).show();
+//                Toasty.info(getActivity(), "您拒绝了权限的申请", Toasty.LENGTH_SHORT).show();
+                new SweetAlertDialog(getActivity())
+                        .setTitleText("您拒绝了权限的申请")
+                        .show();
             }
         });
     }
@@ -301,7 +318,10 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
                         } else {
                             //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                            Toasty.error(context, "错误，错误码" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
+//                            Toasty.error(context, "错误，错误码" + aMapLocation.getErrorInfo(), Toasty.LENGTH_SHORT).show();
+                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                    .setContentText("错误，错误码" + aMapLocation.getErrorInfo())
+                                    .show();
                             Log.e(TAG, "location Error, ErrCode:"
                                     + aMapLocation.getErrorCode() + ", errInfo:"
                                     + aMapLocation.getErrorInfo());

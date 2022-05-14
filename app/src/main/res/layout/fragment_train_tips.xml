@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".fragments.traveltips.CoachTipsFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_15"
+        android:paddingEnd="@dimen/dp_15">
+
+        <LinearLayout
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:text="1.准备好出行物品"
+                android:textStyle="bold" />
+
+            <TextView
+                android:gravity="start|top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_weight="3"
+                android:text="包里准备好消毒湿巾、酒精喷雾、酒精棉片、免洗洗手液、一次性手套。出门前戴好口罩，并在包里准备 2～3 个备用口罩。"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:text="2. 选择靠近车厢两端的位置"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_weight="3"
+                android:text="车厢两端和回风口气流比较大，可以优先选择，回风口通常位于车厢有厕所的一端。"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="3. 注意车上多人触摸的地方，别乱摸，勤洗手"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_weight="3"
+                android:text="如触摸了，不要揉眼睛、摸鼻子等，请及时洗手。"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

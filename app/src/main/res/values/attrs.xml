@@ -11,6 +11,16 @@
         <attr name="rightDrawable" format="reference"/>
     </declare-styleable>
 
+    <!--人脸识别界面-->
+    <declare-styleable name="FaceView">
+        <!--文本-->
+        <attr name="tip_text" format="string"/>
+        <!--颜色-->
+        <attr name="tip_text_color" format="color"/>
+        <!--文字大小-->
+        <attr name="tip_text_size" format="dimension"/>
+
+    </declare-styleable>
     <!--背景图片-->
     <attr name="src" format="reference" />
     <!--遮罩层颜色，建议带透明度-->

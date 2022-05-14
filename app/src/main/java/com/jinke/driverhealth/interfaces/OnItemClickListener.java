@@ -7,9 +7,9 @@ package com.jinke.driverhealth.interfaces;
 
 import android.view.View;
 
-import com.jinke.driverhealth.data.network.beans.BloodPressure;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
-import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.data.network.tudingyun.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Temperature;
 
 /**
  * RecyclerView item 点击事件

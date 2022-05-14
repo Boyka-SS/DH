@@ -1,9 +1,10 @@
 <resources>
     <!--App name-->
-<!--    <string name="app_name">智小安</string>-->
-    <string name="app_name">智辅安行</string>
+    <string name="app_name">智小安</string>
     <!--bottom navigation bar name-->
     <string name="fragment_me">个人中心</string>
+    <string name="behavior_monitoring">行为检测</string>
+    <string name="navigation">导航</string>
     <string name="fragment_health_data">健康数据</string>
     <string name="fragment_app">首页</string>
     <!--alcohol activity-->
@@ -228,6 +229,6 @@
 		定位诊断组件，检查定位的必要条件，并给出建议。\n
 		定位诊断组件代码已上传到示例中心，git地址：https://github.com/amap-demo/android-location-diagnose.git
 	</string>
-    <string name = "startDiagnose">开始诊断</string>
+    <string name="startDiagnose">开始诊断</string>
 
 </resources>

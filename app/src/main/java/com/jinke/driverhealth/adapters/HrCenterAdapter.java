@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jinke.driverhealth.R;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
 
 import java.util.ArrayList;
 import java.util.List;

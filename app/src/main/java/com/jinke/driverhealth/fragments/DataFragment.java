@@ -20,9 +20,9 @@ import com.jinke.driverhealth.activity.consult.HealthConsultActivity;
 import com.jinke.driverhealth.activity.report.ReportActivity;
 import com.jinke.driverhealth.activity.step.StepActivity;
 import com.jinke.driverhealth.adapters.DataAdapter;
-import com.jinke.driverhealth.data.network.beans.BloodPressure;
-import com.jinke.driverhealth.data.network.beans.HeartRate;
-import com.jinke.driverhealth.data.network.beans.Temperature;
+import com.jinke.driverhealth.data.network.tudingyun.beans.BloodPressure;
+import com.jinke.driverhealth.data.network.tudingyun.beans.HeartRate;
+import com.jinke.driverhealth.data.network.tudingyun.beans.Temperature;
 import com.jinke.driverhealth.utils.Config;
 import com.jinke.driverhealth.viewmodels.DataViewModel;
 

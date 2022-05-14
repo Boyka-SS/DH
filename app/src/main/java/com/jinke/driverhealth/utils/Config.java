@@ -31,6 +31,17 @@ public class Config {
      * 兔盯云平台
      */
     public static final String BASE_URL = "https://openapi.xu5g.com/";
+    /**
+     * 百度AI 行为驾驶监测
+     *
+     * AppID:26137490
+     * API Key:YG3vcfAkLn3RXEccAmdpOMhn
+     * Secret Key:wBqughFFz5X5BYIZKHdHjeVsqK3ws7m3
+     */
+    //token
+    public static final String BAIDU_TOKEN_URL = "https://aip.baidubce.com/";
+    //driver_behavior
+    public static final String BAIDU_DRIVER_BEHAVIOR_URL = "https://aip.baidubce.com/";
 
     /**
      * APPKEY+SECRET：兔盯云手表秘钥
@@ -60,4 +71,9 @@ public class Config {
     }
 
 
+    /**
+     * 聚合疫情 政策+风险等级
+     */
+    public static final String JUHE_KEY_FAN = "aaaa7ad916e17847fb9b55f0295f3163";
+    public static final String JUHE_KEY_LIU = "";
 }
