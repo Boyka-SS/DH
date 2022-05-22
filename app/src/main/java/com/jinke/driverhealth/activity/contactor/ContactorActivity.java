@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,11 +77,18 @@ public class ContactorActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     /**
      * android6.0 以后 必须 动态 申请通讯录权限
      */
     private void applyForPermission(Activity activity) {
         String[] permissList = {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_CONTACTS};
+
         PermissionUtil.addPermissByPermissionList(activity, permissList, PERMISS_CONTACT, new ApplyPermissionCallback() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
