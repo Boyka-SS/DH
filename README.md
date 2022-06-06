@@ -7,12 +7,21 @@
 - BlueTooth BLE
 - 众多github资源依赖，详情可查看src下的gradle文件
 
+room等技术建议去看看官网提供的 code demo 结合网上的博客，就很容易学会使用
+
+蓝牙使用提醒：
+①第一步，要确定当前设备是否具有蓝牙并且是否启用蓝牙功能。用BluetoothAdapter 类来确认设备是否具有蓝牙功能，然后使用Intent开启蓝牙功能。
+②第二步，根据硬件店家提供的蓝牙设备的MAC地址，在BluetoothAdapter 类中，没有使用startDiscovery（）方法，而是getRemoteDevice API 获取BluetoothDevice实例，之后，用这个实例，根据蓝牙设备的UUID建立 BluetoothSocket 对象。
+在单独的线程里，使用socket对象connect方法连接蓝牙设备，连接成功后，使用 getInputStream() 和 getOutputStream() 方法获取输入流 和输出流，通过 read和 write 方法可以对数据进行读写，这样就实现了Android和蓝牙设备的通信
+
 2、使用的第三方服务
 
 - 高德导航+定位
 - 兔盯云健康数据
 - 淘宝酒精传感器硬件
 - 聚合数据疫情地区隔离政策
+
+驾驶员健康数据来自兔盯云智能手表（附上官网链接：https://www.5gtdy.com/），联系到卖家，买到手表，店家会提供技术文档和手表 APPKEY+SECRET，这样就可以获得健康数据，当然，市场有很多类似手表，但符合本次要求的并且价格获得过去的（300多/个），我们选择了兔盯云。
 
 3、系统使用的第三方服务的绝大多数配置均在Config.java里面
 
