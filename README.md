@@ -31,7 +31,11 @@ room等技术建议去看看官网提供的 code demo 结合网上的博客，�
 
 6、author主要负责Android的编写，有问题可以联系邮箱：peanut_flh@163.com
 
-7、感悟
+7、项目效果展示
+
+链接: https://pan.baidu.com/s/1DGylBLQgj4AQkfUEhw_QxA?pwd=rv7p 提取码: rv7p 复制这段内容后打开百度网盘手机App，操作更方便哦
+
+8、感悟
     
 比赛角度思考：
 
